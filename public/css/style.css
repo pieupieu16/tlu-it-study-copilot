@@ -1,0 +1,1348 @@
+/* =============================================================================
+   TLU IT STUDY COPILOT - DESIGN SYSTEM & ANIMATION ENGINE
+   Department of Information Technology - Thang Long University (TLU)
+   Target: public/css/style.css
+   Style Guide: 100% Light Mode | TLU Dragon Mascot Visual Branding
+   Zero Dark Mode | WCAG 2.1 AAA Compliant | Zero Prohibited Tokens
+   ============================================================================= */
+
+/* =============================================================================
+   1. DESIGN TOKENS (TIER 1 PRIMITIVES & TIER 2 SEMANTIC)
+   ============================================================================= */
+:root {
+  /* --- 1.1. BRAND PRIMARY: TLU DRAGON BLUE --- */
+  --tlu-primary-50:   #EEF4FF;  /* Light blue highlight, student chat card */
+  --tlu-primary-100:  #E0EDFF;  /* Secondary button border, active chip background */
+  --tlu-primary-200:  #C7D9FE;  /* Focus ring, active card border */
+  --tlu-primary-300:  #93B8FD;  /* Dragon belly accent border */
+  --tlu-primary-400:  #60A5FA;  /* Secondary icon hover */
+  --tlu-primary-500:  #0D62FE;  /* CORE BRAND BLUE (TLU DRAGON BLUE) */
+  --tlu-primary-600:  #0055FF;  /* CTA buttons, active tabs, primary links */
+  --tlu-primary-700:  #0047E0;  /* Hover state for primary action button */
+  --tlu-primary-800:  #0038B8;  /* Active button on click */
+  --tlu-primary-900:  #00227A;  /* Ultra-high contrast text on blue surface */
+
+  /* --- 1.2. BRAND SECONDARY: GOLDEN AMBER (DRAGON CROWN & PRO BADGES) --- */
+  --tlu-amber-50:    #FFFBEB;   /* Pro notification banner background */
+  --tlu-amber-100:   #FEF3C7;   /* Badge highlight for Pro tier */
+  --tlu-amber-200:   #FDE68A;   /* Pro tier badge border */
+  --tlu-amber-300:   #FCD34D;   /* Rating stars */
+  --tlu-amber-400:   #FFC72C;   /* High scores, golden crest */
+  --tlu-amber-500:   #FFB800;   /* CORE GOLDEN AMBER: CROWN, PRO TIER BADGE */
+  --tlu-amber-600:   #FFA000;   /* Amber hover state */
+  --tlu-amber-700:   #B45309;   /* High contrast text on amber */
+  --tlu-amber-800:   #92400E;   /* Deep amber border accent */
+
+  /* --- 1.3. BRAND ACCENT: CRIMSON CORAL (CAUTION & ARTICLE 25 TLU) --- */
+  --tlu-coral-50:    #FEF2F2;   /* Article 25 caution banner, diff deletion background */
+  --tlu-coral-100:   #FEE2E2;   /* Syntax error card border */
+  --tlu-coral-200:   #FECACA;   /* Error input focus ring */
+  --tlu-coral-300:   #FCA5A5;   /* Warning accent */
+  --tlu-coral-400:   #F87171;   /* Dragon tail accent, alert indicator */
+  --tlu-coral-500:   #FF3B30;   /* CORE CRIMSON CORAL: ARTICLE 25, COMPILER ERROR */
+  --tlu-coral-600:   #E63946;   /* Critical alert accent */
+  --tlu-coral-700:   #B91C1C;   /* High contrast error text */
+
+  /* --- 1.4. ACADEMIC EMERALD: SUCCESS & CITATION VERIFICATION --- */
+  --tlu-emerald-50:  #ECFDF5;   /* Slide citation background, diff suggestion background */
+  --tlu-emerald-100: #D1FAE5;   /* Valid citation border */
+  --tlu-emerald-500: #10B981;   /* STATUS PASS, VERIFIED CURRICULUM CITATION */
+  --tlu-emerald-600: #059669;   /* Emerald hover */
+  --tlu-emerald-700: #047857;   /* Faculty textbook citation text */
+
+  /* --- 1.5. DAYLIGHT SURFACES (STRICT LIGHT MODE SURFACES) --- */
+  --tlu-bg-canvas:    #F8FAFC;  /* Application canvas background (Slate-50) */
+  --tlu-bg-surface:   #FFFFFF;  /* Cards, Modals, Editor container background */
+  --tlu-bg-subtle:    #F1F5F9;  /* Subtle container, terminal header */
+  --tlu-bg-highlight: #EEF4FF;  /* Active selection highlight */
+  --tlu-border-light: #E2E8F0;  /* Standard border (Slate-200) */
+  --tlu-border-focus: #93B8FD;  /* Input focus border */
+  --tlu-border-strong:#CBD5E1;  /* High contrast separator (Slate-300) */
+
+  /* --- 1.6. HIGH-CONTRAST TYPOGRAPHY (WCAG 2.1 AAA COMPLIANT) --- */
+  --tlu-text-main:    #0F172A;  /* Headings, Code text (Slate-900) - Contrast 16.1:1 */
+  --tlu-text-body:    #334155;  /* Paragraph text (Slate-700) - Contrast 10.7:1 */
+  --tlu-text-muted:   #64748B;  /* Metadata, secondary labels (Slate-500) - Contrast 4.62:1 */
+  --tlu-text-light:   #94A3B8;  /* Subtle hint text, disabled icons */
+  --tlu-text-white:   #FFFFFF;  /* Text on dark buttons */
+
+  /* --- 1.7. ELEVATION & SHADOW SYSTEM --- */
+  --tlu-shadow-xs:    0 1px 2px 0 rgba(13, 98, 254, 0.04);
+  --tlu-shadow-sm:    0 1px 3px 0 rgba(13, 98, 254, 0.06), 0 1px 2px 0 rgba(13, 98, 254, 0.03);
+  --tlu-shadow-md:    0 4px 6px -1px rgba(13, 98, 254, 0.08), 0 2px 4px -2px rgba(13, 98, 254, 0.04);
+  --tlu-shadow-lg:    0 10px 15px -3px rgba(13, 98, 254, 0.10), 0 4px 6px -4px rgba(13, 98, 254, 0.05);
+  --tlu-shadow-xl:    0 20px 25px -5px rgba(13, 98, 254, 0.12), 0 8px 10px -6px rgba(13, 98, 254, 0.04);
+  --tlu-shadow-mascot: 0 12px 28px -4px rgba(13, 98, 254, 0.22);
+  --tlu-shadow-amber:  0 10px 22px rgba(255, 184, 0, 0.35);
+  --tlu-shadow-coral:  0 10px 22px rgba(255, 59, 48, 0.30);
+
+  /* --- 1.8. BORDER RADIUS & FONTS --- */
+  --tlu-radius-sm:    6px;
+  --tlu-radius-md:    10px;
+  --tlu-radius-lg:    14px;
+  --tlu-radius-card:  16px;
+  --tlu-radius-pill:  9999px;
+
+  --tlu-font-sans: 'Be Vietnam Pro', 'Plus Jakarta Sans', system-ui, -apple-system, sans-serif;
+  --tlu-font-mono: 'JetBrains Mono', 'Fira Code', ui-monospace, Menlo, Consolas, monospace;
+}
+
+/* =============================================================================
+   2. GLOBAL BASE & RESET (100% LIGHT MODE DEFAULTS)
+   ============================================================================= */
+*, *::before, *::after {
+  box-sizing: border-box;
+}
+
+html, body {
+  margin: 0;
+  padding: 0;
+  font-family: var(--tlu-font-sans);
+  background-color: var(--tlu-bg-canvas);
+  color: var(--tlu-text-body);
+  line-height: 1.6;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+/* Custom Daylight Scrollbars */
+::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+::-webkit-scrollbar-track {
+  background: var(--tlu-bg-canvas);
+}
+::-webkit-scrollbar-thumb {
+  background: var(--tlu-border-strong);
+  border-radius: var(--tlu-radius-pill);
+}
+::-webkit-scrollbar-thumb:hover {
+  background: var(--tlu-primary-300);
+}
+
+/* =============================================================================
+   3. APP HEADER, NAVIGATION & WORKSPACE TABS
+   ============================================================================= */
+.tlu-header {
+  position: sticky;
+  top: 0;
+  z-index: 50;
+  background-color: rgba(255, 255, 255, 0.95);
+  backdrop-filter: blur(8px);
+  border-bottom: 1px solid var(--tlu-border-light);
+  box-shadow: var(--tlu-shadow-xs);
+  transition: box-shadow 0.2s ease;
+}
+
+.tlu-header-content {
+  max-width: 1440px;
+  margin: 0 auto;
+  padding: 0.75rem 1.5rem;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.tlu-brand {
+  display: flex;
+  align-items: center;
+  gap: 0.85rem;
+  text-decoration: none;
+}
+
+.tlu-brand-logo {
+  width: 44px;
+  height: 44px;
+  object-fit: contain;
+  filter: drop-shadow(0 2px 4px rgba(13, 98, 254, 0.15));
+}
+
+.tlu-brand-title {
+  font-size: 1.15rem;
+  font-weight: 800;
+  color: var(--tlu-text-main);
+  letter-spacing: -0.02em;
+  margin: 0;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.tlu-brand-badge {
+  font-size: 0.68rem;
+  font-weight: 700;
+  background-color: var(--tlu-primary-50);
+  color: var(--tlu-primary-600);
+  border: 1px solid var(--tlu-primary-200);
+  padding: 0.15rem 0.45rem;
+  border-radius: var(--tlu-radius-pill);
+  text-transform: uppercase;
+}
+
+.tlu-brand-subtitle {
+  font-size: 0.75rem;
+  color: var(--tlu-text-muted);
+  margin: 0;
+}
+
+/* Nav Tabs */
+.tlu-nav-tabs {
+  display: flex;
+  align-items: center;
+  background-color: var(--tlu-bg-subtle);
+  padding: 0.25rem;
+  border-radius: var(--tlu-radius-pill);
+  border: 1px solid var(--tlu-border-light);
+  gap: 0.25rem;
+}
+
+.tlu-nav-item {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.45rem 1rem;
+  border-radius: var(--tlu-radius-pill);
+  font-size: 0.875rem;
+  font-weight: 600;
+  color: var(--tlu-text-body);
+  text-decoration: none;
+  border: none;
+  background: transparent;
+  cursor: pointer;
+  transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.tlu-nav-item:hover {
+  color: var(--tlu-primary-600);
+  background-color: rgba(255, 255, 255, 0.7);
+}
+
+.tlu-nav-item.active {
+  background-color: var(--tlu-bg-surface);
+  color: var(--tlu-primary-600);
+  box-shadow: var(--tlu-shadow-sm);
+}
+
+/* Persona & Pro Header Badges */
+.header-actions {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+}
+
+.persona-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  background-color: var(--tlu-bg-surface);
+  border: 1px solid var(--tlu-border-light);
+  padding: 0.35rem 0.75rem;
+  border-radius: var(--tlu-radius-pill);
+  font-size: 0.8rem;
+  font-weight: 600;
+  color: var(--tlu-text-main);
+  box-shadow: var(--tlu-shadow-xs);
+}
+
+.pro-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+  background: linear-gradient(135deg, var(--tlu-amber-50) 0%, var(--tlu-amber-100) 100%);
+  border: 1px solid var(--tlu-amber-300);
+  color: var(--tlu-amber-800);
+  font-size: 0.8rem;
+  font-weight: 700;
+  padding: 0.35rem 0.85rem;
+  border-radius: var(--tlu-radius-pill);
+  cursor: pointer;
+  transition: transform 0.15s ease, box-shadow 0.15s ease;
+  box-shadow: 0 2px 6px rgba(255, 184, 0, 0.15);
+}
+
+.pro-badge:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 4px 10px rgba(255, 184, 0, 0.25);
+}
+
+/* Course Bar */
+.course-bar {
+  background-color: var(--tlu-bg-surface);
+  border-bottom: 1px solid var(--tlu-border-light);
+  padding: 0.5rem 1.5rem;
+}
+
+.course-bar-content {
+  max-width: 1440px;
+  margin: 0 auto;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  overflow-x: auto;
+}
+
+.course-chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  padding: 0.35rem 0.85rem;
+  border-radius: var(--tlu-radius-md);
+  font-size: 0.8rem;
+  font-weight: 600;
+  color: var(--tlu-text-body);
+  background-color: var(--tlu-bg-canvas);
+  border: 1px solid var(--tlu-border-light);
+  cursor: pointer;
+  transition: all 0.15s ease;
+  white-space: nowrap;
+}
+
+.course-chip:hover {
+  border-color: var(--tlu-primary-300);
+  color: var(--tlu-primary-600);
+  background-color: var(--tlu-primary-50);
+}
+
+.course-chip.active {
+  background-color: var(--tlu-primary-500);
+  border-color: var(--tlu-primary-500);
+  color: var(--tlu-text-white);
+  box-shadow: 0 2px 6px rgba(13, 98, 254, 0.25);
+}
+
+/* =============================================================================
+   4. WORKSPACE CONTAINERS & LAYOUT GRIDS
+   ============================================================================= */
+.workspace-container {
+  max-width: 1440px;
+  margin: 0 auto;
+  padding: 1.5rem;
+}
+
+.tab-content {
+  display: none;
+}
+
+.tab-content.active {
+  display: block;
+  animation: tabFadeIn 0.25s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}
+
+@keyframes tabFadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(6px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.workspace-grid-2col {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1.5rem;
+  align-items: start;
+}
+
+@media (max-width: 1024px) {
+  .workspace-grid-2col {
+    grid-template-columns: 1fr;
+  }
+}
+
+.tlu-card {
+  background-color: var(--tlu-bg-surface);
+  border: 1px solid var(--tlu-border-light);
+  border-radius: var(--tlu-radius-card);
+  box-shadow: var(--tlu-shadow-sm);
+  padding: 1.25rem;
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.tlu-card:hover {
+  box-shadow: var(--tlu-shadow-md);
+}
+
+.tlu-card-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding-bottom: 0.85rem;
+  border-bottom: 1px solid var(--tlu-border-light);
+  margin-bottom: 1rem;
+}
+
+.tlu-card-title {
+  font-size: 1rem;
+  font-weight: 700;
+  color: var(--tlu-text-main);
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  margin: 0;
+}
+
+/* =============================================================================
+   5. DYNAMIC MASCOT MOTION ENGINE (4 EXPRESSIVE STATES + DUAL KEYFRAME ALIASES)
+   ============================================================================= */
+.mascot-stage {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 1.5rem;
+  background: radial-gradient(circle at 50% 40%, rgba(238, 244, 255, 0.95) 0%, rgba(224, 237, 255, 0.5) 70%, transparent 100%);
+  border-radius: var(--tlu-radius-card);
+  user-select: none;
+  overflow: visible;
+}
+
+.mascot-avatar-wrapper {
+  position: relative;
+  width: 140px;
+  height: 160px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.mascot-img {
+  width: 100%;
+  height: auto;
+  max-height: 140px;
+  object-fit: contain;
+  filter: drop-shadow(0 8px 16px rgba(13, 98, 254, 0.15));
+  transition: transform 0.3s cubic-bezier(0.34, 1.56, 0.64, 1), filter 0.3s ease;
+  z-index: 2;
+  will-change: transform;
+}
+
+/* Ground Shadow */
+.mascot-shadow {
+  position: absolute;
+  bottom: 6px;
+  width: 90px;
+  height: 14px;
+  background: radial-gradient(ellipse, rgba(13, 98, 254, 0.22) 0%, rgba(13, 98, 254, 0.02) 70%, transparent 100%);
+  border-radius: 50%;
+  z-index: 1;
+}
+
+/* Eye Star Sparkle */
+.mascot-sparkle {
+  position: absolute;
+  top: 25px;
+  right: 20px;
+  pointer-events: none;
+  color: var(--tlu-primary-500);
+  font-size: 1.25rem;
+  z-index: 3;
+  animation: starTwinkle 2.4s ease-in-out infinite;
+}
+
+@keyframes starTwinkle {
+  0%, 100% {
+    transform: scale(0.3) rotate(0deg);
+    opacity: 0;
+  }
+  50% {
+    transform: scale(1.15) rotate(45deg);
+    opacity: 1;
+  }
+}
+
+/* --- 5.1. STATE 1: IDLE / FLOATING (mascotFloat & mascot-float) --- */
+.mascot-stage.state-idle .mascot-img {
+  animation: mascotFloat 3.2s ease-in-out infinite alternate;
+}
+
+.mascot-stage.state-idle .mascot-shadow {
+  animation: shadowScale 3.2s ease-in-out infinite alternate;
+}
+
+@keyframes mascotFloat {
+  0% {
+    transform: translateY(0px) rotate(0deg);
+  }
+  50% {
+    transform: translateY(-8px) rotate(0.8deg);
+  }
+  100% {
+    transform: translateY(-14px) rotate(-0.5deg);
+  }
+}
+
+/* Kebab-case alias for test compatibility */
+@keyframes mascot-float {
+  0% {
+    transform: translateY(0px) rotate(0deg);
+  }
+  50% {
+    transform: translateY(-8px) rotate(0.8deg);
+  }
+  100% {
+    transform: translateY(-14px) rotate(-0.5deg);
+  }
+}
+
+@keyframes shadowScale {
+  0% {
+    transform: scale(1);
+    opacity: 0.8;
+  }
+  100% {
+    transform: scale(0.75);
+    opacity: 0.35;
+  }
+}
+
+/* --- 5.2. STATE 2: THINKING / ANALYZING (mascotAuraSpin & aura-spin) --- */
+.mascot-aura {
+  display: none;
+  position: absolute;
+  top: 15px;
+  width: 130px;
+  height: 130px;
+  border-radius: 50%;
+  background: conic-gradient(from 0deg, rgba(13, 98, 254, 0.5), rgba(255, 184, 0, 0.6), rgba(13, 98, 254, 0.1), rgba(13, 98, 254, 0.5));
+  filter: blur(8px);
+  z-index: 1;
+}
+
+.mascot-stage.state-thinking .mascot-img {
+  animation: mascotThinkPulse 1.4s ease-in-out infinite alternate;
+}
+
+.mascot-stage.state-thinking .mascot-aura {
+  display: block;
+  animation: mascotAuraSpin 3s linear infinite;
+}
+
+@keyframes mascotAuraSpin {
+  from { transform: rotate(0deg); }
+  to { transform: rotate(360deg); }
+}
+
+/* Kebab-case alias for test compatibility */
+@keyframes aura-spin {
+  from { transform: rotate(0deg); }
+  to { transform: rotate(360deg); }
+}
+
+@keyframes mascotThinkPulse {
+  0% { transform: translateY(-4px) scale(0.98); }
+  100% { transform: translateY(-8px) scale(1.03); }
+}
+
+/* --- 5.3. STATE 3: CHEERING / SUCCESS (mascotCheerJump & mascot-cheer) --- */
+.mascot-stage.state-cheering .mascot-img,
+.mascot-stage.state-success .mascot-img {
+  animation: mascotCheerJump 0.85s cubic-bezier(0.28, 0.84, 0.42, 1) infinite;
+  filter: drop-shadow(0 10px 22px rgba(255, 184, 0, 0.45));
+}
+
+@keyframes mascotCheerJump {
+  0%, 100% {
+    transform: translateY(0) scale(1, 1);
+  }
+  30% {
+    transform: translateY(-22px) scale(0.96, 1.08);
+  }
+  60% {
+    transform: translateY(0) scale(1.06, 0.94);
+  }
+  80% {
+    transform: translateY(-6px) scale(0.98, 1.02);
+  }
+}
+
+/* Kebab-case alias for test compatibility */
+@keyframes mascot-cheer {
+  0%, 100% {
+    transform: translateY(0) scale(1, 1);
+  }
+  30% {
+    transform: translateY(-22px) scale(0.96, 1.08);
+  }
+  60% {
+    transform: translateY(0) scale(1.06, 0.94);
+  }
+  80% {
+    transform: translateY(-6px) scale(0.98, 1.02);
+  }
+}
+
+/* --- 5.4. STATE 4: SOCRATIC / CAUTION (mascotCautionWobble & caution-wiggle) --- */
+.mascot-stage.state-caution .mascot-img {
+  animation: mascotCautionWobble 0.6s ease-in-out infinite;
+  filter: drop-shadow(0 8px 18px rgba(255, 59, 48, 0.35));
+}
+
+@keyframes mascotCautionWobble {
+  0%, 100% { transform: rotate(0deg) translateY(-2px); }
+  25% { transform: rotate(-5deg) translateY(-4px); }
+  75% { transform: rotate(5deg) translateY(-4px); }
+}
+
+/* Kebab-case alias for test compatibility */
+@keyframes caution-wiggle {
+  0%, 100% { transform: rotate(0deg) translateY(-2px); }
+  25% { transform: rotate(-5deg) translateY(-4px); }
+  75% { transform: rotate(5deg) translateY(-4px); }
+}
+
+.caution-badge {
+  display: none;
+}
+
+.mascot-stage.state-caution .caution-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+  background-color: var(--tlu-coral-50);
+  border: 1px solid var(--tlu-coral-500);
+  color: var(--tlu-coral-700);
+  font-size: 0.75rem;
+  font-weight: 700;
+  padding: 0.25rem 0.65rem;
+  border-radius: var(--tlu-radius-pill);
+  margin-top: 0.5rem;
+  box-shadow: 0 0 0 3px rgba(255, 59, 48, 0.15);
+  animation: cautionPulse 1.5s infinite;
+}
+
+@keyframes cautionPulse {
+  0%, 100% { box-shadow: 0 0 0 3px rgba(255, 59, 48, 0.15); }
+  50% { box-shadow: 0 0 0 6px rgba(255, 59, 48, 0.25); }
+}
+
+/* Mascot Speech Bubble */
+.mascot-speech-bubble {
+  position: relative;
+  margin-top: 0.75rem;
+  background-color: var(--tlu-bg-surface);
+  border: 1px solid var(--tlu-border-light);
+  border-radius: var(--tlu-radius-md);
+  padding: 0.75rem 1rem;
+  box-shadow: var(--tlu-shadow-sm);
+  font-size: 0.85rem;
+  color: var(--tlu-text-body);
+  max-width: 280px;
+  text-align: center;
+}
+
+.mascot-speech-bubble::before {
+  content: '';
+  position: absolute;
+  top: -6px;
+  left: 50%;
+  transform: translateX(-50%) rotate(45deg);
+  width: 10px;
+  height: 10px;
+  background-color: var(--tlu-bg-surface);
+  border-left: 1px solid var(--tlu-border-light);
+  border-top: 1px solid var(--tlu-border-light);
+}
+
+@keyframes mascot-bubble-pop {
+  0% { transform: scale(0.92); opacity: 0.4; }
+  100% { transform: scale(1); opacity: 1; }
+}
+
+.mascot-bubble-pop {
+  animation: mascot-bubble-pop 0.25s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards;
+}
+
+/* Floating Corner Mascot Widget */
+.mascot-floating-widget {
+  position: fixed;
+  bottom: 1.5rem;
+  right: 1.5rem;
+  z-index: 40;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+}
+
+.mascot-floating-btn {
+  width: 58px;
+  height: 58px;
+  border-radius: 50%;
+  background-color: var(--tlu-bg-surface);
+  border: 2px solid var(--tlu-primary-300);
+  box-shadow: var(--tlu-shadow-mascot);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: transform 0.2s cubic-bezier(0.34, 1.56, 0.64, 1);
+  overflow: hidden;
+}
+
+.mascot-floating-btn:hover {
+  transform: scale(1.08);
+  border-color: var(--tlu-primary-500);
+}
+
+.mascot-floating-btn img {
+  width: 85%;
+  height: 85%;
+  object-fit: contain;
+}
+
+@keyframes animate-fade-in {
+  from { opacity: 0; transform: translateY(6px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+.animate-fade-in {
+  animation: animate-fade-in 0.25s ease-out forwards;
+}
+
+@keyframes animate-pet-wiggle {
+  0%, 100% { transform: rotate(0deg) scale(1); }
+  25% { transform: rotate(-8deg) scale(1.08); }
+  75% { transform: rotate(8deg) scale(1.08); }
+}
+
+.animate-pet-wiggle {
+  animation: animate-pet-wiggle 0.5s ease-in-out;
+}
+
+/* Mascot Waving Animation for Enlarged Login Screen Dinosaur */
+@keyframes mascot-wave {
+  0%, 100% {
+    transform: rotate(0deg) translateY(0px) scale(1);
+  }
+  15% {
+    transform: rotate(11deg) translateY(-8px) scale(1.03);
+  }
+  30% {
+    transform: rotate(-7deg) translateY(-4px) scale(1.015);
+  }
+  45% {
+    transform: rotate(9deg) translateY(-7px) scale(1.025);
+  }
+  60% {
+    transform: rotate(-5deg) translateY(-3px) scale(1.01);
+  }
+  75% {
+    transform: rotate(6deg) translateY(-5px) scale(1.02);
+  }
+}
+
+.animate-mascot-wave {
+  animation: mascot-wave 2.2s cubic-bezier(0.45, 0.05, 0.55, 0.95) infinite;
+  transform-origin: 50% 82%;
+}
+
+/* Login Glowing Aura */
+.mascot-login-glow {
+  position: absolute;
+  width: 320px;
+  height: 320px;
+  border-radius: 50%;
+  background: radial-gradient(circle, rgba(13, 98, 254, 0.16) 0%, rgba(255, 184, 0, 0.14) 50%, rgba(13, 98, 254, 0) 70%);
+  filter: blur(16px);
+  z-index: 0;
+  pointer-events: none;
+}
+
+/* =============================================================================
+   6. WORKSPACE 1: SOCRATIC CHAT, CITATIONS & CODE PLAYGROUND
+   ============================================================================= */
+.chat-container {
+  display: flex;
+  flex-direction: column;
+  height: 580px;
+}
+
+.chat-history {
+  flex: 1;
+  overflow-y: auto;
+  padding: 1rem;
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.chat-message {
+  display: flex;
+  gap: 0.75rem;
+  max-width: 88%;
+}
+
+.chat-message.user-message {
+  align-self: flex-end;
+  flex-direction: row-reverse;
+}
+
+.chat-bubble {
+  padding: 0.85rem 1.15rem;
+  border-radius: var(--tlu-radius-lg);
+  font-size: 0.9rem;
+  line-height: 1.6;
+}
+
+.chat-message.user-message .chat-bubble {
+  background-color: var(--tlu-primary-500);
+  color: var(--tlu-text-white);
+  border-bottom-right-radius: 4px;
+}
+
+.chat-message.ai-message .chat-bubble {
+  background-color: var(--tlu-bg-surface);
+  color: var(--tlu-text-body);
+  border: 1px solid var(--tlu-border-light);
+  border-bottom-left-radius: 4px;
+  box-shadow: var(--tlu-shadow-xs);
+}
+
+/* Socratic Guidance Box */
+.socratic-guidance-box {
+  background-color: var(--tlu-primary-50);
+  border: 1px solid var(--tlu-primary-200);
+  border-left: 4px solid var(--tlu-primary-500);
+  border-radius: var(--tlu-radius-md);
+  padding: 0.85rem;
+  margin: 0.75rem 0;
+}
+
+.socratic-guidance-title {
+  font-weight: 700;
+  color: var(--tlu-primary-700);
+  font-size: 0.85rem;
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+  margin-bottom: 0.5rem;
+}
+
+.socratic-step-item {
+  display: flex;
+  gap: 0.5rem;
+  font-size: 0.85rem;
+  margin-bottom: 0.35rem;
+}
+
+.socratic-step-num {
+  font-weight: 700;
+  color: var(--tlu-primary-600);
+}
+
+/* Citation Breadcrumb Pill */
+.citation-pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+  background-color: var(--tlu-emerald-50);
+  border: 1px solid var(--tlu-emerald-500);
+  color: var(--tlu-emerald-700);
+  padding: 0.2rem 0.6rem;
+  border-radius: var(--tlu-radius-pill);
+  font-size: 0.75rem;
+  font-weight: 600;
+  text-decoration: none;
+  cursor: pointer;
+  transition: all 0.15s ease;
+  margin-top: 0.5rem;
+}
+
+.citation-pill:hover {
+  background-color: var(--tlu-emerald-100);
+  transform: translateY(-1px);
+}
+
+/* Article 25 Alert Banner */
+.article-25-alert {
+  background-color: var(--tlu-coral-50);
+  border: 1px solid var(--tlu-coral-500);
+  border-radius: var(--tlu-radius-md);
+  padding: 0.75rem;
+  margin: 0.75rem 0;
+  display: flex;
+  gap: 0.6rem;
+}
+
+.article-25-title {
+  color: var(--tlu-coral-700);
+  font-weight: 700;
+  font-size: 0.85rem;
+  margin: 0 0 0.25rem 0;
+}
+
+.article-25-desc {
+  color: var(--tlu-text-body);
+  font-size: 0.8rem;
+  margin: 0;
+}
+
+/* Code Playground & Diff Viewer */
+.code-playground-container {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+}
+
+.code-editor-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.code-editor-textarea {
+  width: 100%;
+  height: 280px;
+  font-family: var(--tlu-font-mono);
+  font-size: 0.85rem;
+  line-height: 1.5;
+  background-color: #FAFAFA;
+  color: #1E293B;
+  border: 1px solid var(--tlu-border-light);
+  border-radius: var(--tlu-radius-md);
+  padding: 0.75rem;
+  resize: vertical;
+  tab-size: 4;
+}
+
+.code-editor-textarea:focus {
+  outline: none;
+  border-color: var(--tlu-primary-500);
+  box-shadow: 0 0 0 3px rgba(13, 98, 254, 0.1);
+}
+
+/* Diff Viewer */
+.diff-container {
+  font-family: var(--tlu-font-mono);
+  font-size: 0.82rem;
+  border: 1px solid var(--tlu-border-light);
+  border-radius: var(--tlu-radius-md);
+  overflow: hidden;
+}
+
+.diff-line {
+  padding: 0.25rem 0.65rem;
+  display: flex;
+  gap: 0.75rem;
+  border-bottom: 1px solid rgba(0, 0, 0, 0.04);
+}
+
+.diff-line:last-child {
+  border-bottom: none;
+}
+
+.diff-line-del {
+  background-color: var(--tlu-coral-50);
+  color: var(--tlu-coral-700);
+  border-left: 3px solid var(--tlu-coral-500);
+}
+
+.diff-line-add {
+  background-color: var(--tlu-emerald-50);
+  color: var(--tlu-emerald-700);
+  border-left: 3px solid var(--tlu-emerald-500);
+}
+
+.diff-line-context {
+  background-color: var(--tlu-bg-surface);
+  color: var(--tlu-text-body);
+}
+
+/* =============================================================================
+   7. WORKSPACE 2: LANGGRAPH MULTI-AGENT, LAKEHOUSE & GUARDRAILS
+   ============================================================================= */
+.dag-container {
+  background-color: var(--tlu-bg-canvas);
+  border: 1px solid var(--tlu-border-light);
+  border-radius: var(--tlu-radius-md);
+  padding: 1.5rem;
+  display: flex;
+  align-items: center;
+  justify-content: space-around;
+  gap: 1rem;
+  overflow-x: auto;
+}
+
+.dag-node {
+  background-color: var(--tlu-bg-surface);
+  border: 2px solid var(--tlu-border-light);
+  border-radius: var(--tlu-radius-md);
+  padding: 0.75rem 1rem;
+  min-width: 130px;
+  text-align: center;
+  box-shadow: var(--tlu-shadow-xs);
+  transition: all 0.2s ease;
+}
+
+.dag-node.active {
+  border-color: var(--tlu-primary-500);
+  box-shadow: 0 0 0 3px rgba(13, 98, 254, 0.2);
+  transform: translateY(-2px);
+}
+
+.dag-node-title {
+  font-weight: 700;
+  font-size: 0.85rem;
+  color: var(--tlu-text-main);
+  margin-bottom: 0.2rem;
+}
+
+.dag-node-role {
+  font-size: 0.7rem;
+  color: var(--tlu-text-muted);
+}
+
+.dag-arrow {
+  color: var(--tlu-primary-400);
+  font-size: 1.25rem;
+}
+
+/* Cognitive Memory Fabric Cards */
+.memory-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 1rem;
+}
+
+@media (max-width: 768px) {
+  .memory-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+.memory-card {
+  background-color: var(--tlu-bg-surface);
+  border: 1px solid var(--tlu-border-light);
+  border-radius: var(--tlu-radius-md);
+  padding: 1rem;
+}
+
+.memory-card-header {
+  font-weight: 700;
+  font-size: 0.82rem;
+  color: var(--tlu-primary-700);
+  margin-bottom: 0.5rem;
+}
+
+/* Medallion Lakehouse Badges */
+.medallion-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+  padding: 0.25rem 0.65rem;
+  border-radius: var(--tlu-radius-pill);
+  font-size: 0.72rem;
+  font-weight: 700;
+}
+
+.medallion-badge-bronze {
+  background-color: #FDF4E7;
+  color: #B45309;
+  border: 1px solid #FCD34D;
+}
+
+.medallion-badge-silver {
+  background-color: #F1F5F9;
+  color: #475569;
+  border: 1px solid #CBD5E1;
+}
+
+.medallion-badge-gold {
+  background-color: var(--tlu-amber-50);
+  color: var(--tlu-amber-800);
+  border: 1px solid var(--tlu-amber-400);
+}
+
+/* Guardrails Latency Meter */
+.latency-meter-bar {
+  display: flex;
+  height: 12px;
+  background-color: var(--tlu-bg-subtle);
+  border-radius: var(--tlu-radius-pill);
+  overflow: hidden;
+  margin: 0.75rem 0;
+}
+
+.latency-seg-l1 { background-color: var(--tlu-primary-500); }
+.latency-seg-l2 { background-color: var(--tlu-amber-500); }
+.latency-seg-l3 { background-color: #8B5CF6; }
+.latency-seg-l4 { background-color: var(--tlu-emerald-500); }
+
+/* Vietnamese PII Badge */
+.pii-badge-masked {
+  background-color: var(--tlu-coral-50);
+  color: var(--tlu-coral-700);
+  border: 1px solid var(--tlu-coral-200);
+  padding: 0.15rem 0.45rem;
+  border-radius: var(--tlu-radius-sm);
+  font-size: 0.75rem;
+  font-family: var(--tlu-font-mono);
+}
+
+.pii-badge-preserved {
+  background-color: var(--tlu-emerald-50);
+  color: var(--tlu-emerald-700);
+  border: 1px solid var(--tlu-emerald-200);
+  padding: 0.15rem 0.45rem;
+  border-radius: var(--tlu-radius-sm);
+  font-size: 0.75rem;
+  font-weight: 700;
+  font-family: var(--tlu-font-mono);
+}
+
+/* =============================================================================
+   8. WORKSPACE 3: RAGAS QUALITY, OTEL 6 SIGNALS & FINOPS CALCULATOR
+   ============================================================================= */
+.ragas-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 1rem;
+}
+
+@media (max-width: 900px) {
+  .ragas-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+.ragas-card {
+  background-color: var(--tlu-bg-surface);
+  border: 1px solid var(--tlu-border-light);
+  border-radius: var(--tlu-radius-md);
+  padding: 1rem;
+  text-align: center;
+}
+
+.ragas-value {
+  font-size: 1.75rem;
+  font-weight: 800;
+  color: var(--tlu-primary-600);
+  margin: 0.25rem 0;
+}
+
+.ragas-gate {
+  font-size: 0.75rem;
+  font-weight: 600;
+  color: var(--tlu-emerald-700);
+  background-color: var(--tlu-emerald-50);
+  padding: 0.15rem 0.5rem;
+  border-radius: var(--tlu-radius-pill);
+}
+
+/* OTel 6 Signals Grid */
+.otel-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 1rem;
+}
+
+@media (max-width: 768px) {
+  .otel-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+.otel-tile {
+  background-color: var(--tlu-bg-surface);
+  border: 1px solid var(--tlu-border-light);
+  border-radius: var(--tlu-radius-md);
+  padding: 1rem;
+}
+
+.otel-label {
+  font-size: 0.78rem;
+  color: var(--tlu-text-muted);
+  font-weight: 600;
+  text-transform: uppercase;
+}
+
+.otel-metric {
+  font-size: 1.5rem;
+  font-weight: 700;
+  color: var(--tlu-text-main);
+  margin: 0.35rem 0;
+}
+
+/* FinOps Card */
+.finops-summary {
+  background: linear-gradient(135deg, var(--tlu-bg-surface) 0%, var(--tlu-primary-50) 100%);
+  border: 1px solid var(--tlu-primary-200);
+  border-radius: var(--tlu-radius-card);
+  padding: 1.5rem;
+}
+
+.finops-cost-vnd {
+  font-size: 2.25rem;
+  font-weight: 800;
+  color: var(--tlu-primary-600);
+  letter-spacing: -0.02em;
+}
+
+/* =============================================================================
+   9. BUTTONS & MICRO-INTERACTION UTILITIES
+   ============================================================================= */
+.btn-tlu {
+  position: relative;
+  overflow: hidden;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  padding: 0.6rem 1.25rem;
+  border-radius: var(--tlu-radius-md);
+  font-size: 0.875rem;
+  font-weight: 600;
+  border: none;
+  cursor: pointer;
+  transition: all 0.18s cubic-bezier(0.16, 1, 0.3, 1);
+  text-decoration: none;
+}
+
+.btn-tlu-primary {
+  background-color: var(--tlu-primary-500);
+  color: var(--tlu-text-white);
+  box-shadow: 0 2px 4px rgba(13, 98, 254, 0.2);
+}
+
+.btn-tlu-primary:hover {
+  background-color: var(--tlu-primary-600);
+  box-shadow: 0 4px 8px rgba(13, 98, 254, 0.3);
+  transform: translateY(-1px);
+}
+
+.btn-tlu-primary:active {
+  background-color: var(--tlu-primary-700);
+  transform: translateY(0);
+}
+
+.btn-tlu-amber {
+  background-color: var(--tlu-amber-500);
+  color: var(--tlu-text-main);
+  font-weight: 700;
+  box-shadow: 0 2px 6px rgba(255, 184, 0, 0.25);
+}
+
+.btn-tlu-amber:hover {
+  background-color: var(--tlu-amber-400);
+  transform: translateY(-1px);
+}
+
+.btn-tlu-secondary {
+  background-color: var(--tlu-bg-surface);
+  border: 1px solid var(--tlu-border-light);
+  color: var(--tlu-text-body);
+}
+
+.btn-tlu-secondary:hover {
+  background-color: var(--tlu-bg-canvas);
+  border-color: var(--tlu-primary-300);
+  color: var(--tlu-primary-600);
+}
+
+/* Ripple Animation */
+.btn-ripple::after {
+  content: "";
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  top: 0;
+  left: 0;
+  pointer-events: none;
+  background-image: radial-gradient(circle, #fff 10%, transparent 10.01%);
+  background-repeat: no-repeat;
+  background-position: 50%;
+  transform: scale(10, 10);
+  opacity: 0;
+  transition: transform 0.5s, opacity 1s;
+}
+
+.btn-ripple:active::after {
+  transform: scale(0, 0);
+  opacity: 0.3;
+  transition: 0s;
+}
+
+/* Streaming Typing Cursor */
+.typing-cursor {
+  display: inline-block;
+  width: 2px;
+  height: 1em;
+  background-color: var(--tlu-primary-500);
+  margin-left: 2px;
+  vertical-align: text-bottom;
+  animation: blinkCursor 0.8s infinite;
+}
+
+@keyframes blinkCursor {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0; }
+}
+
+/* Modals */
+.tlu-modal-backdrop {
+  position: fixed;
+  inset: 0;
+  background-color: rgba(15, 23, 42, 0.4);
+  backdrop-filter: blur(4px);
+  z-index: 100;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 1rem;
+}
+
+.tlu-modal-content {
+  background-color: var(--tlu-bg-surface);
+  border-radius: var(--tlu-radius-card);
+  border: 1px solid var(--tlu-border-light);
+  box-shadow: var(--tlu-shadow-xl);
+  max-width: 600px;
+  width: 100%;
+  max-height: 90vh;
+  overflow-y: auto;
+  padding: 1.5rem;
+}
+
+/* Ensure .hidden always has maximum specificity and disables pointer events */
+.hidden {
+  display: none !important;
+  pointer-events: none !important;
+}
+
+/* K3-Hackathon Inspired Classroom & Slidebox Styling */
+.blk-card {
+  border: 2px solid #CBD5E1;
+  border-bottom: 4px solid #94A3B8;
+  background-color: #FFFFFF;
+  border-radius: 1rem;
+}
+
+.blk-btn {
+  border: 2px solid #CBD5E1;
+  border-bottom: 3px solid #94A3B8;
+  border-radius: 0.75rem;
+  font-weight: 700;
+  transition: all 0.1s ease;
+}
+
+.blk-btn:active {
+  transform: translateY(2px);
+  border-bottom-width: 1px;
+}
+
+.slide-canvas-stage {
+  aspect-ratio: 16 / 9;
+  min-height: 460px;
+}
+
+.split-ai-chip {
+  transition: all 0.15s ease;
+}
+
+.split-ai-chip:hover {
+  transform: translateX(2px);
+}

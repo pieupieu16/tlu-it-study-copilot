@@ -1,0 +1,1916 @@
+<!DOCTYPE html>
+<html lang="vi" class="light">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="theme-color" content="#0D62FE">
+  <meta name="color-scheme" content="light">
+  <title>TLU IT Study Copilot - Trợ Lý Học Tập CNTT Đại Học Thăng Long</title>
+
+  <!-- Google Fonts: Be Vietnam Pro, Plus Jakarta Sans, JetBrains Mono -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600&family=Plus+Jakarta+Sans:wght@500;600;700;800&display=swap" rel="stylesheet">
+
+  <!-- Tailwind CSS CDN -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            tlu: {
+              primary: '#0D62FE',
+              primaryHover: '#0047E0',
+              primaryLight: '#EEF4FF',
+              amber: '#FFB800',
+              amberLight: '#FFFBEB',
+              coral: '#FF3B30',
+              coralLight: '#FEF2F2',
+              emerald: '#10B981',
+              emeraldLight: '#ECFDF5'
+            }
+          },
+          fontFamily: {
+            sans: ['"Be Vietnam Pro"', '"Plus Jakarta Sans"', 'sans-serif'],
+            mono: ['"JetBrains Mono"', 'monospace']
+          }
+        }
+      }
+    }
+  </script>
+
+  <!-- Chart.js CDN -->
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+  <!-- Custom Stylesheet (Design Tokens, Light Mode Rules, Mascot Keyframes) -->
+  <link rel="stylesheet" href="css/style.css">
+</head>
+
+<body class="bg-[#F8FAFC] text-[#0F172A] min-h-screen flex flex-col font-sans antialiased selection:bg-[#C7D9FE] selection:text-[#0D62FE]">
+
+  <!-- =========================================================================
+       0. LOGIN SCREEN (GIAO DIỆN ĐĂNG NHẬP SINH VIÊN - PHÓNG TO KHỦNG LONG VẪY TAY CHÀO)
+       ========================================================================= -->
+  <div id="login-screen" class="fixed inset-0 z-50 overflow-y-auto bg-gradient-to-br from-[#EEF4FF] via-[#F8FAFC] to-[#F1F5F9] flex items-center justify-center min-h-screen p-4 sm:p-6 lg:p-10">
+    <div class="max-w-5xl w-full bg-white/95 backdrop-blur-md border border-[#C7D9FE] rounded-3xl shadow-2xl p-6 sm:p-10 lg:p-12 relative overflow-hidden my-auto">
+      
+      <!-- Top Decorative Color Strip -->
+      <div class="absolute top-0 left-0 right-0 h-2 bg-gradient-to-r from-[#0D62FE] via-[#FFB800] to-[#0D62FE]"></div>
+
+      <div class="grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-12 items-center">
+        
+        <!-- Left Column: ENLARGED WAVING DINOSAUR MASCOT (Col 1 to 6) -->
+        <div class="lg:col-span-6 flex flex-col items-center text-center space-y-4">
+          
+          <!-- Dinosaur Stage with Glow and Waving Animation -->
+          <div class="relative flex items-center justify-center py-4">
+            <!-- Glowing Aura Behind Mascot -->
+            <div class="mascot-login-glow"></div>
+            
+            <!-- Enlarged Mascot Image with Waving Keyframe Animation -->
+            <img src="assets/tlu_dragon_mascot.png" id="login-mascot-img" alt="Linh vật Khủng Long Rồng Xanh TLU vẫy tay chào" class="animate-mascot-wave w-64 sm:w-72 md:w-80 lg:w-96 h-auto object-contain drop-shadow-xl relative z-10 select-none">
+          </div>
+
+          <!-- Welcoming Dialogue Bubble -->
+          <div class="bg-gradient-to-r from-[#EEF4FF] via-white to-[#EEF4FF] border border-[#C7D9FE] rounded-2xl p-4 shadow-sm relative z-10 max-w-md">
+            <div class="flex items-center justify-center space-x-2 mb-1">
+              <span class="w-2.5 h-2.5 rounded-full bg-[#10B981] inline-block animate-ping"></span>
+              <span class="text-xs font-extrabold text-[#0D62FE] uppercase tracking-wide">Rồng Xanh TLU Đang Vẫy Tay Chào Bạn</span>
+            </div>
+            <p class="text-xs sm:text-sm text-[#1E293B] font-medium leading-relaxed">
+              "Chào bạn! Rồng Xanh TLU rất vui được gặp bạn! Hãy đăng nhập để cùng mình khám phá kho bài giảng slide và đồng hành giải đáp thắc mắc lập trình nhé!"
+            </p>
+          </div>
+
+          <!-- Feature Highlights -->
+          <div class="grid grid-cols-3 gap-2 w-full max-w-md text-center text-2xs font-semibold text-[#475569]">
+            <div class="bg-[#F8FAFC] border border-[#E2E8F0] p-2 rounded-xl">
+              <div class="font-bold text-[#0D62FE]">5 Môn CNTT</div>
+              <div>Học liệu chuẩn TLU</div>
+            </div>
+            <div class="bg-[#F8FAFC] border border-[#E2E8F0] p-2 rounded-xl">
+              <div class="font-bold text-[#0D62FE]">Điều 25 TLU</div>
+              <div>Gợi mở Socratic</div>
+            </div>
+            <div class="bg-[#F8FAFC] border border-[#E2E8F0] p-2 rounded-xl">
+              <div class="font-bold text-[#0D62FE]">Chat Nổi</div>
+              <div>Bong bóng Messenger</div>
+            </div>
+          </div>
+
+        </div>
+
+        <!-- Right Column: Student Login Form (Col 7 to 12) -->
+        <div class="lg:col-span-6 bg-[#F8FAFC] border border-[#E2E8F0] rounded-2xl p-6 sm:p-8 shadow-sm space-y-5">
+          
+          <div class="border-b border-[#E2E8F0] pb-4">
+            <div class="flex items-center space-x-2.5 mb-1.5">
+              <img src="assets/tlu_dragon_logo.png" alt="TLU" class="w-8 h-8 object-contain">
+              <div>
+                <h2 class="text-base sm:text-lg font-black text-[#0F172A] tracking-tight">Đăng Nhập Cổng Sinh Viên</h2>
+                <p class="text-xs text-[#64748B]">Trợ Lý Học Tập CNTT Đại Học Thăng Long</p>
+              </div>
+            </div>
+          </div>
+
+          <!-- Quick Persona Account Selection -->
+          <div class="space-y-2">
+            <label class="text-xs font-bold text-[#334155]">Chọn tài khoản sinh viên mẫu:</label>
+            <div class="grid grid-cols-2 gap-2.5">
+              <button type="button" id="btn-quick-login-an" class="p-3 bg-white hover:bg-[#EEF4FF] border-2 border-[#0D62FE] rounded-xl text-left transition-all group">
+                <div class="text-xs font-bold text-[#0D62FE] group-hover:text-[#0047E0]">Nguyễn Văn An</div>
+                <div class="text-2xs text-[#64748B]">K35 • Mã SV: A41234</div>
+                <div class="text-3xs font-semibold text-[#10B981] mt-0.5">Môn học: IT101 / IT201</div>
+              </button>
+              <button type="button" id="btn-quick-login-linh" class="p-3 bg-white hover:bg-[#EEF4FF] border border-[#CBD5E1] hover:border-[#0D62FE] rounded-xl text-left transition-all group">
+                <div class="text-xs font-bold text-[#334155] group-hover:text-[#0D62FE]">Trần Mai Linh</div>
+                <div class="text-2xs text-[#64748B]">K34 • Mã SV: A38901</div>
+                <div class="text-3xs font-semibold text-[#0D62FE] mt-0.5">Đồ án: KTPM / AI</div>
+              </button>
+            </div>
+          </div>
+
+          <!-- Login Form Credentials -->
+          <form id="login-form" class="space-y-4">
+            <div class="space-y-1">
+              <label for="login-student-id" class="text-xs font-bold text-[#334155]">Mã số sinh viên TLU:</label>
+              <input id="login-student-id" type="text" value="A41234" aria-label="Mã số sinh viên" class="w-full bg-white border border-[#CBD5E1] text-[#0F172A] text-xs font-bold rounded-xl px-3.5 py-2.5 focus:outline-none focus:ring-2 focus:ring-[#0D62FE] focus:border-transparent">
+            </div>
+
+            <div class="space-y-1">
+              <label for="login-password" class="text-xs font-bold text-[#334155]">Mật khẩu tài khoản:</label>
+              <input id="login-password" type="password" value="tlu123456" aria-label="Mật khẩu tài khoản sinh viên" class="w-full bg-white border border-[#CBD5E1] text-[#0F172A] text-xs font-bold rounded-xl px-3.5 py-2.5 focus:outline-none focus:ring-2 focus:ring-[#0D62FE] focus:border-transparent">
+            </div>
+
+            <div class="flex items-center justify-between text-2xs text-[#64748B]">
+              <label class="flex items-center space-x-1.5 cursor-pointer">
+                <input id="login-remember" type="checkbox" checked class="rounded border-[#CBD5E1] text-[#0D62FE] focus:ring-[#0D62FE]">
+                <span>Ghi nhớ đăng nhập trên thiết bị này</span>
+              </label>
+              <span class="text-[#0D62FE] font-bold">Hỗ trợ 24/7</span>
+            </div>
+
+            <button type="submit" id="btn-login-submit" class="w-full py-3 bg-[#0D62FE] hover:bg-[#0047E0] text-white text-xs font-extrabold rounded-xl shadow-md hover:shadow-lg transition-all flex items-center justify-center space-x-2">
+              <span>Đăng Nhập Vào Hệ Thống</span>
+            </button>
+          </form>
+
+          <!-- Separate Admin Link (Admin dùng đường link khác) -->
+          <div class="pt-3 border-t border-[#E2E8F0] text-center space-y-1.5">
+            <div class="text-2xs text-[#64748B]">Bạn là Quản trị viên hệ thống hoặc Kỹ sư SRE?</div>
+            <a href="/admin" id="link-goto-admin" class="inline-block px-3 py-1.5 bg-white border border-[#CBD5E1] hover:border-[#0D62FE] text-[#0D62FE] text-2xs font-bold rounded-lg shadow-2xs hover:shadow-xs transition-all">
+              Đến Cổng Quản Trị Hệ Thống (/admin)
+            </a>
+          </div>
+
+        </div>
+
+      </div>
+    </div>
+  </div>
+
+  <!-- =========================================================================
+       1. GLOBAL HEADER & BRAND CHROME
+       ========================================================================= -->
+  <header id="app-header" class="sticky top-0 z-40 bg-white/95 backdrop-blur-md border-b border-[#E2E8F0] shadow-sm">
+    <!-- Top Toolbar -->
+    <div class="max-w-7xl mx-auto px-4 lg:px-8 py-3 flex flex-wrap items-center justify-between gap-4">
+      
+      <!-- Logo & Brand Info -->
+      <div class="flex items-center space-x-3">
+        <a href="#slides" class="flex items-center space-x-3 group focus:outline-none focus:ring-2 focus:ring-[#0D62FE] rounded-lg">
+          <img src="assets/tlu_dragon_logo.png" alt="Logo TLU Dragon" class="w-11 h-11 object-contain drop-shadow-sm group-hover:scale-105 transition-transform duration-200">
+          <div>
+            <div class="flex items-center space-x-2">
+              <span class="text-base font-extrabold text-[#0F172A] tracking-tight group-hover:text-[#0D62FE] transition-colors">TLU IT Study Copilot</span>
+              <span class="px-2 py-0.5 bg-[#EEF4FF] text-[#0D62FE] text-[10px] font-bold rounded-full border border-[#C7D9FE]">v1.0 AI</span>
+            </div>
+            <p class="text-xs font-semibold text-[#64748B]">Khoa Công nghệ Thông tin - Đại học Thăng Long</p>
+          </div>
+        </a>
+      </div>
+
+      <!-- Portal Mode Indicator -->
+      <div id="student-portal-indicator" class="flex items-center space-x-2">
+        <span class="px-3.5 py-1.5 bg-[#EEF4FF] border border-[#C7D9FE] text-[#0D62FE] text-xs font-bold rounded-xl flex items-center space-x-1.5">
+          <span class="w-2 h-2 rounded-full bg-[#10B981] inline-block animate-pulse"></span>
+          <span>Cổng Sinh Viên TLU</span>
+        </span>
+      </div>
+
+      <!-- Admin Portal Indicator (Visible when accessed via /admin) -->
+      <div id="admin-portal-indicator" class="hidden items-center space-x-2">
+        <span class="px-3.5 py-1.5 bg-[#0F172A] text-white text-xs font-bold rounded-xl flex items-center space-x-1.5">
+          <span class="w-2 h-2 rounded-full bg-[#0D62FE] inline-block animate-pulse"></span>
+          <span>Cổng Quản Trị (/admin)</span>
+        </span>
+        <button id="btn-admin-return-student" class="px-3 py-1.5 bg-white border border-[#CBD5E1] hover:border-[#0D62FE] text-[#0D62FE] text-xs font-bold rounded-xl shadow-2xs hover:shadow-xs transition-all">
+          Về Cổng Sinh Viên (/)
+        </button>
+      </div>
+
+      <!-- Hidden Legacy Portal Switchers (Preserved for compatibility) -->
+      <div class="hidden">
+        <button id="btn-portal-student" class="portal-tab-btn px-3.5 py-1.5 text-xs font-bold rounded-lg bg-[#0D62FE] text-white">Cổng Sinh Viên</button>
+        <button id="btn-portal-admin" class="portal-tab-btn px-3.5 py-1.5 text-xs font-bold rounded-lg text-[#475569]">Cổng Quản Trị</button>
+      </div>
+
+      <!-- Student Header Controls (Visible in Student Portal) -->
+      <div id="student-header-controls" class="flex items-center flex-wrap gap-2.5">
+        <!-- Quick Course Selector -->
+        <div class="flex items-center space-x-1.5 bg-[#F1F5F9] px-2.5 py-1 rounded-xl border border-[#E2E8F0]">
+          <span class="text-xs font-bold text-[#475569]">Môn học:</span>
+          <label for="course-select" class="sr-only">Chọn môn học</label>
+          <select id="course-select" aria-label="Lựa chọn môn học CNTT TLU" class="bg-transparent text-xs font-bold text-[#0D62FE] focus:outline-none cursor-pointer pr-1">
+            <option value="IT101" selected>IT101 - Lập trình cơ bản (C/C++)</option>
+            <option value="IT201">IT201 - Lập trình Hướng đối tượng (Java)</option>
+            <option value="IT205">IT205 - Cơ sở dữ liệu (SQL)</option>
+            <option value="IT301">IT301 - Lập trình Python & Trí tuệ Nhân tạo</option>
+            <option value="IT315">IT315 - Kiến trúc Máy tính & Hệ điều hành</option>
+          </select>
+        </div>
+
+        <!-- Student Persona Switcher -->
+        <div class="flex items-center space-x-1.5 bg-[#F1F5F9] px-2.5 py-1 rounded-xl border border-[#E2E8F0]">
+          <span class="text-xs font-bold text-[#475569]">Sinh viên:</span>
+          <label for="persona-select" class="sr-only">Chọn sinh viên đại diện</label>
+          <select id="persona-select" aria-label="Lựa chọn Persona sinh viên" class="bg-transparent text-xs font-bold text-[#334155] focus:outline-none cursor-pointer pr-1">
+            <option value="an" selected>Nguyễn Văn An (K35 - Y1)</option>
+            <option value="linh">Trần Mai Linh (K34 - Y3)</option>
+          </select>
+        </div>
+
+        <!-- Preserved Student ID Pill (Module 5 PII Preservation) -->
+        <div id="student-id-badge" class="px-2.5 py-1.5 bg-[#EEF4FF] border border-[#C7D9FE] text-[#0D62FE] text-xs font-bold rounded-lg flex items-center space-x-1" title="Mã số sinh viên TLU được bảo lưu an toàn không che dấu">
+          <span class="w-2 h-2 rounded-full bg-[#0D62FE] inline-block animate-pulse"></span>
+          <span>Mã SV: <strong id="current-student-id">A41234</strong></span>
+        </div>
+
+        <!-- Pro Tier CTA Button (Module 1 Economics) -->
+        <button id="btn-header-pro" class="flex items-center space-x-1.5 px-3 py-1.5 bg-gradient-to-r from-[#FFB800] to-[#FFA000] text-[#0F172A] text-xs font-extrabold rounded-lg shadow-sm hover:shadow-md hover:scale-[1.02] active:scale-[0.98] transition-all">
+          <span>Gói Pro: 69.000 đ/tháng</span>
+        </button>
+
+        <!-- Student Logout Button -->
+        <button id="btn-logout" class="px-3 py-1.5 bg-white border border-[#CBD5E1] hover:border-[#FF3B30] hover:text-[#FF3B30] text-[#475569] text-xs font-bold rounded-lg shadow-2xs hover:shadow-xs transition-all" title="Đăng xuất khỏi tài khoản sinh viên và quay lại màn hình đăng nhập">
+          Đăng Xuất
+        </button>
+      </div>
+
+      <!-- Admin Role Badge (Visible in Admin Portal, Hidden in Student Portal) -->
+      <div id="admin-role-badge" class="hidden flex items-center space-x-2.5">
+        <div class="px-3 py-1.5 bg-[#F1F5F9] border border-[#CBD5E1] text-[#0F172A] text-xs font-bold rounded-lg flex items-center space-x-2 shadow-2xs">
+          <span class="w-2 h-2 rounded-full bg-[#0D62FE] inline-block animate-pulse"></span>
+          <span>Quản Trị Viên: <strong>SRE &amp; FinOps Ops Lead</strong></span>
+        </div>
+      </div>
+
+      <!-- AI Multi-Provider Engine Status Pill -->
+      <div id="ai-provider-badge" class="px-2.5 py-1.5 bg-[#F0FDF4] border border-[#BBF7D0] text-[#16A34A] text-xs font-bold rounded-lg flex items-center space-x-1" title="Động cơ AI Đa Tầng: Groq Cloud (Qwen) | Google Gemini 3.5 | OpenRouter">
+        <span class="w-2 h-2 rounded-full bg-[#16A34A] inline-block animate-pulse"></span>
+        <span>AI: <strong id="current-ai-engine">Groq &amp; Gemini Sẵn Sàng</strong></span>
+      </div>
+
+    </div>
+
+    <!-- Workspace Tabs Navigation: Student Portal Tabs -->
+    <div id="nav-student-tabs" class="max-w-7xl mx-auto px-4 lg:px-8 border-t border-[#F1F5F9]">
+      <nav id="workspace-tabs-nav-student" class="flex space-x-4" role="tablist" aria-label="Điều hướng học tập sinh viên">
+        <button id="tab-btn-slides" data-tab="slides" role="tab" aria-selected="true" aria-controls="workspace-slides" class="tab-btn active px-3 py-2.5 border-b-2 border-[#0D62FE] text-[#0D62FE] text-xs font-bold flex items-center space-x-2 transition-colors">
+          <span>Kho Bài Giảng &amp; Slide (Giao Diện Chính)</span>
+        </button>
+        <button id="tab-btn-socratic" data-tab="socratic" role="tab" aria-selected="false" aria-controls="workspace-socratic" class="tab-btn px-3 py-2.5 border-b-2 border-transparent text-[#64748B] hover:text-[#0F172A] text-xs font-bold flex items-center space-x-2 transition-colors">
+          <span>Gia Sư &amp; Code Studio (Tùy Chọn)</span>
+        </button>
+      </nav>
+    </div>
+
+    <!-- Workspace Tabs Navigation: Admin Portal Tabs (Hidden by default) -->
+    <div id="nav-admin-tabs" class="max-w-7xl mx-auto px-4 lg:px-8 border-t border-[#F1F5F9] hidden">
+      <nav id="workspace-tabs-nav-admin" class="flex space-x-4" role="tablist" aria-label="Điều hướng quản trị hạ tầng">
+        <button id="tab-btn-multiagent" data-tab="multiagent" role="tab" aria-selected="false" aria-controls="workspace-multiagent" class="tab-btn px-3 py-2.5 border-b-2 border-transparent text-[#64748B] hover:text-[#0F172A] text-xs font-bold flex items-center space-x-2 transition-colors">
+          <span>Hạ Tầng Tác Tử &amp; Dữ Liệu</span>
+        </button>
+        <button id="tab-btn-ops" data-tab="ops" role="tab" aria-selected="false" aria-controls="workspace-ops" class="tab-btn px-3 py-2.5 border-b-2 border-transparent text-[#64748B] hover:text-[#0F172A] text-xs font-bold flex items-center space-x-2 transition-colors">
+          <span>Vận Hành, Benchmarking, Logs &amp; FinOps</span>
+        </button>
+      </nav>
+    </div>
+  </header>
+
+  <!-- =========================================================================
+       2. MAIN CONTENT (3 WORKSPACE PANELS)
+       ========================================================================= -->
+  <main id="main-content" class="flex-1 max-w-7xl w-full mx-auto px-4 lg:px-8 py-6">
+
+    <!-- =======================================================================
+         WORKSPACE 1: SOCRATIC TUTORING & CODE STUDIO (Tab 'socratic')
+         ======================================================================= -->
+    <section id="workspace-socratic" role="tabpanel" aria-labelledby="tab-btn-socratic" class="hidden space-y-6">
+      
+      <!-- Academic Integrity & Optional Studio Header Banner -->
+      <div class="bg-gradient-to-r from-[#EEF4FF] via-white to-[#EEF4FF] border border-[#C7D9FE] rounded-2xl p-5 flex flex-col md:flex-row items-start md:items-center justify-between gap-4 shadow-sm">
+        <div class="flex items-center space-x-3.5">
+          <div class="w-11 h-11 rounded-xl bg-white border border-[#C7D9FE] flex items-center justify-center text-xs font-extrabold text-[#0D62FE] shadow-sm shrink-0">
+            STUDIO
+          </div>
+          <div>
+            <div class="flex items-center space-x-2">
+              <h2 class="text-base font-extrabold text-[#0F172A]">Gia Sư &amp; Code Studio (Chức Năng Tùy Chọn)</h2>
+              <span class="text-[10px] font-bold text-[#0D62FE] bg-[#EEF4FF] px-2 py-0.5 rounded-full border border-[#C7D9FE]">Tùy Chọn Thực Hành</span>
+            </div>
+            <p class="text-xs text-[#475569] mt-0.5">Không gian thực hành mã nguồn, mô phỏng lỗi thực thi và phân tích Diff theo Điều 25 Quy chế Đào tạo TLU.</p>
+          </div>
+        </div>
+        <div class="flex flex-wrap items-center gap-2">
+          <button id="btn-back-to-slides" class="px-3.5 py-2 bg-[#0D62FE] hover:bg-[#0047E0] text-white text-xs font-bold rounded-xl shadow-xs hover:shadow transition-all flex items-center space-x-1.5">
+            <span>Quay Lại Kho Bài Giảng &amp; Slide Chính</span>
+          </button>
+          <button id="btn-open-messenger-from-studio" class="px-3.5 py-2 bg-white border border-[#CBD5E1] hover:border-[#0D62FE] text-[#0D62FE] text-xs font-bold rounded-xl shadow-2xs hover:shadow-xs transition-all flex items-center space-x-1.5">
+            <span>Mở Trợ Lý Rồng TLU (Messenger)</span>
+          </button>
+          <button id="btn-view-article25" class="px-3 py-2 bg-white border border-[#CBD5E1] hover:border-[#0D62FE] text-[#0D62FE] text-xs font-bold rounded-xl shadow-2xs hover:shadow-sm transition-all flex items-center space-x-1 shrink-0">
+            <span>Xem Quy chế Điều 25</span>
+          </button>
+        </div>
+      </div>
+
+      <!-- Two-Column Split Layout for Code Studio & Diff Viewer -->
+      <div class="grid grid-cols-1 lg:grid-cols-12 gap-6 items-start">
+        
+        <!-- Left Column: Code Editor & Terminal Simulator (Col 1 to 7) -->
+        <div class="lg:col-span-7 bg-white border border-[#E2E8F0] rounded-2xl shadow-sm overflow-hidden flex flex-col h-[680px]">
+          <!-- Editor Toolbar -->
+          <div class="px-4 py-3 border-b border-[#F1F5F9] bg-[#FFFFFF] flex items-center justify-between">
+            <div class="flex items-center space-x-2">
+              <label for="code-lang-selector" class="text-xs font-bold text-[#475569]">Ngôn ngữ:</label>
+              <select id="code-lang-selector" aria-label="Ngôn ngữ lập trình" class="bg-[#F8FAFC] border border-[#CBD5E1] text-[#0F172A] text-xs font-bold rounded-lg px-2.5 py-1 focus:ring-1 focus:ring-[#0D62FE]">
+                <option value="cpp" selected>C / C++ (IT101)</option>
+                <option value="java">Java (IT201)</option>
+                <option value="sql">SQL (IT205)</option>
+                <option value="python">Python (IT301)</option>
+              </select>
+            </div>
+
+            <!-- Action Buttons -->
+            <div class="flex items-center space-x-1.5">
+              <button id="btn-code-run" class="px-3 py-1.5 bg-[#10B981] hover:bg-[#059669] text-white text-xs font-bold rounded-lg shadow-2xs hover:shadow-sm transition-all flex items-center space-x-1">
+                <span>Chạy thử</span>
+              </button>
+              <button id="btn-code-diff" class="px-3 py-1.5 bg-[#0D62FE] hover:bg-[#0047E0] text-white text-xs font-bold rounded-lg shadow-2xs hover:shadow-sm transition-all flex items-center space-x-1">
+                <span>So sánh Diff</span>
+              </button>
+              <button id="btn-code-reset" class="px-2.5 py-1.5 bg-[#F1F5F9] hover:bg-[#E2E8F0] text-[#475569] text-xs font-semibold rounded-lg transition-colors" title="Đặt lại code mẫu">
+                Đặt lại
+              </button>
+            </div>
+          </div>
+
+          <!-- Editor Input Box -->
+          <div id="code-editor-container" class="flex-1 relative bg-[#F8FAFC] p-3.5 overflow-hidden font-mono text-xs">
+            <label for="code-editor" class="sr-only">Trình soạn thảo mã nguồn</label>
+            <textarea id="code-editor" rows="22" spellcheck="false" aria-label="Khung soạn thảo mã nguồn" class="w-full h-full bg-transparent text-[#0F172A] font-mono text-xs leading-relaxed focus:outline-none resize-none">#include &lt;iostream&gt;
+using namespace std;
+
+int main() {
+    // Thử nghiệm con trỏ trong IT101
+    int *ptr = nullptr;
+    
+    // Lỗi logic: Gán giá trị vào con trỏ chưa cấp phát
+    *ptr = 100;
+    
+    cout &lt;&lt; "Gia tri: " &lt;&lt; *ptr &lt;&lt; endl;
+    return 0;
+}</textarea>
+          </div>
+
+          <!-- Terminal Output Simulator -->
+          <div class="border-t border-[#E2E8F0] bg-[#F1F5F9] p-3.5 text-xs font-mono">
+            <div class="flex items-center justify-between text-[11px] font-bold text-[#64748B] mb-1">
+              <span>TERMINAL SIMULATOR</span>
+              <span id="terminal-status-badge" class="text-[#FF3B30]">Exit code: 139 (SIGSEGV)</span>
+            </div>
+            <div id="code-output" class="text-[#B91C1C] text-[11px] leading-relaxed max-h-24 overflow-y-auto">
+              Segmentation fault (core dumped): Invalid memory access at address 0x0
+            </div>
+          </div>
+        </div>
+
+        <!-- Right Column: Visual Logic Diff Viewer Card & Guidance (Col 8 to 12) -->
+        <div class="lg:col-span-5 space-y-4">
+          
+          <!-- Visual Logic Diff Viewer Card (Article 25 Safe Mode) -->
+          <div id="code-diff-container" class="bg-white border border-[#E2E8F0] rounded-2xl p-5 shadow-sm space-y-3.5">
+            <div class="flex items-center justify-between border-b border-[#F1F5F9] pb-3">
+              <h4 class="text-xs font-bold text-[#0F172A] flex items-center space-x-1.5">
+                <span>Phân Tích Logic &amp; So Sánh Diff (Điều 25 TLU)</span>
+              </h4>
+              <span class="text-[10px] font-bold text-[#10B981] bg-[#ECFDF5] px-2 py-0.5 rounded-full border border-[#A7F3D0]">Không viết hộ full code</span>
+            </div>
+
+            <!-- Diff Lines Demonstration -->
+            <div class="space-y-2 font-mono text-xs">
+              <!-- Negative Diff Line (Flaw Highlight) -->
+              <div class="bg-[#FEF2F2] border border-[#FECACA] text-[#991B1B] p-2.5 rounded-xl flex items-start space-x-2">
+                <span class="font-bold text-[#FF3B30] select-none shrink-0">[-]</span>
+                <div class="leading-relaxed">
+                  <span class="font-bold">Dòng 8:</span> <code class="bg-white/60 px-1 py-0.5 rounded">*ptr = 100;</code>
+                  <div class="text-[11px] text-[#B91C1C] font-sans mt-0.5 font-medium">Lỗi: Ghi dữ liệu vào địa chỉ null. Cần trỏ tới biến hoặc cấp phát ô nhớ trước.</div>
+                </div>
+              </div>
+
+              <!-- Positive Socratic Suggestion Line -->
+              <div class="bg-[#ECFDF5] border border-[#A7F3D0] text-[#065F46] p-2.5 rounded-xl flex items-start space-x-2">
+                <span class="font-bold text-[#10B981] select-none shrink-0">[+]</span>
+                <div class="leading-relaxed">
+                  <span class="font-bold">Gợi ý sửa:</span> <code class="bg-white/60 px-1 py-0.5 rounded">int val = 100; ptr = &amp;val;</code> hoặc <code class="bg-white/60 px-1 py-0.5 rounded">ptr = new int(100);</code>
+                  <div class="text-[11px] text-[#047857] font-sans mt-0.5 font-medium">Lưu ý giải phóng bộ nhớ <code class="font-mono">delete ptr;</code> nếu sử dụng cấp phát động heap.</div>
+                </div>
+              </div>
+            </div>
+
+            <!-- Logic Flaws Summary List -->
+            <div id="diff-logic-flaws" class="text-[11px] text-[#475569] space-y-1 pt-1 border-t border-[#F1F5F9]">
+              <div>• <strong>Nguyên nhân:</strong> Con trỏ trỏ vào vùng nhớ không thuộc quyền sở hữu của tiến trình.</div>
+              <div>• <strong>Kiến thức cốt lõi:</strong> Slide IT101 Tuần 3 - Phân biệt vùng nhớ Stack và Heap.</div>
+            </div>
+          </div>
+
+          <!-- Academic Principles Guide Card -->
+          <div class="bg-[#EEF4FF] border border-[#C7D9FE] rounded-2xl p-5 shadow-2xs space-y-2.5">
+            <div class="flex items-center space-x-2">
+              <span class="w-2.5 h-2.5 rounded-full bg-[#0D62FE] inline-block"></span>
+              <h4 class="text-xs font-bold text-[#0D62FE]">Quy Trình Tự Sửa Lỗi Socratic 3 Bước</h4>
+            </div>
+            <ol class="list-decimal list-inside text-xs text-[#334155] space-y-1.5 leading-relaxed">
+              <li>Đọc kỹ thông báo từ Terminal Simulator để nắm loại lỗi (biên dịch hoặc thực thi).</li>
+              <li>Bấm nút "So sánh Diff" để đối chiếu mã nguồn với chuẩn bài giảng của giảng viên TLU.</li>
+              <li>Chạm vào bong bóng Messenger Chatbot Rồng TLU ở góc màn hình để nhận câu hỏi gợi mở tư duy.</li>
+            </ol>
+          </div>
+
+        </div>
+
+      </div>
+
+    </section>
+
+    <!-- =======================================================================
+         WORKSPACE 2: SLIDE UPLOAD & COURSE MATERIALS (Tab 'slides' - Cổng Sinh Viên)
+         ======================================================================= -->
+    <section id="workspace-slides" role="tabpanel" aria-labelledby="tab-btn-slides" class="space-y-6">
+      
+      <!-- Top Title Banner -->
+      <div class="bg-gradient-to-r from-[#EEF4FF] via-white to-[#EEF4FF] border border-[#C7D9FE] rounded-2xl p-5 shadow-sm flex flex-col md:flex-row items-start md:items-center justify-between gap-4">
+        <div class="flex items-center space-x-3.5">
+          <div class="w-11 h-11 rounded-xl bg-white border border-[#C7D9FE] flex items-center justify-center text-xs font-extrabold text-[#0D62FE] shadow-sm shrink-0">
+            SLIDE
+          </div>
+          <div>
+            <div class="flex items-center space-x-2">
+              <h2 class="text-base font-extrabold text-[#0F172A]">Kho Bài Giảng &amp; Slide (Giao Diện Chính)</h2>
+              <span class="text-[10px] font-bold text-[#10B981] bg-[#ECFDF5] px-2 py-0.5 rounded-full border border-[#A7F3D0]">Chính Khóa TLU</span>
+            </div>
+            <p class="text-xs text-[#475569] mt-0.5">Không gian chiếu bài giảng tập trung, trực quan, hỗ trợ tất cả các môn học Công nghệ Thông tin.</p>
+          </div>
+        </div>
+        <div class="flex flex-wrap items-center gap-2">
+          <button id="btn-open-upload-modal" class="px-3.5 py-2 bg-[#0D62FE] hover:bg-[#0047E0] text-white text-xs font-bold rounded-xl shadow-xs hover:shadow transition-all flex items-center space-x-1.5">
+            <span>[+] Tải Lên Slide Môn Học Mới</span>
+          </button>
+          <button id="btn-open-catalog-modal" class="px-3.5 py-2 bg-white border border-[#CBD5E1] hover:border-[#0D62FE] text-[#0D62FE] text-xs font-bold rounded-xl shadow-2xs hover:shadow-xs transition-all flex items-center space-x-1.5">
+            <span>Kho Slide CNTT Đã Nạp</span>
+          </button>
+          <button id="btn-open-messenger-chat" class="px-3.5 py-2 bg-[#EEF4FF] hover:bg-[#DBEAFE] text-[#0D62FE] text-xs font-bold rounded-xl border border-[#C7D9FE] transition-all flex items-center space-x-1.5">
+            <span>Hỏi Rồng TLU (Messenger)</span>
+          </button>
+          <button id="btn-practice-slide-code" class="px-3.5 py-2 bg-white border border-[#CBD5E1] hover:border-[#0D62FE] text-[#475569] hover:text-[#0D62FE] text-xs font-bold rounded-xl shadow-2xs hover:shadow-xs transition-all flex items-center space-x-1.5">
+            <span>Code Studio (Tùy Chọn)</span>
+          </button>
+        </div>
+      </div>
+
+      <!-- 3-Tier Lakehouse Architecture Cards (Hidden from student view to keep UI clean) -->
+      <div id="lakehouse-architecture-cards" class="hidden grid grid-cols-1 md:grid-cols-3 gap-4">
+        <div class="bg-white border border-[#E2E8F0] rounded-xl p-4 shadow-sm space-y-1.5">
+          <div class="flex items-center justify-between">
+            <span class="text-xs font-bold text-[#0F172A]">Tầng Đồng (Bronze Layer)</span>
+            <span class="text-3xs font-mono px-2 py-0.5 rounded bg-[#EEF4FF] text-[#0D62FE] border border-[#BFDBFE] font-bold">RAW Hash</span>
+          </div>
+          <p class="text-2xs text-[#64748B] leading-relaxed">Lưu trữ nguyên trạng tệp PDF/PPTX/Source code, tính mã băm SHA-256 chống trùng lặp và lưu metadata nguồn gốc.</p>
+        </div>
+
+        <div class="bg-white border border-[#E2E8F0] rounded-xl p-4 shadow-sm space-y-1.5">
+          <div class="flex items-center justify-between">
+            <span class="text-xs font-bold text-[#0F172A]">Tầng Bạc (Silver Layer)</span>
+            <span class="text-3xs font-mono px-2 py-0.5 rounded bg-[#F0FDF4] text-[#15803D] border border-[#BBF7D0] font-bold">PII Masked</span>
+          </div>
+          <p class="text-2xs text-[#64748B] leading-relaxed">Chuẩn hóa UTF-8, lọc sạch thông tin nhạy cảm PII, lọc trùng lặp qua thuật toán MinHash/LSH với ngưỡng Jaccard ≥ 0.85.</p>
+        </div>
+
+        <div class="bg-white border border-[#E2E8F0] rounded-xl p-4 shadow-sm space-y-1.5">
+          <div class="flex items-center justify-between">
+            <span class="text-xs font-bold text-[#0F172A]">Tầng Vàng (Gold Layer)</span>
+            <span class="text-3xs font-mono px-2 py-0.5 rounded bg-[#FFFBEB] text-[#B45309] border border-[#FDE68A] font-bold">1024-dim BGE-M3</span>
+          </div>
+          <p class="text-2xs text-[#64748B] leading-relaxed">Phân đoạn AST-aware giữ nguyên khối code/slide heading, sinh vector Dense 1024 chiều và chỉ mục đảo từ khóa BM25.</p>
+        </div>
+      </div>
+
+      <!-- Single Interactive Slide Viewer (K3-Hackathon Inspired Classroom Stage) -->
+      <div class="w-full bg-white border-2 border-b-4 border-[#CBD5E1] rounded-2xl p-5 sm:p-7 shadow-sm space-y-5">
+        
+        <!-- Classroom Top Header Bar (Inspired by K3-Hackathon student-classroom__header) -->
+        <div class="flex flex-col md:flex-row md:items-center justify-between gap-3 border-b-2 border-[#F1F5F9] pb-4">
+          <div class="flex flex-wrap items-center gap-2.5">
+            <span id="current-slide-badge" class="px-3 py-1 bg-[#EEF4FF] border border-[#C7D9FE] text-[#0D62FE] text-xs font-black rounded-xl">IT101 • Tuần 03</span>
+            <span id="slide-sync-badge" class="text-[11px] font-extrabold text-[#10B981] bg-[#ECFDF5] px-2.5 py-1 rounded-xl border border-[#A7F3D0]">Đang Theo Dõi Bài Giảng</span>
+            <span id="current-slide-format-badge" class="text-[10px] font-bold text-[#0D62FE] bg-[#EEF4FF] px-2 py-0.5 rounded-lg border border-[#C7D9FE]">Học Liệu Chính Khóa</span>
+          </div>
+
+          <!-- Classroom Reading Progress Bar -->
+          <div class="flex items-center space-x-3 w-full md:w-80">
+            <div class="h-3 flex-1 overflow-hidden rounded-full bg-[#F1F5F9] border border-[#CBD5E1]">
+              <div id="slide-progress-bar" class="h-full rounded-full bg-[#0D62FE] transition-all duration-300" style="width: 42.8%;"></div>
+            </div>
+            <span id="current-slide-page" class="text-xs sm:text-sm font-extrabold tabular-nums text-[#0F172A] bg-[#F8FAFC] px-3 py-1 rounded-xl border border-[#CBD5E1] shrink-0">Slide 18 / 42</span>
+          </div>
+
+          <!-- Quick Navigation Header Buttons -->
+          <div class="flex flex-wrap items-center gap-2">
+            <button id="btn-prev-slide" class="blk-btn px-3.5 py-1.5 bg-[#F1F5F9] hover:bg-[#E2E8F0] active:scale-95 text-[#475569] text-xs font-extrabold transition-all cursor-pointer">Slide Trước</button>
+            <button id="btn-next-slide" class="blk-btn px-3.5 py-1.5 bg-[#EEF4FF] hover:bg-[#DBEAFE] active:scale-95 text-[#0D62FE] text-xs font-extrabold transition-all cursor-pointer">Slide Kế Tiếp</button>
+            <button id="btn-open-upload-modal-inline" class="blk-btn px-3.5 py-1.5 bg-[#0D62FE] hover:bg-[#0047E0] active:scale-95 text-white text-xs font-bold shadow-2xs hover:shadow transition-all cursor-pointer">
+              <span>[+] Tải Lên Slide Mới</span>
+            </button>
+          </div>
+        </div>
+
+        <!-- Sync Notice Banner (Toggled when in self-reading mode) -->
+        <div id="slide-sync-notice" class="hidden p-3.5 bg-[#FFFBEB] border-2 border-b-4 border-[#FCD34D] rounded-xl flex items-center justify-between gap-3 text-xs">
+          <div class="flex items-center space-x-2 text-[#92400E] font-bold">
+            <span class="w-2.5 h-2.5 rounded-full bg-[#F59E0B] inline-block"></span>
+            <span id="slide-sync-notice-text">Bạn đang ở chế độ tự đọc slide độc lập. Bấm [Đồng Bộ Bài Giảng] để bám sát nhịp độ lớp học.</span>
+          </div>
+          <button id="btn-slide-resync" class="blk-btn px-3 py-1 bg-white hover:bg-[#FEF3C7] text-[#B45309] text-xs font-extrabold cursor-pointer">
+            Đồng Bộ Bài Giảng
+          </button>
+        </div>
+
+        <!-- Main Classroom Stage Row: 16:9 Slide Canvas + Optional Split AI Panel -->
+        <div class="flex flex-col lg:flex-row items-start gap-5">
+
+          <!-- Left: 16:9 Cinematic Slide Stage -->
+          <div class="flex-1 w-full space-y-4 min-w-0">
+            
+            <div id="slide-stage-wrapper" class="w-full overflow-hidden rounded-2xl relative">
+              <div id="current-slide-container" class="blk-card p-6 sm:p-8 space-y-4 transition-all duration-200">
+                
+                <div class="flex flex-wrap items-center justify-between gap-2 border-b border-[#F1F5F9] pb-3">
+                  <span class="text-[11px] font-black uppercase tracking-wider text-[#0D62FE]">KHOA CÔNG NGHỆ THÔNG TIN • ĐẠI HỌC THĂNG LONG</span>
+                  <span id="current-slide-course-tag" class="text-[10px] font-bold text-[#0D62FE] bg-[#EEF4FF] px-2.5 py-0.5 rounded-full border border-[#C7D9FE]">Slide Trình Chiếu</span>
+                </div>
+
+                <!-- Title & Signature Accent Underline Bar (from SlideCanvas.tsx) -->
+                <div>
+                  <h3 id="current-slide-topic" class="text-base sm:text-2xl font-black text-[#0F172A] leading-snug">Chủ đề: Cấp Phát Bộ Nhớ Động Trên Vùng Nhớ Heap (C/C++)</h3>
+                  <div class="h-2 w-28 bg-[#0D62FE] rounded-full my-2.5"></div>
+                </div>
+
+                <p id="current-slide-desc" class="text-xs sm:text-sm text-[#334155] leading-relaxed">
+                  Vùng nhớ Heap là không gian nhớ dùng cho cấp phát động tại thời điểm thực thi (runtime). Khác với vùng nhớ Stack được quản lý tự động theo phạm vi hàm, lập trình viên phải chủ động giải phóng bộ nhớ heap đã xin cấp phát.
+                </p>
+
+                <!-- Code box with K3-Hackathon block styling -->
+                <div id="current-slide-code-box" class="blk-card border border-[#CBD5E1] bg-[#F8FAFC] rounded-xl p-4 sm:p-5 font-mono text-xs sm:text-sm text-[#0F172A] space-y-1.5 shadow-2xs">
+                  <div class="text-[#64748B]">// Ví dụ chuẩn trong Slide IT101 Tuần 3:</div>
+                  <div><span class="text-[#0D62FE] font-bold">int</span> *ptr = <span class="text-[#0D62FE] font-bold">new</span> <span class="text-[#0D62FE] font-bold">int</span>(100); <span class="text-[#64748B]">// Cấp phát 1 ô nhớ int trên Heap</span></div>
+                  <div>std::cout &lt;&lt; <span class="text-[#B91C1C]">"Gia tri: "</span> &lt;&lt; *ptr &lt;&lt; std::endl;</div>
+                  <div><span class="text-[#0D62FE] font-bold">delete</span> ptr; <span class="text-[#64748B]">// Bắt buộc giải phóng sau khi dùng</span></div>
+                  <div>ptr = <span class="text-[#0D62FE] font-bold">nullptr</span>; <span class="text-[#64748B]">// Tránh con trỏ lơ lửng (Dangling pointer)</span></div>
+                </div>
+
+                <!-- Callout Note -->
+                <div id="current-slide-note-box" class="bg-[#FEF2F2] border-l-4 border-[#FF3B30] p-4 rounded-r-xl text-xs sm:text-sm text-[#7F1D1D] space-y-1">
+                  <div class="font-bold text-[#B91C1C]">Cảnh Báo Lỗi Thường Gặp Của Sinh Viên:</div>
+                  <div>Quên giải phóng con trỏ dẫn đến rò rỉ bộ nhớ (Memory Leak), hoặc truy cập vào ô nhớ sau khi delete sẽ gây lỗi <code class="font-mono font-bold bg-white/70 px-1 rounded">Segmentation fault (SIGSEGV)</code>.</div>
+                </div>
+
+                <!-- Slide Footer Label -->
+                <div id="current-slide-canvas-footer" class="text-[11px] font-bold text-[#64748B] pt-3 border-t border-[#F1F5F9] flex items-center justify-between">
+                  <span>TLU IT Study Copilot • Slide Chuẩn Giảng Đường</span>
+                  <span class="font-mono">Tỉ Lệ Khung Hình 16:9</span>
+                </div>
+
+              </div>
+            </div>
+
+            <!-- Classroom Controls & Zoom Dock (Inspired by K3-Hackathon student-classroom__controls) -->
+            <div class="relative z-10 blk-card p-3 sm:p-4 flex flex-wrap items-center justify-between gap-3 shadow-xs bg-white">
+              
+              <!-- Follow toggle -->
+              <div class="flex items-center gap-2">
+                <button id="btn-slide-toggle-follow" class="blk-btn px-3.5 py-2 bg-[#ECFDF5] hover:bg-[#D1FAE5] text-[#047857] text-xs font-extrabold transition-all cursor-pointer">
+                  Đang Theo Dõi Giảng Viên
+                </button>
+              </div>
+
+              <!-- Zoom Dock -->
+              <div class="flex items-center gap-1.5 bg-[#F8FAFC] border border-[#CBD5E1] rounded-xl px-2.5 py-1">
+                <span class="text-3xs font-black uppercase text-[#64748B] mr-1">Thu Phóng:</span>
+                <button id="btn-slide-zoom-out" class="blk-btn px-2.5 py-1 bg-white hover:bg-[#F1F5F9] text-[#475569] text-xs font-black cursor-pointer" title="Thu nhỏ slide">
+                  [-]
+                </button>
+                <button id="slide-zoom-val" class="px-2 py-1 text-xs font-black tabular-nums text-[#0F172A] hover:text-[#0D62FE] cursor-pointer" title="Bấm để về cỡ vừa khung 100%">
+                  100%
+                </button>
+                <button id="btn-slide-zoom-in" class="blk-btn px-2.5 py-1 bg-white hover:bg-[#F1F5F9] text-[#475569] text-xs font-black cursor-pointer" title="Phóng to slide">
+                  [+]
+                </button>
+                <button id="btn-slide-zoom-reset" class="blk-btn px-2.5 py-1 bg-white hover:bg-[#F1F5F9] text-[#0D62FE] text-3xs font-black cursor-pointer" title="Về cỡ 100%">
+                  Vừa Khung
+                </button>
+              </div>
+
+              <!-- Split AI Toggle Button -->
+              <div>
+                <button id="btn-toggle-split-ai" class="blk-btn px-3.5 py-2 bg-[#F3E8FF] hover:bg-[#E9D5FF] text-[#7E22CE] text-xs font-extrabold transition-all cursor-pointer">
+                  Hỏi AI Về Slide
+                </button>
+              </div>
+
+            </div>
+
+            <!-- Bottom Action Bar (Preserving All Original Button IDs) -->
+            <div class="flex flex-wrap items-center justify-start gap-2.5 pt-1">
+              <button id="btn-trigger-messenger-panel" class="blk-btn px-4 py-2.5 bg-[#0D62FE] hover:bg-[#0047E0] text-white text-xs font-bold shadow-xs hover:shadow transition-all flex items-center space-x-1.5 cursor-pointer">
+                <span>Hỏi Chatbot Rồng TLU Về Slide Này</span>
+              </button>
+              <button id="btn-ask-slide-mascot" class="blk-btn px-3.5 py-2.5 bg-white border border-[#CBD5E1] hover:border-[#0D62FE] text-[#0D62FE] text-xs font-bold shadow-2xs hover:shadow-xs transition-all flex items-center space-x-1.5 cursor-pointer">
+                <span>Mở Cửa Sổ Chat Messenger</span>
+              </button>
+              <button id="btn-goto-socratic-optional" class="blk-btn px-3.5 py-2.5 bg-white border border-[#CBD5E1] hover:border-[#0D62FE] text-[#475569] hover:text-[#0D62FE] text-xs font-bold shadow-2xs hover:shadow-xs transition-all flex items-center space-x-1.5 cursor-pointer">
+                <span>Thực Hành Trong Studio (Tùy Chọn)</span>
+              </button>
+              <button class="btn-open-slide blk-btn px-3.5 py-2.5 bg-[#ECFDF5] border border-[#A7F3D0] hover:border-[#10B981] text-[#047857] text-xs font-bold transition-colors cursor-pointer" data-course="IT101" data-week="03" data-slide="18" data-title="Con trỏ &amp; Vùng nhớ Heap">
+                <span>Xem Slide Gốc Toàn Màn Hình</span>
+              </button>
+            </div>
+
+          </div>
+
+          <!-- Right: Split-View Classroom AI Study Panel (Inspired by K3-Hackathon ai-help-panel) -->
+          <aside id="slide-ai-split-panel" class="hidden w-full lg:w-96 shrink-0 blk-card p-5 space-y-4 shadow-md bg-white">
+            
+            <div class="flex items-center justify-between border-b border-[#CBD5E1] pb-3">
+              <div>
+                <span class="text-[11px] font-black uppercase text-[#7E22CE] tracking-wider">HỖ TRỢ THEO SLIDE HIỆN TẠI</span>
+                <h4 class="text-base font-extrabold text-[#0F172A]">Gia Sư Socratic AI</h4>
+              </div>
+              <button id="btn-close-split-ai" class="blk-btn px-2.5 py-1 bg-[#F1F5F9] hover:bg-[#E2E8F0] text-[#64748B] text-xs font-black cursor-pointer" title="Đóng panel hỗ trợ">
+                [X]
+              </button>
+            </div>
+
+            <!-- Scope notice -->
+            <div class="p-3 bg-[#EEF4FF] border border-[#BFDBFE] rounded-xl text-xs text-[#0D62FE] font-medium leading-relaxed">
+              AI trả lời bám sát slide đang trình chiếu và gợi mở tư duy theo chuẩn phương pháp Socratic TLU.
+            </div>
+
+            <!-- Slide Summary -->
+            <div class="p-3.5 bg-[#F8FAFC] border border-[#CBD5E1] rounded-xl space-y-1.5">
+              <span class="text-3xs font-black uppercase tracking-wider text-[#7E22CE]">TÓM TẮT TRỌNG TÂM SLIDE</span>
+              <p id="split-ai-slide-summary" class="text-xs text-[#334155] leading-relaxed">
+                Cấp phát bộ nhớ động trên Heap bằng toán tử new và bắt buộc thu hồi bằng delete để tránh lỗi rò rỉ bộ nhớ trong C++.
+              </p>
+            </div>
+
+            <!-- Quick Socratic suggestions -->
+            <div class="space-y-2">
+              <span class="text-3xs font-black uppercase tracking-wider text-[#64748B]">GỢI Ý CÂU HỎI NHANH:</span>
+              <div id="split-ai-suggestions" class="space-y-1.5">
+                <button class="split-ai-chip w-full text-left p-2.5 bg-white hover:bg-[#F3E8FF] border border-[#CBD5E1] hover:border-[#A855F7] rounded-xl text-xs font-semibold text-[#0F172A] transition-all cursor-pointer">
+                  So sánh phân vùng Heap vs Stack trong slide này
+                </button>
+                <button class="split-ai-chip w-full text-left p-2.5 bg-white hover:bg-[#F3E8FF] border border-[#CBD5E1] hover:border-[#A855F7] rounded-xl text-xs font-semibold text-[#0F172A] transition-all cursor-pointer">
+                  Tại sao bắt buộc dùng delete sau khi new?
+                </button>
+                <button class="split-ai-chip w-full text-left p-2.5 bg-white hover:bg-[#F3E8FF] border border-[#CBD5E1] hover:border-[#A855F7] rounded-xl text-xs font-semibold text-[#0F172A] transition-all cursor-pointer">
+                  Con trỏ lơ lửng (Dangling pointer) là gì?
+                </button>
+              </div>
+            </div>
+
+            <!-- Message stream -->
+            <div id="split-ai-messages" class="h-44 overflow-y-auto p-3 bg-[#F8FAFC] border border-[#CBD5E1] rounded-xl space-y-2 text-xs">
+              <div class="p-2.5 bg-white border border-[#E2E8F0] rounded-xl text-[#334155]">
+                Xin chào! Tôi là Trợ giảng Socratic đồng hành cùng slide này. Bạn có câu hỏi nào về phần cấp phát bộ nhớ động không?
+              </div>
+            </div>
+
+            <!-- Composer input box -->
+            <div class="space-y-2 pt-1 border-t border-[#CBD5E1]">
+              <label for="split-ai-input" class="text-3xs font-black uppercase tracking-wider text-[#64748B] block">ĐẶT CÂU HỎI VỀ SLIDE:</label>
+              <div class="flex items-center gap-2">
+                <input id="split-ai-input" type="text" aria-label="Nhập câu hỏi về slide này" class="flex-1 px-3 py-2 bg-white border border-[#CBD5E1] focus:border-[#0D62FE] rounded-xl text-xs text-[#0F172A] outline-none" />
+                <button id="btn-send-split-ai" class="blk-btn px-3.5 py-2 bg-[#0D62FE] hover:bg-[#0047E0] text-white text-xs font-extrabold cursor-pointer">
+                  Gửi
+                </button>
+              </div>
+            </div>
+
+          </aside>
+
+        </div>
+
+      </div>
+
+      <!-- Preserved Dinosaur Companion Card Elements (Hidden from UI) -->
+      <div id="dinosaur-companion-card" class="hidden">
+        <button class="btn-quick-slide-query" data-query="Giải thích cấp phát Heap và Stack trong slide này">So sánh phân vùng Heap vs Stack</button>
+        <button class="btn-quick-slide-query" data-query="Tại sao cần dùng lệnh delete sau khi cấp phát new?">Tại sao bắt buộc dùng delete sau khi new?</button>
+        <button class="btn-quick-slide-query" data-query="Lỗi dangling pointer trong C++ môn IT101">Con trỏ lơ lửng là gì?</button>
+      </div>
+
+    </section>
+
+    <!-- =======================================================================
+         WORKSPACE 3: MULTI-AGENT ARCHITECTURE & DATA LAKEHOUSE (Tab 'multiagent')
+         ======================================================================= -->
+    <section id="workspace-multiagent" role="tabpanel" aria-labelledby="tab-btn-multiagent" class="hidden space-y-6">
+      
+      <!-- Top Title -->
+      <div class="bg-white border border-[#E2E8F0] rounded-2xl p-5 shadow-sm">
+        <h2 class="text-base font-extrabold text-[#0F172A]">Hạ Tầng AI Đa Tác Tử, Kho Học Liệu & Rào Chắn An Toàn</h2>
+        <p class="text-xs text-[#64748B] mt-1">Trực quan hóa hoạt động điều phối của LangGraph State Machine (Module 3), cấu trúc Medallion Lakehouse AST Chunking (Module 4) và phòng thủ 4 lớp Guardrails (Module 5).</p>
+      </div>
+
+      <!-- Grid 2 Columns for Agent Visualizer and Memory -->
+      <div class="grid grid-cols-1 lg:grid-cols-12 gap-6">
+        
+        <!-- Live LangGraph Visualizer (Col 1 to 7) -->
+        <div id="langgraph-visualizer" class="lg:col-span-7 bg-white border border-[#E2E8F0] rounded-2xl p-5 shadow-sm space-y-4">
+          <div class="flex items-center justify-between border-b border-[#F1F5F9] pb-3">
+            <h3 class="text-sm font-bold text-[#0F172A] flex items-center space-x-2">
+              <span>Live LangGraph Workflow Visualizer</span>
+            </h3>
+            <span class="text-[11px] font-bold text-[#0D62FE] bg-[#EEF4FF] px-2.5 py-1 rounded-full border border-[#C7D9FE]">Supervisor-Worker DAG</span>
+          </div>
+
+          <!-- DAG Flowchart Diagram Mockup -->
+          <div class="bg-[#F8FAFC] border border-[#CBD5E1] rounded-xl p-4 space-y-4">
+            <!-- Node 1: Supervisor Router -->
+            <div class="bg-white border-2 border-[#0D62FE] rounded-xl p-3 shadow-sm flex items-center justify-between">
+              <div class="flex items-center space-x-2.5">
+                <span class="w-7 h-7 rounded-lg bg-[#EEF4FF] text-[#0D62FE] flex items-center justify-center font-bold text-xs">R</span>
+                <div>
+                  <div class="text-xs font-bold text-[#0F172A]">Supervisor Router Node</div>
+                  <div class="text-[10px] text-[#64748B]">Phân loại ý định sinh viên theo môn học & chuyên môn</div>
+                </div>
+              </div>
+              <span class="text-[10px] font-bold text-[#10B981] bg-[#ECFDF5] px-2 py-0.5 rounded">Active (Routing)</span>
+            </div>
+
+            <!-- Arrow Down -->
+            <div class="text-center text-[#94A3B8] text-xs font-bold">Phân phối chuyên môn</div>
+
+            <!-- Node 2: Specialist Worker -->
+            <div class="bg-white border-2 border-[#FFB800] rounded-xl p-3 shadow-sm flex items-center justify-between">
+              <div class="flex items-center space-x-2.5">
+                <span class="w-7 h-7 rounded-lg bg-[#FFFBEB] text-[#B45309] flex items-center justify-center font-bold text-xs">W</span>
+                <div>
+                  <div class="text-xs font-bold text-[#0F172A]">Code & Logic Specialist Worker</div>
+                  <div class="text-[10px] text-[#64748B]">Bóc tách AST cú pháp, phân tích lỗi con trỏ IT101</div>
+                </div>
+              </div>
+              <span class="text-[10px] font-bold text-[#B45309] bg-[#FFFBEB] px-2 py-0.5 rounded">Processing</span>
+            </div>
+
+            <!-- Arrow Down -->
+            <div class="text-center text-[#94A3B8] text-xs font-bold">Thẩm định an toàn sư phạm</div>
+
+            <!-- Node 3: Socratic Reviewer Guardrail -->
+            <div class="bg-white border-2 border-[#10B981] rounded-xl p-3 shadow-sm flex items-center justify-between">
+              <div class="flex items-center space-x-2.5">
+                <span class="w-7 h-7 rounded-lg bg-[#ECFDF5] text-[#047857] flex items-center justify-center font-bold text-xs">G</span>
+                <div>
+                  <div class="text-xs font-bold text-[#0F172A]">Socratic Reviewer Guardrail Node</div>
+                  <div class="text-[10px] text-[#64748B]">Khóa Điều 25 TLU: Cấm full-code, kiểm chứng trích dẫn Slide</div>
+                </div>
+              </div>
+              <span class="text-[10px] font-bold text-[#047857] bg-[#ECFDF5] px-2 py-0.5 rounded">Verified PASS</span>
+            </div>
+
+            <!-- Escalation Branch -->
+            <div class="border-t border-[#E2E8F0] pt-2 flex items-center justify-between text-[11px] text-[#64748B]">
+              <span>Nhánh ngắt mạch: Human-in-the-Loop Triad</span>
+              <span class="text-[#0D62FE] font-bold">Chuyển Giảng viên nếu bế tắc 3 lần</span>
+            </div>
+          </div>
+
+          <!-- Channel States in TLUStudentAgentState -->
+          <div class="grid grid-cols-2 md:grid-cols-4 gap-2 text-center text-xs">
+            <div class="bg-[#F1F5F9] p-2 rounded-lg">
+              <div class="text-[10px] text-[#64748B]">Course Code</div>
+              <div class="font-bold text-[#0F172A]">IT101</div>
+            </div>
+            <div class="bg-[#F1F5F9] p-2 rounded-lg">
+              <div class="text-[10px] text-[#64748B]">Session Turns</div>
+              <div class="font-bold text-[#0F172A]">4 / 20</div>
+            </div>
+            <div class="bg-[#F1F5F9] p-2 rounded-lg">
+              <div class="text-[10px] text-[#64748B]">Article 25 State</div>
+              <div class="font-bold text-[#10B981]">SAFE (Guided)</div>
+            </div>
+            <div class="bg-[#F1F5F9] p-2 rounded-lg">
+              <div class="text-[10px] text-[#64748B]">HITL Escalate</div>
+              <div class="font-bold text-[#64748B]">False</div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Cognitive Memory Fabric Inspector (Col 8 to 12) -->
+        <div id="memory-inspector" class="lg:col-span-5 bg-white border border-[#E2E8F0] rounded-2xl p-5 shadow-sm space-y-4">
+          <div class="border-b border-[#F1F5F9] pb-3">
+            <h3 class="text-sm font-bold text-[#0F172A]">Cognitive Memory Fabric</h3>
+            <p class="text-xs text-[#64748B]">Bộ nhớ nhận thức 3 tầng theo dõi tiến trình học tập của sinh viên.</p>
+          </div>
+
+          <!-- Memory Tabs Container -->
+          <div class="space-y-3">
+            <!-- Tier 1: Working Memory -->
+            <div class="bg-[#F8FAFC] border border-[#E2E8F0] rounded-xl p-3">
+              <div class="flex items-center justify-between text-xs font-bold text-[#0D62FE] mb-1">
+                <span>1. Working Memory (Bộ nhớ phiên hiện tại)</span>
+                <span class="text-[10px] text-[#64748B]">TTL: Phiên học</span>
+              </div>
+              <p class="text-xs text-[#334155] leading-relaxed">
+                Biến con trỏ: <code class="font-mono">int *ptr = nullptr</code>; Lỗi phát hiện: Segmentation fault tại dòng 8; Đang giải thích: Cơ chế vùng nhớ Stack vs Heap.
+              </p>
+            </div>
+
+            <!-- Tier 2: Session Trajectory -->
+            <div class="bg-[#F8FAFC] border border-[#E2E8F0] rounded-xl p-3">
+              <div class="flex items-center justify-between text-xs font-bold text-[#B45309] mb-1">
+                <span>2. Session Trajectory (Lịch sử công cụ)</span>
+                <span class="text-[10px] text-[#64748B]">3 tool calls</span>
+              </div>
+              <ul class="text-[11px] text-[#475569] space-y-1 font-mono">
+                <li>• tlu_it_retrieve_slide_code("IT101", "pointer_heap")</li>
+                <li>• tlu_it_debug_code_syntax("cpp", "*ptr = 100")</li>
+                <li>• tlu_it_verify_code_citation("IT101 > Week 3 > Slide 18")</li>
+              </ul>
+            </div>
+
+            <!-- Tier 3: Declarative Profile -->
+            <div class="bg-[#F8FAFC] border border-[#E2E8F0] rounded-xl p-3">
+              <div class="flex items-center justify-between text-xs font-bold text-[#047857] mb-1">
+                <span>3. Declarative Profile (Hồ sơ sinh viên)</span>
+                <span class="text-[10px] text-[#64748B]">Persona An K35</span>
+              </div>
+              <div class="text-xs text-[#334155] space-y-1">
+                <div>• Trình độ: Năm nhất (Cơ sở lập trình)</div>
+                <div>• Chủ đề đã vững: Vòng lặp for/while, Mảng 1 chiều</div>
+                <div>• Cần củng cố: Con trỏ, Cấp phát động, Struct</div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+      </div>
+
+      <!-- Grid 2 Columns for Lakehouse and Guardrails -->
+      <div class="grid grid-cols-1 lg:grid-cols-12 gap-6">
+        
+        <!-- Medallion Lakehouse & Hybrid Search (Col 1 to 7) -->
+        <div id="lakehouse-explorer" class="lg:col-span-7 bg-white border border-[#E2E8F0] rounded-2xl p-5 shadow-sm space-y-4">
+          <div class="flex items-center justify-between border-b border-[#F1F5F9] pb-3">
+            <h3 class="text-sm font-bold text-[#0F172A]">Medallion Lakehouse & Hybrid Search Explorer</h3>
+            <span class="text-[11px] font-bold text-[#0D62FE] bg-[#EEF4FF] px-2 py-0.5 rounded">Module 4</span>
+          </div>
+
+          <!-- 3 Medallion Layers Cards -->
+          <div class="grid grid-cols-3 gap-3 text-xs">
+            <div class="border border-[#CBD5E1] rounded-xl p-3 bg-[#F8FAFC]">
+              <div class="font-bold text-[#475569]">Bronze Layer</div>
+              <div class="text-[11px] text-[#64748B] mt-1">Slide thô PDF/PPTX</div>
+              <div class="text-[10px] font-mono text-[#0D62FE] mt-1">SHA-256 Verified</div>
+            </div>
+            <div class="border border-[#CBD5E1] rounded-xl p-3 bg-[#F8FAFC]">
+              <div class="font-bold text-[#475569]">Silver Layer</div>
+              <div class="text-[11px] text-[#64748B] mt-1">UTF-8 Conformed</div>
+              <div class="text-[10px] font-mono text-[#10B981] mt-1">MinHash Jaccard ≥ 0.85</div>
+            </div>
+            <div class="border border-[#CBD5E1] rounded-xl p-3 bg-[#F8FAFC]">
+              <div class="font-bold text-[#475569]">Gold Layer</div>
+              <div class="text-[11px] text-[#64748B] mt-1">AST Code Chunks</div>
+              <div class="text-[10px] font-mono text-[#B45309] mt-1">BGE-M3 1024-dim</div>
+            </div>
+          </div>
+
+          <!-- Hybrid Search Simulation Box -->
+          <div class="space-y-2">
+            <label for="hybrid-search-input" class="block text-xs font-bold text-[#475569]">Thử nghiệm tìm kiếm lai (Dense Vector BGE-M3 + BM25 Sparse + RRF k=60):</label>
+            <div class="flex space-x-2">
+              <input type="text" id="hybrid-search-input" value="con trỏ và cấp phát bộ nhớ heap IT101" aria-label="Truy vấn tìm kiếm tài liệu học liệu" class="flex-1 bg-[#F8FAFC] border border-[#CBD5E1] rounded-xl px-3 py-2 text-xs text-[#0F172A] focus:ring-2 focus:ring-[#0D62FE]">
+              <button id="btn-hybrid-search" class="px-4 py-2 bg-[#0D62FE] text-white text-xs font-bold rounded-xl shadow-sm hover:bg-[#0047E0] transition-colors">Tìm kiếm</button>
+            </div>
+          </div>
+
+          <!-- Search Results Sample Table -->
+          <div id="lakehouse-results-container" class="overflow-x-auto">
+            <table class="w-full text-left text-xs">
+              <thead class="bg-[#F1F5F9] text-[#475569] font-bold">
+                <tr>
+                  <th class="p-2 rounded-l-lg">Breadcrumb</th>
+                  <th class="p-2">Dense (BGE-M3)</th>
+                  <th class="p-2">Sparse (BM25)</th>
+                  <th class="p-2 rounded-r-lg">RRF Rank (k=60)</th>
+                </tr>
+              </thead>
+              <tbody class="divide-y divide-[#F1F5F9] text-[#334155]">
+                <tr>
+                  <td class="p-2 font-mono text-[11px] text-[#0D62FE]">IT101 > Tuần 03 > Slide 18</td>
+                  <td class="p-2 font-mono">0.892</td>
+                  <td class="p-2 font-mono">14.28</td>
+                  <td class="p-2 font-bold text-[#10B981]">0.0328 (#1)</td>
+                </tr>
+                <tr>
+                  <td class="p-2 font-mono text-[11px] text-[#0D62FE]">IT101 > Tuần 03 > Slide 19</td>
+                  <td class="p-2 font-mono">0.841</td>
+                  <td class="p-2 font-mono">11.05</td>
+                  <td class="p-2 font-bold text-[#10B981]">0.0315 (#2)</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+
+        <!-- Guardrails Latency Meter & Vietnamese PII Demo (Col 8 to 12) -->
+        <div id="guardrails-meter" class="lg:col-span-5 bg-white border border-[#E2E8F0] rounded-2xl p-5 shadow-sm space-y-4">
+          <div class="border-b border-[#F1F5F9] pb-3">
+            <h3 class="text-sm font-bold text-[#0F172A]">Phòng Thủ 4 Tầng & Khử PII Tiếng Việt</h3>
+            <p class="text-xs text-[#64748B]">Ngân sách độ trễ P95 ≤ 130ms; khử CCCD, SĐT nhưng bảo lưu Mã SV.</p>
+          </div>
+
+          <!-- Latency Gauge Cards -->
+          <div class="bg-[#F8FAFC] border border-[#E2E8F0] rounded-xl p-3.5 space-y-2.5">
+            <div class="flex items-center justify-between text-xs font-bold">
+              <span class="text-[#0F172A]">Tổng độ trễ Guardrails:</span>
+              <span class="text-[#10B981] font-mono text-sm">98.1 ms / ≤ 130 ms (ĐẠT)</span>
+            </div>
+            
+            <!-- 4 Layer Breakdown -->
+            <div class="space-y-1.5 text-[11px]">
+              <div class="flex items-center justify-between">
+                <span class="text-[#475569]">L1: Fast Filter (NFKC, Regex)</span>
+                <span class="font-mono font-bold text-[#0D62FE]">3.2 ms (≤ 5ms)</span>
+              </div>
+              <div class="flex items-center justify-between">
+                <span class="text-[#475569]">L2: Semantic Classifier (Jailbreak)</span>
+                <span class="font-mono font-bold text-[#0D62FE]">18.5 ms (≤ 25ms)</span>
+              </div>
+              <div class="flex items-center justify-between">
+                <span class="text-[#475569]">L3: Neural Guard (Llama Guard 3)</span>
+                <span class="font-mono font-bold text-[#0D62FE]">54.1 ms (≤ 70ms)</span>
+              </div>
+              <div class="flex items-center justify-between">
+                <span class="text-[#475569]">L4: Output PII & Socratic Gate</span>
+                <span class="font-mono font-bold text-[#0D62FE]">22.3 ms (≤ 30ms)</span>
+              </div>
+            </div>
+          </div>
+
+          <!-- Interactive PII Demo Box -->
+          <div id="pii-demo-container" class="space-y-2">
+            <label for="pii-input" class="block text-xs font-bold text-[#475569]">Thử nghiệm bộ lọc PII tiếng Việt:</label>
+            <textarea id="pii-input" rows="2" aria-label="Văn bản thử nghiệm khử PII" class="w-full bg-[#F8FAFC] border border-[#CBD5E1] rounded-xl p-2.5 text-xs text-[#0F172A] focus:ring-1 focus:ring-[#0D62FE]">Sinh viên An mã SV A41234, số CCCD 001203004567, SĐT 0912345678</textarea>
+            
+            <div class="bg-[#EEF4FF] border border-[#C7D9FE] rounded-xl p-2.5 text-xs">
+              <div class="text-[10px] font-bold text-[#0D62FE] uppercase mb-0.5">Kết quả sau khi khử định danh:</div>
+              <p id="pii-output" class="text-xs text-[#1E3A8A] leading-relaxed">
+                Sinh viên An mã SV <strong class="bg-white px-1 py-0.5 rounded text-[#0D62FE] border border-[#93B8FD]">A41234</strong>, số CCCD <span class="bg-[#FEE2E2] text-[#B91C1C] px-1 py-0.5 rounded font-mono">[ĐÃ CHE CCCD]</span>, SĐT <span class="bg-[#FEE2E2] text-[#B91C1C] px-1 py-0.5 rounded font-mono">[ĐÃ CHE SĐT]</span>
+              </p>
+            </div>
+          </div>
+        </div>
+
+      </div>
+
+    </section>
+
+    <!-- =======================================================================
+         WORKSPACE 3: OPS, BENCHMARKING & FINOPS (Tab 'ops')
+         ======================================================================= -->
+    <section id="workspace-ops" role="tabpanel" aria-labelledby="tab-btn-ops" class="hidden space-y-6">
+      
+      <!-- Top Title -->
+      <div class="bg-white border border-[#E2E8F0] rounded-2xl p-5 shadow-sm">
+        <h2 class="text-base font-extrabold text-[#0F172A]">Vận Hành SRE, Đánh Giá RAGAS & Bài Toán Kinh Tế FinOps</h2>
+        <p class="text-xs text-[#64748B] mt-1">Khung đánh giá định lượng khoa học (Module 6) kết hợp 6 Golden Signals và phương trình hạch toán chi phí VNĐ (Module 1, 7).</p>
+      </div>
+
+      <!-- Section A: RAGAS Quality Monitor -->
+      <div id="ragas-monitor" class="bg-white border border-[#E2E8F0] rounded-2xl p-5 shadow-sm space-y-4">
+        <div class="flex items-center justify-between border-b border-[#F1F5F9] pb-3">
+          <div>
+            <h3 class="text-sm font-bold text-[#0F172A]">Bộ 4 Chỉ Số Đánh Giá Chất Lượng RAGAS (Release Gates)</h3>
+            <p class="text-xs text-[#64748B]">Đối chuẩn với 100 câu hỏi học thuật CNTT TLU qua giám khảo LLM-as-a-Judge Calibrated.</p>
+          </div>
+          <span class="text-xs font-bold text-[#10B981] bg-[#ECFDF5] px-3 py-1 rounded-full border border-[#A7F3D0]">4/4 Tiêu Chí ĐẠT</span>
+        </div>
+
+        <!-- 4 Metric Cards -->
+        <div class="grid grid-cols-2 lg:grid-cols-4 gap-4">
+          <!-- Metric 1 -->
+          <div class="bg-[#F8FAFC] border border-[#E2E8F0] rounded-xl p-3.5">
+            <div class="text-xs text-[#64748B]">Faithfulness</div>
+            <div class="text-2xl font-extrabold text-[#0D62FE] my-1">0.92</div>
+            <div class="text-[11px] text-[#10B981] font-bold">Mục tiêu: ≥ 0.85 (VƯỢT)</div>
+          </div>
+          <!-- Metric 2 -->
+          <div class="bg-[#F8FAFC] border border-[#E2E8F0] rounded-xl p-3.5">
+            <div class="text-xs text-[#64748B]">Answer Relevancy</div>
+            <div class="text-2xl font-extrabold text-[#0D62FE] my-1">0.91</div>
+            <div class="text-[11px] text-[#10B981] font-bold">Mục tiêu: ≥ 0.85 (VƯỢT)</div>
+          </div>
+          <!-- Metric 3 -->
+          <div class="bg-[#F8FAFC] border border-[#E2E8F0] rounded-xl p-3.5">
+            <div class="text-xs text-[#64748B]">Context Precision</div>
+            <div class="text-2xl font-extrabold text-[#0D62FE] my-1">0.88</div>
+            <div class="text-[11px] text-[#10B981] font-bold">Mục tiêu: ≥ 0.80 (VƯỢT)</div>
+          </div>
+          <!-- Metric 4 -->
+          <div class="bg-[#F8FAFC] border border-[#E2E8F0] rounded-xl p-3.5">
+            <div class="text-xs text-[#64748B]">Context Recall</div>
+            <div class="text-2xl font-extrabold text-[#0D62FE] my-1">0.86</div>
+            <div class="text-[11px] text-[#10B981] font-bold">Mục tiêu: ≥ 0.80 (VƯỢT)</div>
+          </div>
+        </div>
+
+        <!-- Statistical Rigor Highlights -->
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-3 text-xs bg-[#EEF4FF] border border-[#C7D9FE] rounded-xl p-3 text-[#1E3A8A]">
+          <div>• <strong>Cohen's Kappa:</strong> κ = 0.76 (≥ 0.70 - Đồng thuận cao)</div>
+          <div>• <strong>Paired t-test:</strong> p = 0.0012 (&lt; 0.05 - Ý nghĩa thống kê)</div>
+          <div>• <strong>Bootstrap 95% CI:</strong> [0.895, 0.942]</div>
+        </div>
+      </div>
+
+      <!-- Section B: Golden Dataset 100 Questions Viewer -->
+      <div id="golden-dataset-viewer" class="bg-white border border-[#E2E8F0] rounded-2xl p-5 shadow-sm space-y-4">
+        <div class="flex flex-col md:flex-row md:items-center justify-between gap-3 border-b border-[#F1F5F9] pb-3">
+          <div>
+            <h3 class="text-sm font-bold text-[#0F172A]">Trình Duyệt Golden Dataset 100 Mẫu Đối Chuẩn</h3>
+            <p class="text-xs text-[#64748B]">Phân bổ đều 20 câu/môn cho 5 môn CNTT TLU qua 4 tầng độ khó.</p>
+          </div>
+          <div class="flex items-center space-x-2">
+            <label for="golden-filter-course" class="sr-only">Lọc môn học</label>
+            <select id="golden-filter-course" aria-label="Bộ lọc môn học" class="bg-[#F8FAFC] border border-[#CBD5E1] text-[#0F172A] text-xs font-semibold rounded-lg px-2.5 py-1">
+              <option value="ALL">Tất cả 5 môn</option>
+              <option value="IT101" selected>IT101 (C/C++)</option>
+              <option value="IT201">IT201 (Java)</option>
+              <option value="IT205">IT205 (SQL)</option>
+              <option value="IT301">IT301 (Python)</option>
+              <option value="IT315">IT315 (Kiến trúc MT)</option>
+            </select>
+          </div>
+        </div>
+
+        <!-- Sample Questions Table -->
+        <div class="overflow-x-auto">
+          <table class="w-full text-left text-xs">
+            <thead class="bg-[#F1F5F9] text-[#475569] font-bold">
+              <tr>
+                <th class="p-2.5 rounded-l-lg">Mã ID</th>
+                <th class="p-2.5">Môn</th>
+                <th class="p-2.5">Tầng Độ Khó</th>
+                <th class="p-2.5">Câu Hỏi Đối Chuẩn</th>
+                <th class="p-2.5">Trích Dẫn Ground Truth</th>
+                <th class="p-2.5 rounded-r-lg">Điểm Judge</th>
+              </tr>
+            </thead>
+            <tbody class="divide-y divide-[#F1F5F9] text-[#334155]">
+              <tr>
+                <td class="p-2.5 font-mono text-[11px] text-[#0D62FE]">GOLD-IT101-001</td>
+                <td class="p-2.5 font-bold">IT101</td>
+                <td class="p-2.5"><span class="bg-[#EEF4FF] text-[#0D62FE] px-2 py-0.5 rounded-full text-[10px] font-bold">Simple Factual</span></td>
+                <td class="p-2.5">Toán tử sizeof trả về bao nhiêu byte cho con trỏ int * trên hệ 64-bit?</td>
+                <td class="p-2.5 text-[11px] text-[#64748B]">Slide Tuần 05 - Kích thước con trỏ LP64 (8 bytes)</td>
+                <td class="p-2.5 font-bold text-[#10B981]">5.0 / 5.0</td>
+              </tr>
+              <tr>
+                <td class="p-2.5 font-mono text-[11px] text-[#0D62FE]">GOLD-IT101-002</td>
+                <td class="p-2.5 font-bold">IT101</td>
+                <td class="p-2.5"><span class="bg-[#FFFBEB] text-[#B45309] px-2 py-0.5 rounded-full text-[10px] font-bold">Multi-Hop</span></td>
+                <td class="p-2.5">Sự khác biệt giữa cấp phát malloc trong C và toán tử new trong C++?</td>
+                <td class="p-2.5 text-[11px] text-[#64748B]">Slide Tuần 03 & Tuần 06 - Constructor invocation</td>
+                <td class="p-2.5 font-bold text-[#10B981]">4.9 / 5.0</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      <!-- Section C: OpenTelemetry 6 Golden Signals Dashboard -->
+      <div id="otel-signals-dashboard" class="bg-white border border-[#E2E8F0] rounded-2xl p-5 shadow-sm space-y-4">
+        <div class="flex items-center justify-between border-b border-[#F1F5F9] pb-3">
+          <div>
+            <h3 class="text-sm font-bold text-[#0F172A]">Viễn Thám OpenTelemetry: 6 Golden Signals (SRE Live Telemetry)</h3>
+            <p class="text-xs text-[#64748B]">Giám sát thời gian thực với phân tích phân vị P95 và cảnh báo Multi-Burn-Rate.</p>
+          </div>
+          <span class="text-xs font-bold text-[#10B981] bg-[#ECFDF5] px-2.5 py-1 rounded-full border border-[#A7F3D0]">Hệ thống Ổn định</span>
+        </div>
+
+        <div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-3 text-center">
+          <!-- Sig 1: TTFT -->
+          <div class="bg-[#F8FAFC] border border-[#E2E8F0] rounded-xl p-3">
+            <div class="text-[11px] text-[#64748B]">TTFT P95</div>
+            <div class="text-xl font-extrabold text-[#0F172A] my-0.5">640 ms</div>
+            <div class="text-[10px] text-[#10B981] font-bold">SLA: ≤ 800 ms</div>
+          </div>
+          <!-- Sig 2: Turn Latency -->
+          <div class="bg-[#F8FAFC] border border-[#E2E8F0] rounded-xl p-3">
+            <div class="text-[11px] text-[#64748B]">Turn Latency P95</div>
+            <div class="text-xl font-extrabold text-[#0F172A] my-0.5">2,850 ms</div>
+            <div class="text-[10px] text-[#10B981] font-bold">SLA: ≤ 3,500 ms</div>
+          </div>
+          <!-- Sig 3: RPS -->
+          <div class="bg-[#F8FAFC] border border-[#E2E8F0] rounded-xl p-3">
+            <div class="text-[11px] text-[#64748B]">Lưu lượng (RPS)</div>
+            <div class="text-xl font-extrabold text-[#0F172A] my-0.5">18.5 rps</div>
+            <div class="text-[10px] text-[#64748B] font-bold">Đỉnh: 42.0 rps</div>
+          </div>
+          <!-- Sig 4: Error Rate -->
+          <div class="bg-[#F8FAFC] border border-[#E2E8F0] rounded-xl p-3">
+            <div class="text-[11px] text-[#64748B]">Tỷ lệ lỗi</div>
+            <div class="text-xl font-extrabold text-[#10B981] my-0.5">0.02%</div>
+            <div class="text-[10px] text-[#10B981] font-bold">SLA: &lt; 0.10%</div>
+          </div>
+          <!-- Sig 5: Saturation -->
+          <div class="bg-[#F8FAFC] border border-[#E2E8F0] rounded-xl p-3">
+            <div class="text-[11px] text-[#64748B]">GPU Saturation</div>
+            <div class="text-xl font-extrabold text-[#0F172A] my-0.5">58.2%</div>
+            <div class="text-[10px] text-[#10B981] font-bold">An toàn</div>
+          </div>
+          <!-- Sig 6: Uptime -->
+          <div class="bg-[#F8FAFC] border border-[#E2E8F0] rounded-xl p-3">
+            <div class="text-[11px] text-[#64748B]">Khả dụng Uptime</div>
+            <div class="text-xl font-extrabold text-[#10B981] my-0.5">99.98%</div>
+            <div class="text-[10px] text-[#10B981] font-bold">SLA: ≥ 99.95%</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Section D: FinOps Real-time Calculator & B2C Subscription Portal -->
+      <div class="grid grid-cols-1 lg:grid-cols-12 gap-6">
+        
+        <!-- Real-Time FinOps Calculator (Col 1 to 7) -->
+        <div id="finops-calculator" class="lg:col-span-7 bg-white border border-[#E2E8F0] rounded-2xl p-5 shadow-sm space-y-4">
+          <div class="border-b border-[#F1F5F9] pb-3">
+            <h3 class="text-sm font-bold text-[#0F172A]">Máy Tính Chi Phí FinOps Thời Gian Thực (Việt Nam Đồng)</h3>
+            <p class="text-xs text-[#64748B]">Hạch toán Master Cost Equation: Tỷ giá 25.000 VNĐ / USD.</p>
+          </div>
+
+          <!-- FinOps Metrics Cards -->
+          <div class="grid grid-cols-3 gap-3 text-center">
+            <div class="bg-[#EEF4FF] border border-[#C7D9FE] rounded-xl p-3">
+              <div class="text-[11px] text-[#1E3A8A]">Cache Hit Rate</div>
+              <div class="text-lg font-bold text-[#0D62FE] my-0.5">68.4%</div>
+              <div class="text-[10px] text-[#10B981] font-bold">Mục tiêu: ≥ 60.0%</div>
+            </div>
+            <div class="bg-[#EEF4FF] border border-[#C7D9FE] rounded-xl p-3">
+              <div class="text-[11px] text-[#1E3A8A]">Chi phí TB / lượt</div>
+              <div class="text-lg font-bold text-[#0D62FE] my-0.5">184.5 đ</div>
+              <div class="text-[10px] text-[#10B981] font-bold">Mục tiêu: ≤ 300 đ</div>
+            </div>
+            <div class="bg-[#FFFBEB] border border-[#FDE68A] rounded-xl p-3">
+              <div class="text-[11px] text-[#92400E]">Pro Gross Margin</div>
+              <div class="text-lg font-bold text-[#B45309] my-0.5">59.89%</div>
+              <div class="text-[10px] text-[#10B981] font-bold">Mục tiêu: ≥ 54.16%</div>
+            </div>
+          </div>
+
+          <!-- Interactive Calculator -->
+          <div class="bg-[#F8FAFC] border border-[#E2E8F0] rounded-xl p-4 space-y-3">
+            <div class="text-xs font-bold text-[#0F172A]">Ước tính chi phí 1 phiên học tập (10 lượt hỏi):</div>
+            <div class="flex items-center justify-between text-xs text-[#334155]">
+              <span>Chi phí chưa có Cache:</span>
+              <span class="font-mono">3.450 VNĐ</span>
+            </div>
+            <div class="flex items-center justify-between text-xs text-[#10B981] font-bold">
+              <span>Tiết kiệm nhờ Prompt Caching (68.4%):</span>
+              <span class="font-mono">-1.605 VNĐ</span>
+            </div>
+            <div class="flex items-center justify-between text-sm font-extrabold text-[#0D62FE] pt-2 border-t border-[#E2E8F0]">
+              <span>Chi phí thực tế sinh viên tiêu thụ:</span>
+              <span class="font-mono text-base">1.845 VNĐ / 10 lượt</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- B2C Subscription Portal (Col 8 to 12) -->
+        <div id="subscription-portal" class="lg:col-span-5 bg-white border border-[#E2E8F0] rounded-2xl p-5 shadow-sm space-y-4">
+          <div class="border-b border-[#F1F5F9] pb-3">
+            <h3 class="text-sm font-bold text-[#0F172A]">Gói Thuê Bao Dành Cho Sinh Viên TLU</h3>
+            <p class="text-xs text-[#64748B]">Bảo đảm Unit Economics bền vững với Gross Margin ≥ 54.16%.</p>
+          </div>
+
+          <!-- Pro Tier Pricing Highlight -->
+          <div class="bg-gradient-to-br from-[#FFFBEB] to-[#FEF3C7] border-2 border-[#FFB800] rounded-2xl p-4 space-y-3">
+            <div class="flex items-center justify-between">
+              <span class="text-xs font-extrabold text-[#B45309] uppercase tracking-wide">Gói Pro Không Giới Hạn</span>
+              <span class="px-2 py-0.5 bg-[#FFB800] text-[#0F172A] text-[10px] font-extrabold rounded-full">Khuyên Dùng</span>
+            </div>
+            <div class="flex items-baseline space-x-1">
+              <span class="text-2xl font-black text-[#0F172A]">69.000</span>
+              <span class="text-xs font-bold text-[#475569]">VNĐ / tháng</span>
+            </div>
+
+            <ul class="text-xs text-[#334155] space-y-1.5">
+              <li class="flex items-center space-x-1.5">
+                <span class="w-2 h-2 rounded-full bg-[#10B981] inline-block mr-1.5"></span>
+                <span>Không giới hạn số lượt hỏi (thay vì 20 lượt/ngày)</span>
+              </li>
+              <li class="flex items-center space-x-1.5">
+                <span class="w-2 h-2 rounded-full bg-[#10B981] inline-block mr-1.5"></span>
+                <span>Toàn quyền tra cứu 5 môn học CNTT cốt lõi</span>
+              </li>
+              <li class="flex items-center space-x-1.5">
+                <span class="w-2 h-2 rounded-full bg-[#10B981] inline-block mr-1.5"></span>
+                <span>Ưu tiên độ trễ suy luận P95 ≤ 800ms</span>
+              </li>
+              <li class="flex items-center space-x-1.5">
+                <span class="w-2 h-2 rounded-full bg-[#10B981] inline-block mr-1.5"></span>
+                <span>Trực quan hóa AST Code Diff chi tiết</span>
+              </li>
+            </ul>
+
+            <button id="btn-portal-upgrade" class="w-full py-2.5 bg-gradient-to-r from-[#FFB800] to-[#FFA000] hover:from-[#FFA000] hover:to-[#FF8F00] text-[#0F172A] text-xs font-extrabold rounded-xl shadow-sm hover:shadow transition-all">
+              Nâng Cấp Gói Pro Ngay (69.000 đ)
+            </button>
+          </div>
+        </div>
+
+      <!-- Section E: 3-Tier Structured JSON System Logs & FinOps Telemetry -->
+      <div id="admin-logs-panel" class="bg-white border border-[#E2E8F0] rounded-2xl p-5 shadow-sm space-y-4">
+        <div class="flex flex-col md:flex-row md:items-center justify-between gap-3 border-b border-[#F1F5F9] pb-3">
+          <div>
+            <h3 class="text-sm font-bold text-[#0F172A]">Nhật Ký Hệ Thống 3 Tầng &amp; Vết Suy Luận (3-Tier Structured JSON Logs)</h3>
+            <p class="text-xs text-[#64748B]">Theo dõi toàn diện Audit Logs (Kiểm toán), Inference Traces (Groq/Gemini/OpenRouter), và Safety Events (Guardrails &amp; Presidio).</p>
+          </div>
+          <div class="flex items-center space-x-2">
+            <label for="admin-log-filter" class="sr-only">Bộ lọc loại nhật ký</label>
+            <select id="admin-log-filter" aria-label="Bộ lọc loại nhật ký hệ thống" class="bg-[#F8FAFC] border border-[#CBD5E1] text-[#0F172A] text-xs font-semibold rounded-lg px-2.5 py-1.5 focus:outline-none focus:border-[#0D62FE]">
+              <option value="all" selected>Tất cả nhật ký (All Logs)</option>
+              <option value="audit">Nhật ký Kiểm toán (Audit)</option>
+              <option value="inference">Vết Suy Luận AI (Inference)</option>
+              <option value="safety">An Toàn &amp; Rào Chắn (Safety)</option>
+            </select>
+            <button id="btn-refresh-admin-logs" class="px-3 py-1.5 bg-[#EEF4FF] border border-[#BFDBFE] text-[#0D62FE] hover:bg-[#DBEAFE] text-xs font-bold rounded-lg transition-colors">
+              Làm Mới
+            </button>
+          </div>
+        </div>
+
+        <!-- 4 FinOps Live Summary Cards for Admin -->
+        <div class="grid grid-cols-2 lg:grid-cols-4 gap-3 text-center">
+          <div class="bg-[#F8FAFC] border border-[#E2E8F0] rounded-xl p-3">
+            <div class="text-[11px] text-[#64748B]">Ngân Sách Tháng (Budget)</div>
+            <div id="admin-finops-budget" class="text-lg font-extrabold text-[#0F172A] my-0.5">15.000.000 đ</div>
+            <div class="text-3xs text-[#10B981] font-bold">Hạn mức an toàn</div>
+          </div>
+          <div class="bg-[#F8FAFC] border border-[#E2E8F0] rounded-xl p-3">
+            <div class="text-[11px] text-[#64748B]">Đã Tiêu Thụ (Burn Rate)</div>
+            <div id="admin-finops-consumed" class="text-lg font-extrabold text-[#0D62FE] my-0.5">6.842.000 đ</div>
+            <div class="text-3xs text-[#64748B] font-bold">45.61% ngân sách</div>
+          </div>
+          <div class="bg-[#F8FAFC] border border-[#E2E8F0] rounded-xl p-3">
+            <div class="text-[11px] text-[#64748B]">Prompt Cache Hit Rate</div>
+            <div id="admin-finops-cache" class="text-lg font-extrabold text-[#10B981] my-0.5">68.4%</div>
+            <div class="text-3xs text-[#10B981] font-bold">Mục tiêu: ≥ 60.0%</div>
+          </div>
+          <div class="bg-[#F8FAFC] border border-[#E2E8F0] rounded-xl p-3">
+            <div class="text-[11px] text-[#64748B]">Gross Margin Gói Pro</div>
+            <div id="admin-finops-margin" class="text-lg font-extrabold text-[#B45309] my-0.5">54.16%</div>
+            <div class="text-3xs text-[#10B981] font-bold">Vượt mục tiêu ≥ 50%</div>
+          </div>
+        </div>
+
+        <!-- Logs Table -->
+        <div class="overflow-x-auto border border-[#CBD5E1] rounded-xl">
+          <table class="w-full text-left text-xs">
+            <thead class="bg-[#F1F5F9] text-[#475569] font-bold border-b border-[#CBD5E1]">
+              <tr>
+                <th class="py-2.5 px-3">Loại Log</th>
+                <th class="py-2.5 px-3">Thời Gian</th>
+                <th class="py-2.5 px-3">Mục Tiêu / Tác Vụ</th>
+                <th class="py-2.5 px-3">Chi Tiết / Payload</th>
+                <th class="py-2.5 px-3">Trạng Thái</th>
+              </tr>
+            </thead>
+            <tbody id="admin-logs-table-body" class="divide-y divide-[#F1F5F9] bg-white">
+              <!-- Rendered dynamically by TLUAdminLogs.renderFilteredLogs() -->
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      <!-- Section F: Dead-Letter Queue (DLQ) Inspector -->
+      <div id="admin-dlq-panel" class="bg-white border border-[#E2E8F0] rounded-2xl p-5 shadow-sm space-y-4">
+        <div class="flex items-center justify-between border-b border-[#F1F5F9] pb-3">
+          <div>
+            <h3 class="text-sm font-bold text-[#0F172A]">Hàng Đợi Chết (Dead-Letter Queue - DLQ Inspector)</h3>
+            <p class="text-xs text-[#64748B]">Bắt giữ và cách ly các gói tin lỗi parse AST, encoding UTF-8 hỏng hoặc timeout để xử lý theo Đồng Hồ 20 Phút.</p>
+          </div>
+          <span class="text-xs font-bold text-[#10B981] bg-[#ECFDF5] px-2.5 py-1 rounded-full border border-[#A7F3D0]">Cách Ly An Toàn</span>
+        </div>
+
+        <div class="overflow-x-auto border border-[#CBD5E1] rounded-xl">
+          <table class="w-full text-left text-xs">
+            <thead class="bg-[#F1F5F9] text-[#475569] font-bold border-b border-[#CBD5E1]">
+              <tr>
+                <th class="py-2 px-3">DLQ ID</th>
+                <th class="py-2 px-3">Thời Gian</th>
+                <th class="py-2 px-3">Mã Lỗi (Error Code)</th>
+                <th class="py-2 px-3">Tệp Nguồn / Payload</th>
+                <th class="py-2 px-3">Tình Trạng</th>
+              </tr>
+            </thead>
+            <tbody id="admin-dlq-table-body" class="divide-y divide-[#F1F5F9] bg-white">
+              <!-- Rendered dynamically by TLUAdminLogs.renderDLQ() -->
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+    </section>
+
+  </main>
+
+  <!-- =========================================================================
+       3. FLOATING MASCOT INTERACTIVE WIDGET (RỒNG XANH TLU)
+       ========================================================================= -->
+  <aside id="mascot-floating-widget" class="fixed bottom-6 right-6 z-50 flex flex-col items-end pointer-events-none" aria-label="Linh vật Rồng TLU tương tác và Bong bóng Chat Messenger">
+    
+    <!-- Floating Messenger Chat Window (#mascot-chat-window) -->
+    <div id="mascot-chat-window" class="hidden pointer-events-auto w-[380px] sm:w-[420px] max-w-[calc(100vw-2rem)] h-[min(520px,calc(100vh-6rem))] max-h-[calc(100vh-5rem)] flex flex-col bg-white border border-[#CBD5E1] rounded-2xl shadow-2xl overflow-hidden mb-3 transition-all z-50">
+      
+      <!-- Messenger Header -->
+      <div class="px-4 py-3 bg-[#0D62FE] text-white flex items-center justify-between shadow-sm">
+        <div class="flex items-center space-x-2.5">
+          <div class="w-8 h-8 rounded-full bg-white/20 border border-white/30 flex items-center justify-center shrink-0">
+            <img src="assets/tlu_dragon_logo.png" alt="TLU" class="w-6 h-6 object-contain">
+          </div>
+          <div>
+            <div class="text-xs font-bold leading-tight">Rồng Xanh TLU - Trợ Lý Học Tập</div>
+            <div id="chat-active-course-label" class="text-[10px] text-white/90 font-medium">Đang học: IT101 - Lập trình cơ bản (C/C++)</div>
+          </div>
+        </div>
+        <div class="flex items-center space-x-1.5">
+          <button id="btn-clear-chat" class="px-2 py-1 bg-white/15 hover:bg-white/25 text-white text-[11px] font-bold rounded-lg transition-colors" title="Bắt đầu phiên đối thoại mới">
+            Làm mới
+          </button>
+          <button id="btn-minimize-chat" class="px-2 py-1 bg-white/15 hover:bg-white/25 text-white text-[11px] font-bold rounded-lg transition-colors" title="Thu nhỏ cửa sổ chat">
+            Thu nhỏ
+          </button>
+        </div>
+      </div>
+
+      <!-- Messages Stream (#chat-messages) -->
+      <div id="chat-messages" class="flex-1 overflow-y-auto p-4 space-y-3.5 bg-[#F8FAFC]" aria-live="polite">
+        <!-- Copilot Welcome Greeting Card -->
+        <div class="flex items-start space-x-2.5">
+          <div class="w-7 h-7 rounded-full bg-[#EEF4FF] border border-[#C7D9FE] flex items-center justify-center shrink-0">
+            <img src="assets/tlu_dragon_logo.png" alt="TLU" class="w-5 h-5 object-contain">
+          </div>
+          <div class="flex-1 bg-white border border-[#E2E8F0] rounded-2xl p-3 shadow-2xs">
+            <div class="flex items-center justify-between mb-1">
+              <span class="text-xs font-bold text-[#0D62FE]">Rồng Xanh TLU Copilot</span>
+              <span class="text-[10px] text-[#94A3B8]">Hôm nay</span>
+            </div>
+            <p class="text-xs text-[#334155] leading-relaxed mb-2">
+              Chào bạn! Mình là Rồng Xanh TLU, trợ lý học tập trực tuyến bên cạnh slide môn <strong class="text-[#0D62FE]">IT101</strong>. Bạn đang gặp vướng mắc ở phần cú pháp, con trỏ hay bài tập nào?
+            </p>
+            <div class="bg-[#EEF4FF] rounded-lg p-2 border border-[#C7D9FE] text-[11px] text-[#1E40AF]">
+              <strong>Nguyên tắc Socratic:</strong> Mình sẽ gợi mở tư duy và chỉ ra nguyên nhân lỗi thay vì giải hộ trọn vẹn theo Điều 25 TLU!
+            </div>
+          </div>
+        </div>
+
+        <!-- Sample Student Question Card -->
+        <div class="flex items-start space-x-2.5 justify-end">
+          <div class="max-w-[85%] bg-[#EEF4FF] border border-[#C7D9FE] rounded-2xl p-3 shadow-2xs">
+            <div class="flex items-center justify-between mb-1">
+              <span class="text-xs font-bold text-[#0F172A]">Nguyễn Văn An (K35)</span>
+              <span class="text-[10px] text-[#64748B]">10:24</span>
+            </div>
+            <p class="text-xs text-[#0F172A] leading-relaxed font-medium">
+              Thầy ơi, bài code con trỏ của em chạy bị báo lỗi "Segmentation fault (core dumped)" khi em thử gán giá trị *ptr = 100. Em chưa hiểu con trỏ đang trỏ đi đâu ạ?
+            </p>
+          </div>
+          <div class="w-7 h-7 rounded-full bg-[#0D62FE] text-white flex items-center justify-center text-xs font-bold shrink-0">
+            An
+          </div>
+        </div>
+
+        <!-- Sample Socratic Copilot Response Card -->
+        <div class="flex items-start space-x-2.5">
+          <div class="w-7 h-7 rounded-full bg-[#EEF4FF] border border-[#C7D9FE] flex items-center justify-center shrink-0">
+            <img src="assets/tlu_dragon_logo.png" alt="TLU" class="w-5 h-5 object-contain">
+          </div>
+          <div class="flex-1 bg-white border border-[#E2E8F0] rounded-2xl p-3 shadow-2xs space-y-2">
+            <div class="flex items-center justify-between">
+              <span class="text-xs font-bold text-[#0D62FE]">Rồng Xanh TLU (Gợi Ý Socratic)</span>
+              <span class="text-[10px] text-[#94A3B8]">10:25</span>
+            </div>
+
+            <!-- Diagnostic Section -->
+            <div class="bg-[#FEF2F2] border-l-4 border-[#FF3B30] p-2 rounded-r-lg">
+              <div class="text-[11px] font-bold text-[#B91C1C]">Chẩn đoán lỗi:</div>
+              <p class="text-[11px] text-[#7F1D1D] mt-0.5">
+                Biến con trỏ <code class="bg-white/80 px-1 py-0.5 rounded text-[#B91C1C] font-mono">int *ptr</code> mới chỉ được khai báo và đang giữ giá trị rác hoặc <code class="font-mono">nullptr</code>. Thao tác <code class="font-mono">*ptr = 100</code> đang cố ghi dữ liệu vào địa chỉ bất hợp pháp.
+              </p>
+            </div>
+
+            <!-- Guided Inquiry Steps -->
+            <div class="bg-[#F8FAFC] border border-[#E2E8F0] rounded-xl p-2.5 space-y-1.5 text-[11px] text-[#334155]">
+              <div class="font-bold text-[#0F172A]">Gợi ý tư duy 3 bước:</div>
+              <ol class="list-decimal list-inside space-y-1 leading-relaxed">
+                <li>Trước khi giải tham chiếu <code class="font-mono font-bold">*ptr</code>, con trỏ cần trỏ vào địa chỉ hợp lệ nào?</li>
+                <li>Bạn muốn trỏ vào biến stack (ví dụ <code class="font-mono">int x; ptr = &amp;x;</code>) hay cấp phát trên heap?</li>
+                <li>Nếu cấp phát trên heap C++, từ khóa nào dùng để xin cấp phát bộ nhớ?</li>
+              </ol>
+            </div>
+
+            <!-- Citation Breadcrumbs Bar -->
+            <div id="citation-breadcrumbs" class="flex flex-wrap items-center gap-1.5 pt-1 border-t border-[#F1F5F9]">
+              <span class="text-[10px] font-bold text-[#64748B]">Trích dẫn học liệu:</span>
+              <button class="btn-open-slide px-2 py-0.5 bg-[#ECFDF5] border border-[#A7F3D0] hover:border-[#10B981] text-[#047857] text-[10px] font-bold rounded-md flex items-center space-x-1 transition-colors" data-course="IT101" data-week="03" data-slide="18" data-title="Con trỏ &amp; Vùng nhớ Heap">
+                <span>IT101 &gt; Tuần 03 &gt; Slide 18</span>
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Quick Prompt Chips -->
+      <div id="quick-prompt-chips" class="px-3.5 py-2 bg-white border-t border-[#F1F5F9] flex items-center space-x-1.5 overflow-x-auto text-[11px] whitespace-nowrap">
+        <span class="text-[#64748B] font-semibold text-[10px]">Gợi ý:</span>
+        <button class="chip-btn px-2.5 py-1 bg-[#F1F5F9] hover:bg-[#EEF4FF] hover:text-[#0D62FE] text-[#334155] font-medium rounded-full transition-colors" data-prompt="Lỗi Segmentation fault con trỏ C++ sửa thế nào?">Con trỏ C++</button>
+        <button class="chip-btn px-2.5 py-1 bg-[#F1F5F9] hover:bg-[#EEF4FF] hover:text-[#0D62FE] text-[#334155] font-medium rounded-full transition-colors" data-prompt="Tối ưu câu lệnh JOIN trong SQL môn IT205">Tối ưu SQL JOIN</button>
+        <button class="chip-btn px-2.5 py-1 bg-[#F1F5F9] hover:bg-[#EEF4FF] hover:text-[#0D62FE] text-[#334155] font-medium rounded-full transition-colors" data-prompt="Phân tích độ phức tạp O(n log n) của QuickSort">Thuật toán O(n log n)</button>
+        <button class="chip-btn px-2.5 py-1 bg-[#F1F5F9] hover:bg-[#EEF4FF] hover:text-[#0D62FE] text-[#334155] font-medium rounded-full transition-colors" data-prompt="Cơ chế kế thừa và đa hình trong Java môn IT201">Đa hình Java</button>
+      </div>
+
+      <!-- Chat Input Form -->
+      <div class="p-3 bg-white border-t border-[#E2E8F0]">
+        <form id="chat-form" class="space-y-1.5">
+          <label for="chat-input" class="sr-only">Nhập câu hỏi học tập hoặc dán thông báo lỗi biên dịch</label>
+          <div class="relative">
+            <textarea id="chat-input" rows="2" aria-label="Nội dung câu hỏi học tập" class="w-full bg-[#F8FAFC] border border-[#CBD5E1] rounded-xl p-2.5 text-xs text-[#0F172A] focus:outline-none focus:ring-2 focus:ring-[#0D62FE] focus:border-transparent resize-none leading-relaxed"></textarea>
+            <div class="absolute bottom-2 right-2 flex items-center space-x-1.5">
+              <button type="submit" id="btn-chat-send" class="px-3 py-1.5 bg-[#0D62FE] hover:bg-[#0047E0] text-white text-[11px] font-bold rounded-lg shadow-2xs hover:shadow transition-all flex items-center space-x-1">
+                <span>Gửi</span>
+              </button>
+            </div>
+          </div>
+        </form>
+      </div>
+
+    </div>
+
+    <!-- Mascot Messenger Floating Bubble Trigger (#mascot-messenger-trigger) -->
+    <div id="mascot-messenger-trigger" class="pointer-events-auto flex items-center space-x-2.5 bg-white hover:bg-[#EEF4FF] border-2 border-[#0D62FE] text-[#0D62FE] p-1.5 pr-4 rounded-full shadow-xl hover:shadow-2xl transition-all cursor-pointer group mb-2" title="Bấm để mở Chatbot Khủng Long Rồng TLU (Bong bóng Messenger)">
+      <div class="relative w-10 h-10 rounded-full bg-[#EEF4FF] border border-[#C7D9FE] flex items-center justify-center shrink-0">
+        <img src="assets/tlu_dragon_logo.png" alt="Rồng Xanh TLU" class="w-7 h-7 object-contain">
+        <span class="absolute -bottom-0.5 -right-0.5 w-3 h-3 rounded-full bg-[#10B981] border-2 border-white inline-block animate-pulse"></span>
+      </div>
+      <div class="flex flex-col text-left">
+        <span class="text-xs font-extrabold text-[#0D62FE] leading-tight">Chat Rồng TLU</span>
+        <span class="text-[10px] text-[#475569] leading-tight">Trực tuyến bên slide</span>
+      </div>
+    </div>
+
+    <!-- Mascot Dynamic Speech Bubble Dialog (Hidden in clean mode) -->
+    <div id="mascot-speech" class="hidden pointer-events-none max-w-xs mb-2 p-3 bg-white border border-[#C7D9FE] rounded-2xl shadow-lg text-xs text-[#1E293B] relative animate-fade-in" role="status" aria-live="polite">
+      <div class="font-extrabold text-[#0D62FE] flex items-center space-x-1.5 mb-0.5">
+        <span>Rồng Xanh Thăng Long</span>
+      </div>
+      <div id="mascot-speech-text" class="leading-relaxed text-xs text-[#334155]">
+        Chào An! Mình là Rồng Xanh TLU. Mình đang trực tuyến bên cạnh slide để hỗ trợ bạn học tập!
+      </div>
+      <div class="absolute -bottom-2 right-10 w-3 h-3 bg-white border-b border-r border-[#C7D9FE] transform rotate-45"></div>
+    </div>
+
+    <!-- Mascot Interactive Stage (Hidden in clean mode) -->
+    <div id="mascot-stage" class="hidden mascot-stage state-idle pointer-events-none cursor-pointer relative flex flex-col items-center justify-center p-1 rounded-2xl transition-all" title="Chạm vào Rồng TLU để nhận gợi ý học tập!">
+      <div class="mascot-aura"></div>
+      <div class="mascot-avatar-wrapper">
+        <img src="assets/tlu_dragon_mascot.png" id="mascot-img" alt="Linh vật Rồng Xanh TLU" class="mascot-img w-20 h-auto object-contain">
+      </div>
+      <div class="mascot-shadow"></div>
+      <div class="caution-badge hidden" id="mascot-caution-badge">
+        <span>Điều 25 TLU: Không giải hộ!</span>
+      </div>
+    </div>
+
+    <!-- Quick State Tester Toolbar (Hidden in clean mode) -->
+    <div id="mascot-controls-bar" class="hidden pointer-events-auto mt-1 flex items-center space-x-1 bg-white/95 backdrop-blur px-2.5 py-1 rounded-full border border-[#E2E8F0] shadow-md text-[10px] font-bold text-[#475569]">
+      <span class="mr-1 text-[#0D62FE]">Biểu cảm:</span>
+      <button id="btn-mascot-idle" class="px-2 py-0.5 rounded-full hover:bg-[#EEF4FF] hover:text-[#0D62FE] transition-colors">Nghỉ</button>
+      <button id="btn-mascot-thinking" class="px-2 py-0.5 rounded-full hover:bg-[#EEF4FF] hover:text-[#0D62FE] transition-colors">Suy luận</button>
+      <button id="btn-mascot-cheering" class="px-2 py-0.5 rounded-full hover:bg-[#FFFBEB] hover:text-[#B45309] transition-colors">Vui mừng</button>
+      <button id="btn-mascot-caution" class="px-2 py-0.5 rounded-full hover:bg-[#FEF2F2] hover:text-[#B91C1C] transition-colors">Cảnh báo</button>
+    </div>
+
+  </aside>
+
+  <!-- =========================================================================
+       4. MODALS & DIALOG OVERLAYS
+       ========================================================================= -->
+
+  <!-- Modal 1: Curriculum Slide Inspector Modal (#slide-modal) -->
+  <div id="slide-modal" class="fixed inset-0 z-50 hidden flex items-center justify-center p-4 bg-slate-900/40 backdrop-blur-xs" role="dialog" aria-modal="true" aria-labelledby="slide-modal-title">
+    <div class="bg-white border border-[#CBD5E1] rounded-2xl max-w-2xl w-full p-6 shadow-2xl space-y-4">
+      <div class="flex items-center justify-between border-b border-[#F1F5F9] pb-3">
+        <div class="flex items-center space-x-2">
+          
+          <h3 id="slide-modal-title" class="text-sm font-extrabold text-[#0F172A]">Học Liệu Chính Khóa Khoa CNTT TLU</h3>
+        </div>
+        <button id="btn-close-slide-modal" class="text-[#64748B] hover:text-[#0F172A] text-lg font-bold p-1 rounded-lg hover:bg-[#F1F5F9] transition-colors">Đóng</button>
+      </div>
+
+      <div class="space-y-3">
+        <div class="flex items-center space-x-2 text-xs font-bold text-[#0D62FE] bg-[#EEF4FF] px-3 py-1.5 rounded-lg border border-[#C7D9FE]">
+          <span>Môn học: IT101</span>
+          <span>•</span>
+          <span>Tuần 03: Con trỏ & Bộ nhớ</span>
+          <span>•</span>
+          <span>Slide số 18</span>
+        </div>
+
+        <div class="bg-[#F8FAFC] border border-[#E2E8F0] rounded-xl p-4 space-y-2">
+          <h4 class="text-xs font-bold text-[#0F172A]">Tiêu đề slide: Cấp phát bộ nhớ động trên vùng nhớ Heap</h4>
+          <p class="text-xs text-[#334155] leading-relaxed">
+            "Vùng nhớ Heap là vùng nhớ do lập trình viên tự quản lý thông qua các lệnh cấp phát động. Khác với biến cục bộ trên Stack sẽ tự động thu hồi khi thoát khỏi phạm vi khối lệnh, vùng nhớ Heap cần được giải phóng tường minh (free trong C hoặc delete trong C++) để tránh rò rỉ bộ nhớ (Memory Leak)."
+          </p>
+          <div class="bg-white border border-[#CBD5E1] p-3 rounded-lg font-mono text-xs text-[#0F172A]">
+            // Minh họa cấp phát bộ nhớ động C++<br>
+            int *ptr = new int(100);<br>
+            // Sử dụng ptr...<br>
+            delete ptr; // Bắt buộc giải phóng<br>
+            ptr = nullptr; // Tránh con trỏ lơ lửng (Dangling pointer)
+          </div>
+        </div>
+
+        <div class="flex items-center justify-between text-xs text-[#64748B] pt-1">
+          <span>Giảng viên biên soạn: Bộ môn Khoa học Máy tính TLU</span>
+          <span class="text-[#10B981] font-bold">Đã kiểm chứng trích dẫn</span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Modal 2: B2C Pro Upgrade Modal (#pro-modal) -->
+  <div id="pro-modal" class="fixed inset-0 z-50 hidden flex items-center justify-center p-4 bg-slate-900/40 backdrop-blur-xs" role="dialog" aria-modal="true" aria-labelledby="pro-modal-title">
+    <div class="bg-white border border-[#CBD5E1] rounded-2xl max-w-md w-full p-6 shadow-2xl space-y-4">
+      <div class="flex items-center justify-between border-b border-[#F1F5F9] pb-3">
+        <div class="flex items-center space-x-2">
+          
+          <h3 id="pro-modal-title" class="text-sm font-extrabold text-[#0F172A]">Nâng Cấp Gói Pro Sinh Viên TLU</h3>
+        </div>
+        <button id="btn-close-pro-modal" class="text-[#64748B] hover:text-[#0F172A] text-lg font-bold p-1 rounded-lg hover:bg-[#F1F5F9] transition-colors">Đóng</button>
+      </div>
+
+      <div class="space-y-4">
+        <div class="bg-gradient-to-r from-[#FFFBEB] to-[#FEF3C7] border border-[#FDE68A] rounded-xl p-4 text-center">
+          <div class="text-xs font-bold text-[#B45309]">Học tập không giới hạn cả học kỳ</div>
+          <div class="text-3xl font-black text-[#0F172A] my-1">69.000 <span class="text-sm font-bold text-[#475569]">VNĐ / tháng</span></div>
+          <div class="text-[11px] text-[#047857] font-semibold">Tài khoản sinh viên: Nguyễn Văn An (A41234)</div>
+        </div>
+
+        <div class="space-y-2 text-xs text-[#334155]">
+          <div class="font-bold text-[#0F172A]">Chọn phương thức thanh toán sinh viên:</div>
+          <div class="grid grid-cols-2 gap-2">
+            <button type="button" id="btn-pay-vnpay" class="p-2.5 border-2 border-[#0D62FE] bg-[#EEF4FF] rounded-xl text-center font-bold text-[#0D62FE] transition-all cursor-pointer">
+              Cổng VNPAY QR
+            </button>
+            <button type="button" id="btn-pay-momo" class="p-2.5 border border-[#E2E8F0] hover:border-[#0D62FE] rounded-xl text-center font-bold text-[#475569] transition-all cursor-pointer">
+              Ví điện tử MoMo
+            </button>
+          </div>
+        </div>
+
+        <button id="btn-confirm-pro-payment" class="w-full py-3 bg-gradient-to-r from-[#FFB800] to-[#FFA000] hover:from-[#FFA000] hover:to-[#FF8F00] text-[#0F172A] text-xs font-extrabold rounded-xl shadow-md transition-all">
+          Xác Nhận Nâng Cấp (69.000 VNĐ)
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Modal 3: Article 25 TLU Academic Integrity Modal (#article25-modal) -->
+  <div id="article25-modal" class="fixed inset-0 z-50 hidden flex items-center justify-center p-4 bg-slate-900/40 backdrop-blur-xs" role="dialog" aria-modal="true" aria-labelledby="article25-modal-title">
+    <div class="bg-white border border-[#CBD5E1] rounded-2xl max-w-xl w-full p-6 shadow-2xl space-y-4">
+      <div class="flex items-center justify-between border-b border-[#F1F5F9] pb-3">
+        <div class="flex items-center space-x-2">
+          
+          <h3 id="article25-modal-title" class="text-sm font-extrabold text-[#0F172A]">Điều 25 Quy Chế Đào Tạo Đại Học Thăng Long</h3>
+        </div>
+        <button id="btn-close-article25-modal" class="text-[#64748B] hover:text-[#0F172A] text-lg font-bold p-1 rounded-lg hover:bg-[#F1F5F9] transition-colors">Đóng</button>
+      </div>
+
+      <div class="space-y-3 text-xs text-[#334155] leading-relaxed">
+        <div class="bg-[#FEF2F2] border-l-4 border-[#FF3B30] p-3 rounded-r-lg text-[#7F1D1D]">
+          <strong>Quy định về Liêm chính Học thuật:</strong> Sinh viên không được phép sao chép, nhờ người khác hoặc công cụ tự động làm hộ toàn bộ bài tập lớn, bài thi hoặc đồ án môn học.
+        </div>
+        <p>
+          Trợ lý AI <strong class="text-[#0D62FE]">TLU IT Study Copilot</strong> được thiết kế theo đúng tinh thần sư phạm của nhà trường:
+        </p>
+        <ul class="list-disc list-inside space-y-1.5 pl-2">
+          <li><strong>Chỉ ra bản chất lỗi:</strong> Giúp sinh viên hiểu tại sao code bị lỗi cú pháp hoặc tràn bộ nhớ.</li>
+          <li><strong>Gợi ý câu hỏi tư duy:</strong> Dẫn dắt sinh viên từng bước tự tìm ra giải pháp tối ưu.</li>
+          <li><strong>Trích dẫn bài giảng:</strong> Kết nối trực tiếp với slide và giáo trình của thầy cô Khoa CNTT TLU.</li>
+          <li><strong>Khóa giải hộ:</strong> Từ chối 100% các yêu cầu "viết toàn bộ bài nộp" để bảo vệ liêm chính học thuật.</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+
+  <!-- Modal 4: Slide Upload Modal (#upload-slide-modal) -->
+  <div id="upload-slide-modal" class="fixed inset-0 z-50 hidden flex items-center justify-center p-4 bg-slate-900/40 backdrop-blur-xs" role="dialog" aria-modal="true" aria-labelledby="upload-slide-modal-title">
+    <div class="bg-white border border-[#CBD5E1] rounded-2xl max-w-xl w-full p-6 shadow-2xl space-y-4 max-h-[90vh] overflow-y-auto">
+      <div class="flex items-center justify-between border-b border-[#F1F5F9] pb-3">
+        <div>
+          <h3 id="upload-slide-modal-title" class="text-sm font-extrabold text-[#0F172A]">Tải Lên Slide Môn Học Mới (Tất Cả Môn CNTT)</h3>
+          <p class="text-xs text-[#64748B]">Hỗ trợ mọi môn học trong chương trình đào tạo Công nghệ Thông tin</p>
+        </div>
+        <button id="btn-close-upload-modal" class="text-[#64748B] hover:text-[#0F172A] text-lg font-bold p-1 rounded-lg hover:bg-[#F1F5F9] transition-colors">Đóng</button>
+      </div>
+
+      <form id="slide-upload-form" class="space-y-3.5">
+        <!-- Course Code Selection & Custom Course Code/Name Input -->
+        <div class="space-y-1.5">
+          <label for="slide-course-select" class="text-xs font-bold text-[#334155]">Môn học Công nghệ Thông tin (Chọn danh mục hoặc tự nhập môn bất kỳ):</label>
+          <div class="grid grid-cols-1 sm:grid-cols-2 gap-2">
+            <div>
+              <label for="slide-course-select" class="sr-only">Chọn mã môn CNTT có sẵn</label>
+              <select id="slide-course-select" aria-label="Mã môn học CNTT" class="w-full bg-[#F8FAFC] border border-[#CBD5E1] text-[#0F172A] text-xs font-semibold rounded-xl px-3 py-2.5 focus:outline-none focus:border-[#0D62FE]">
+                <option value="IT101" selected>IT101 - Nhập môn lập trình (C/C++)</option>
+                <option value="IT201">IT201 - Cấu trúc dữ liệu &amp; Giải thuật (Java)</option>
+                <option value="IT205">IT205 - Cơ sở dữ liệu (SQL)</option>
+                <option value="IT301">IT301 - Mạng máy tính &amp; Truyền thông (Python)</option>
+                <option value="IT315">IT315 - Kiến trúc máy tính &amp; Hệ điều hành</option>
+                <option value="IT320">IT320 - Kỹ thuật phần mềm</option>
+                <option value="IT401">IT401 - Trí tuệ nhân tạo</option>
+                <option value="IT405">IT405 - An toàn &amp; Bảo mật thông tin</option>
+                <option value="IT220">IT220 - Lập trình Web &amp; Ứng dụng</option>
+                <option value="IT330">IT330 - Hệ quản trị CSDL nâng cao</option>
+                <option value="IT340">IT340 - Phân tích thiết kế hệ thống</option>
+                <option value="IT420">IT420 - Khai phá dữ liệu &amp; Machine Learning</option>
+                <option value="IT430">IT430 - Lập trình ứng dụng di động</option>
+                <option value="IT450">IT450 - Đồ án Công nghệ Thông tin</option>
+                <option value="custom">[+] Môn học CNTT khác (tự nhập)...</option>
+              </select>
+            </div>
+            <div>
+              <label for="slide-course-custom-input" class="sr-only">Tự nhập mã môn hoặc tên môn CNTT khác</label>
+              <input id="slide-course-custom-input" type="text" value="" aria-label="Tự nhập mã môn hoặc tên môn CNTT khác" class="w-full bg-[#F8FAFC] border border-[#CBD5E1] text-[#0F172A] text-xs font-semibold rounded-xl px-3 py-2.5 focus:outline-none focus:border-[#0D62FE]">
+            </div>
+          </div>
+          <div class="text-3xs text-[#64748B]">Sản phẩm phù hợp với tất cả các môn học CNTT: Nhập mã môn hoặc tên môn học bất kỳ (ví dụ: IT320, IT401, IT405...).</div>
+        </div>
+
+        <!-- Week & File Type -->
+        <div class="grid grid-cols-3 gap-3">
+          <div class="space-y-1">
+            <label for="slide-week-input" class="text-xs font-bold text-[#334155]">Tuần học:</label>
+            <input id="slide-week-input" type="number" min="1" max="15" value="3" aria-label="Số tuần học" class="w-full bg-[#F8FAFC] border border-[#CBD5E1] text-[#0F172A] text-xs font-semibold rounded-xl px-3 py-2 focus:outline-none focus:border-[#0D62FE]">
+          </div>
+          <div class="col-span-2 space-y-1">
+            <label for="slide-filetype-select" class="text-xs font-bold text-[#334155]">Định dạng tệp:</label>
+            <select id="slide-filetype-select" aria-label="Định dạng tệp bài giảng" class="w-full bg-[#F8FAFC] border border-[#CBD5E1] text-[#0F172A] text-xs font-semibold rounded-xl px-3 py-2 focus:outline-none focus:border-[#0D62FE]">
+              <option value="pdf" selected>Tài liệu PDF (.pdf)</option>
+              <option value="pptx">Bài giảng Slide (.pptx)</option>
+              <option value="zip">Gói mã nguồn nén (.zip)</option>
+              <option value="cpp">Mã nguồn mẫu C/C++ (.cpp)</option>
+            </select>
+          </div>
+        </div>
+
+        <!-- Topic Title -->
+        <div class="space-y-1">
+          <label for="slide-topic-input" class="text-xs font-bold text-[#334155]">Chủ đề bài giảng:</label>
+          <input id="slide-topic-input" type="text" value="Con trỏ và Quản lý bộ nhớ động" aria-label="Chủ đề bài giảng" class="w-full bg-[#F8FAFC] border border-[#CBD5E1] text-[#0F172A] text-xs font-semibold rounded-xl px-3 py-2.5 focus:outline-none focus:border-[#0D62FE]">
+        </div>
+
+        <!-- File Input Area -->
+        <div class="space-y-1.5">
+          <label class="text-xs font-bold text-[#334155]">Chọn tệp từ thiết bị:</label>
+          <div class="border-2 border-dashed border-[#CBD5E1] hover:border-[#0D62FE] rounded-xl p-4 text-center bg-[#F8FAFC] transition-colors cursor-pointer relative">
+            <input id="slide-file-input" type="file" aria-label="Tệp slide bài giảng tải lên" class="absolute inset-0 w-full h-full opacity-0 cursor-pointer">
+            <div class="text-xs font-bold text-[#0D62FE]">Nhấn vào đây để chọn tệp hoặc kéo thả tệp vào</div>
+            <div class="text-3xs text-[#64748B] mt-1">Hỗ trợ PDF, PPTX, ZIP, CPP (Dung lượng tối đa 50MB)</div>
+          </div>
+          <div id="slide-file-name-display" class="hidden text-xs font-mono font-bold text-[#0D62FE] bg-[#EEF4FF] p-2 rounded-lg border border-[#C7D9FE]"></div>
+        </div>
+
+        <!-- Submit Button -->
+        <button id="btn-submit-slide-upload" type="submit" class="w-full py-2.5 bg-[#0D62FE] hover:bg-[#0047E0] text-white text-xs font-bold rounded-xl shadow-xs hover:shadow transition-all flex items-center justify-center space-x-1.5">
+          <span>Tải Lên &amp; Nạp Vào Hệ Thống Học Tập</span>
+        </button>
+
+        <!-- Status Container -->
+        <div id="slide-upload-status" class="mt-2"></div>
+      </form>
+    </div>
+  </div>
+
+  <!-- Modal 5: Slide Catalog Modal (#catalog-slide-modal) -->
+  <div id="catalog-slide-modal" class="fixed inset-0 z-50 hidden flex items-center justify-center p-4 bg-slate-900/40 backdrop-blur-xs" role="dialog" aria-modal="true" aria-labelledby="catalog-slide-modal-title">
+    <div class="bg-white border border-[#CBD5E1] rounded-2xl max-w-2xl w-full p-6 shadow-2xl space-y-4 max-h-[90vh] overflow-y-auto">
+      <div class="flex items-center justify-between border-b border-[#F1F5F9] pb-3">
+        <div>
+          <h3 id="catalog-slide-modal-title" class="text-sm font-extrabold text-[#0F172A]">Kho Học Liệu &amp; Slide Đã Nạp</h3>
+          <p class="text-xs text-[#64748B]">Bấm vào slide để trình chiếu ngay trên Khung Chiếu Slide</p>
+        </div>
+        <button id="btn-close-catalog-modal" class="text-[#64748B] hover:text-[#0F172A] text-lg font-bold p-1 rounded-lg hover:bg-[#F1F5F9] transition-colors">Đóng</button>
+      </div>
+
+      <!-- Dynamic Container rendered by slides.js -->
+      <div id="ingested-slides-list" class="space-y-3 min-h-[200px]">
+        <!-- Rendered by TLUSlides.renderSlidesList() -->
+      </div>
+
+      <div class="p-3 bg-[#F8FAFC] border border-[#CBD5E1] rounded-xl text-2xs text-[#475569] space-y-1">
+        <div class="font-bold text-[#0F172A]">• Cơ Chế Trích Dẫn Minh Bạch:</div>
+        <div>Mọi phản hồi từ Chatbot Socratic sẽ tự động đối chiếu và dẫn chứng chính xác trang slide, tuần học và khối code từ kho học liệu này.</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- =========================================================================
+       5. FOOTER
+       ========================================================================= -->
+  <footer class="bg-white border-t border-[#E2E8F0] py-6 px-4 lg:px-8 mt-auto text-center text-xs text-[#64748B]">
+    <div class="max-w-7xl mx-auto flex flex-col sm:flex-row items-center justify-between gap-3">
+      <div class="flex items-center space-x-2">
+        <img src="assets/tlu_dragon_logo.png" alt="Logo" class="w-5 h-5 object-contain">
+        <span class="font-bold text-[#0F172A]">TLU IT Study Copilot</span>
+        <span>— Phiên bản EdTech AI Chuẩn AI Product Playbook Modules 1-7</span>
+      </div>
+      <div>
+        <span>Khoa Công nghệ Thông tin - Trường Đại học Thăng Long (Cơ sở Nghiêm Xuân Yêm, Hà Nội)</span>
+      </div>
+    </div>
+  </footer>
+
+  <!-- =========================================================================
+       6. MODULAR APPLICATION JAVASCRIPT FILES
+       ========================================================================= -->
+  <script src="js/mascot.js?v=2.2.0"></script>
+  <script src="js/chat.js?v=2.2.0"></script>
+  <script src="js/playground.js?v=2.2.0"></script>
+  <script src="js/agents.js?v=2.2.0"></script>
+  <script src="js/lakehouse.js?v=2.2.0"></script>
+  <script src="js/guardrails.js?v=2.2.0"></script>
+  <script src="js/dashboard.js?v=2.2.0"></script>
+  <script src="js/slides.js?v=2.2.0"></script>
+  <script src="js/admin_logs.js?v=2.2.0"></script>
+  <script src="js/app.js?v=2.2.0"></script>
+
+  <!-- Global Workspace Switcher & Interactive Helpers -->
+  <script>
+    // Global Workspace Switcher Contract (PROJECT.md)
+    window.TLUWorkspace = {
+      switchTab: function(tabId) {
+        const tabs = ['socratic', 'slides', 'multiagent', 'ops'];
+        tabs.forEach(id => {
+          const btn = document.getElementById(`tab-btn-${id}`);
+          const panel = document.getElementById(`workspace-${id}`);
+          if (id === tabId) {
+            if (btn) {
+              btn.classList.add('active', 'border-[#0D62FE]', 'text-[#0D62FE]');
+              btn.classList.remove('border-transparent', 'text-[#64748B]');
+              btn.setAttribute('aria-selected', 'true');
+            }
+            if (panel) {
+              panel.classList.remove('hidden');
+            }
+          } else {
+            if (btn) {
+              btn.classList.remove('active', 'border-[#0D62FE]', 'text-[#0D62FE]');
+              btn.classList.add('border-transparent', 'text-[#64748B]');
+              btn.setAttribute('aria-selected', 'false');
+            }
+            if (panel) {
+              panel.classList.add('hidden');
+            }
+          }
+        });
+        window.dispatchEvent(new CustomEvent('tlu:tab:switch', { detail: { tab: tabId } }));
+      }
+    };
+
+    document.addEventListener('DOMContentLoaded', function() {
+      // Bind Tab Navigation Buttons
+      ['socratic', 'slides', 'multiagent', 'ops'].forEach(tabId => {
+        const btn = document.getElementById(`tab-btn-${tabId}`);
+        if (btn) {
+          btn.addEventListener('click', () => window.TLUWorkspace.switchTab(tabId));
+        }
+      });
+
+      // Bind Modals: Article 25, Pro Tier, Slide Viewer
+      const setupModal = (openBtnId, modalId, closeBtnId) => {
+        const openBtn = document.getElementById(openBtnId);
+        const modal = document.getElementById(modalId);
+        const closeBtn = document.getElementById(closeBtnId);
+        if (openBtn && modal) {
+          openBtn.addEventListener('click', () => modal.classList.remove('hidden'));
+        }
+        if (closeBtn && modal) {
+          closeBtn.addEventListener('click', () => modal.classList.add('hidden'));
+        }
+      };
+      setupModal('btn-view-article25', 'article25-modal', 'btn-close-article25-modal');
+      setupModal('btn-header-pro', 'pro-modal', 'btn-close-pro-modal');
+      setupModal('btn-portal-upgrade', 'pro-modal', 'btn-close-pro-modal');
+
+      document.querySelectorAll('.btn-open-slide').forEach(btn => {
+        btn.addEventListener('click', () => {
+          const modal = document.getElementById('slide-modal');
+          if (modal) modal.classList.remove('hidden');
+        });
+      });
+      const closeSlide = document.getElementById('btn-close-slide-modal');
+      if (closeSlide) {
+        closeSlide.addEventListener('click', () => {
+          const modal = document.getElementById('slide-modal');
+          if (modal) modal.classList.add('hidden');
+        });
+      }
+
+      // Mascot State Controller Testing Buttons
+      const mascotStates = {
+        'btn-mascot-idle': 'idle',
+        'btn-mascot-thinking': 'thinking',
+        'btn-mascot-cheering': 'cheering',
+        'btn-mascot-caution': 'caution'
+      };
+      Object.entries(mascotStates).forEach(([btnId, state]) => {
+        const btn = document.getElementById(btnId);
+        if (btn) {
+          btn.addEventListener('click', () => {
+            if (window.TLUMascot) window.TLUMascot.setState(state);
+          });
+        }
+      });
+
+      // Course Selector Dispatch
+      const courseSel = document.getElementById('course-select');
+      if (courseSel) {
+        courseSel.addEventListener('change', (e) => {
+          const label = document.getElementById('chat-active-course-label');
+          if (label) {
+            const courseNames = {
+              'IT101': 'IT101 - Lập trình cơ bản (C/C++)',
+              'IT201': 'IT201 - Lập trình Hướng đối tượng (Java)',
+              'IT205': 'IT205 - Cơ sở dữ liệu (SQL)',
+              'IT301': 'IT301 - Lập trình Python & Trí tuệ Nhân tạo',
+              'IT315': 'IT315 - Kiến trúc Máy tính & Hệ điều hành'
+            };
+            label.textContent = `Đang học: ${courseNames[e.target.value] || e.target.value}`;
+          }
+          window.dispatchEvent(new CustomEvent('tlu:course:switch', { detail: { courseCode: e.target.value } }));
+        });
+      }
+
+      // Persona Selector Dispatch
+      const personaSel = document.getElementById('persona-select');
+      if (personaSel) {
+        personaSel.addEventListener('change', (e) => {
+          const studentIdBadge = document.getElementById('current-student-id');
+          if (studentIdBadge) {
+            studentIdBadge.textContent = e.target.value === 'linh' ? 'A38901' : 'A41234';
+          }
+          window.dispatchEvent(new CustomEvent('tlu:persona:switch', { detail: { persona: e.target.value } }));
+        });
+      }
+
+      // Quick Prompt Chips
+      document.querySelectorAll('#quick-prompt-chips .chip-btn').forEach(btn => {
+        btn.addEventListener('click', () => {
+          const prompt = btn.getAttribute('data-prompt');
+          const input = document.getElementById('chat-input');
+          if (input && prompt) {
+            input.value = prompt;
+            input.focus();
+          }
+        });
+      });
+    });
+  </script>
+
+</body>
+</html>
