@@ -953,23 +953,20 @@ print("TLU Socket Server dang lang nghe tren port 8080...")`,
           throw new Error(`HTTP error: ${res.status}`);
         }
       } catch (err) {
-        console.warn('API error, using local fallback:', err);
-        this.onUploadSuccess({
-          filename: filename,
-          course_code: course,
-          week: week,
-          topic: topic,
-          file_type: fileType,
-          sha256: 'a591a6d40bf420404a011733cfb7b190d62c65bf0bcda32b57b277d9ad9f146e',
-          gold_chunks: 14,
-          uploaded_at: new Date().toLocaleTimeString('vi-VN')
-        });
+        console.error('Slide upload error:', err);
+        if (this.statusContainer) {
+          this.statusContainer.innerHTML = `
+            <div class="p-3 bg-[#FEF2F2] border border-[#FCA5A5] rounded-xl text-xs text-[#DC2626]">
+              Lỗi khi nạp tài liệu: ${err.message || 'Không thể kết nối đến máy chủ'}. Vui lòng thử lại.
+            </div>
+          `;
+        }
       }
     }
 
     onUploadSuccess(record) {
       this.renderUploadSuccessMessage(record);
-      this.loadSlidesList();
+      this.loadSlidesList(false);
 
       // Add to active slide deck and present immediately
       const newSlide = {
@@ -1048,10 +1045,10 @@ print("TLU Socket Server dang lang nghe tren port 8080...")`,
 
       setTimeout(() => {
         if (this.uploadModal) this.uploadModal.classList.add('hidden');
-      }, 1200);
+      }, 600);
     }
 
-    async loadSlidesList() {
+    async loadSlidesList(shouldHydrateDeck = true) {
       if (!this.slidesListContainer) return;
 
       try {
@@ -1059,11 +1056,57 @@ print("TLU Socket Server dang lang nghe tren port 8080...")`,
         if (res.ok) {
           const slides = await res.json();
           this.renderSlidesList(slides);
+          if (shouldHydrateDeck) {
+            this.hydrateSlidesDeckFromDatabase(slides);
+          }
         } else {
-          this.renderMockSlidesList();
+          this.renderSlidesList([]);
         }
       } catch (err) {
-        this.renderMockSlidesList();
+        console.error('Failed to load slides list from server:', err);
+        this.renderSlidesList([]);
+      }
+    }
+
+    hydrateSlidesDeckFromDatabase(dbSlides) {
+      if (!Array.isArray(dbSlides) || dbSlides.length === 0) return;
+
+      const mapped = dbSlides.map(s => {
+        const pageNum = s.course_code === 'IT101' ? 'Slide 18 / 42' :
+                        s.course_code === 'IT201' ? 'Slide 22 / 50' :
+                        s.course_code === 'IT205' ? 'Slide 14 / 36' :
+                        s.course_code === 'IT301' ? 'Slide 12 / 38' :
+                        s.course_code === 'IT315' ? 'Slide 26 / 45' :
+                        `Slide 01 / ${s.gold_chunks || 12}`;
+
+        return {
+          slide_id: s.slide_id,
+          course_code: s.course_code || 'IT101',
+          course_name: s.course_name || `Môn học CNTT (${s.course_code})`,
+          week: s.week || 1,
+          page: pageNum,
+          topic: s.topic ? (s.topic.startsWith('Chủ đề:') ? s.topic : `Chủ đề: ${s.topic}`) : `Chủ đề: Bài giảng môn ${s.course_code}`,
+          desc: s.content_desc || s.desc || `Học liệu môn ${s.course_code} - ${s.filename || 'Tài liệu môn học'} đã được nạp từ cơ sở dữ liệu Supabase.`,
+          code: s.code_snippet || s.code || `// Học liệu môn ${s.course_code}\n// Tệp: ${s.filename || 'slide.pdf'}\n// Trích xuất từ Supabase Database`,
+          note: s.callout_note || s.note || `Học liệu chính khóa Khoa CNTT TLU môn ${s.course_code}.`
+        };
+      });
+
+      const it101Slide = mapped.find(s => s.course_code === 'IT101');
+      const it201Slide = mapped.find(s => s.course_code === 'IT201');
+      const others = mapped.filter(s => s.course_code !== 'IT101' && s.course_code !== 'IT201');
+
+      const orderedDeck = [];
+      if (it101Slide) orderedDeck.push(it101Slide);
+      if (it201Slide) orderedDeck.push(it201Slide);
+      orderedDeck.push(...others);
+
+      if (orderedDeck.length > 0) {
+        this.slidesDeck = orderedDeck;
+        if (this.currentSlideIndex >= this.slidesDeck.length) {
+          this.currentSlideIndex = 0;
+        }
+        this.renderCurrentSlide();
       }
     }
 
@@ -1078,7 +1121,7 @@ print("TLU Socket Server dang lang nghe tren port 8080...")`,
       let html = '<div class="space-y-2.5">';
       slides.forEach((s, idx) => {
         html += `
-          <div class="p-3 bg-white border border-[#CBD5E1] rounded-xl flex flex-col md:flex-row md:items-center justify-between gap-2 shadow-2xs hover:border-[#0D62FE] transition-colors cursor-pointer group" data-slide-index="${idx}" data-course="${s.course_code || 'IT101'}">
+          <div class="p-3 bg-white border border-[#CBD5E1] rounded-xl flex flex-col md:flex-row md:items-center justify-between gap-2 shadow-2xs hover:border-[#0D62FE] transition-colors cursor-pointer group" data-slide-index="${idx}" data-slide-id="${s.slide_id || ''}" data-course="${s.course_code || 'IT101'}">
             <div class="space-y-0.5">
               <div class="flex items-center gap-2">
                 <span class="text-3xs font-bold px-1.5 py-0.5 rounded bg-[#EEF4FF] text-[#0D62FE] border border-[#BFDBFE] font-mono">${s.course_code || 'IT101'}</span>
@@ -1100,14 +1143,16 @@ print("TLU Socket Server dang lang nghe tren port 8080...")`,
       // Attach click events on slides list to load into main viewer
       this.slidesListContainer.querySelectorAll('[data-slide-index]').forEach((item) => {
         item.addEventListener('click', () => {
+          const slideId = item.getAttribute('data-slide-id');
           const courseCode = item.getAttribute('data-course');
-          // Find matching slide in deck or create one
-          const foundIndex = this.slidesDeck.findIndex(s => s.course_code === courseCode);
+          // Find matching slide in deck by slide_id or course_code
+          const foundIndex = this.slidesDeck.findIndex(s => (slideId && s.slide_id === slideId) || s.course_code === courseCode);
           if (foundIndex >= 0) {
             this.currentSlideIndex = foundIndex;
           } else {
             const topic = item.querySelector('.text-2xs') ? item.querySelector('.text-2xs').textContent : 'Chủ đề bài giảng';
             this.slidesDeck.unshift({
+              slide_id: slideId,
               course_code: courseCode,
               course_name: `Môn học CNTT (${courseCode})`,
               week: 1,
@@ -1130,15 +1175,6 @@ print("TLU Socket Server dang lang nghe tren port 8080...")`,
           }
         });
       });
-    }
-
-    renderMockSlidesList() {
-      const mock = [
-        { course_code: 'IT101', filename: 'IT101_Tuan03_ConTro_BoNho.pdf', week: 3, topic: 'Con trỏ và Quản lý bộ nhớ động', gold_chunks: 14, uploaded_at: '2026-10-06 14:30:00' },
-        { course_code: 'IT201', filename: 'IT201_Tuan05_Cay_AVL_Dijkstra.pptx', week: 5, topic: 'Cây nhị phân tìm kiếm cân bằng AVL & Đồ thị', gold_chunks: 22, uploaded_at: '2026-10-06 15:10:00' },
-        { course_code: 'IT205', filename: 'IT205_Tuan06_ChuanHoa_3NF_BCNF.pdf', week: 6, topic: 'Chuẩn hóa quan hệ 1NF, 2NF, 3NF & BCNF', gold_chunks: 18, uploaded_at: '2026-10-06 16:45:00' }
-      ];
-      this.renderSlidesList(mock);
     }
   }
 

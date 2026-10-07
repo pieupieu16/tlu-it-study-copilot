@@ -237,9 +237,11 @@ class TLUSupabaseManager:
                     INSERT INTO public.slides (
                         slide_id, filename, course_code, course_name, week, topic,
                         file_type, sha256, status, bronze_status, silver_status,
-                        gold_chunks, vectors_indexed, uploaded_at
+                        gold_chunks, vectors_indexed, uploaded_at,
+                        content_desc, code_snippet, callout_note
                     ) VALUES (
-                        %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, NOW()
+                        %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, NOW(),
+                        %s, %s, %s
                     )
                     ON CONFLICT (slide_id) DO UPDATE SET
                         filename = EXCLUDED.filename,
@@ -247,7 +249,10 @@ class TLUSupabaseManager:
                         topic = EXCLUDED.topic,
                         status = EXCLUDED.status,
                         gold_chunks = EXCLUDED.gold_chunks,
-                        vectors_indexed = EXCLUDED.vectors_indexed;
+                        vectors_indexed = EXCLUDED.vectors_indexed,
+                        content_desc = COALESCE(EXCLUDED.content_desc, public.slides.content_desc),
+                        code_snippet = COALESCE(EXCLUDED.code_snippet, public.slides.code_snippet),
+                        callout_note = COALESCE(EXCLUDED.callout_note, public.slides.callout_note);
                     """
                     cur.execute(insert_sql, (
                         record.get("slide_id"),
@@ -262,7 +267,10 @@ class TLUSupabaseManager:
                         record.get("bronze_status", "Archived RAW (Immutable)"),
                         record.get("silver_status", "Sanitized UTF-8, PII Redacted"),
                         record.get("gold_chunks", 12),
-                        record.get("vectors_indexed", 12)
+                        record.get("vectors_indexed", 12),
+                        record.get("content_desc") or record.get("desc"),
+                        record.get("code_snippet") or record.get("code"),
+                        record.get("callout_note") or record.get("note")
                     ))
                     cur.close()
                     conn.close()
@@ -288,6 +296,9 @@ class TLUSupabaseManager:
                     "silver_status": record.get("silver_status", "Sanitized UTF-8, PII Redacted"),
                     "gold_chunks": record.get("gold_chunks", 12),
                     "vectors_indexed": record.get("vectors_indexed", 12),
+                    "content_desc": record.get("content_desc") or record.get("desc"),
+                    "code_snippet": record.get("code_snippet") or record.get("code"),
+                    "callout_note": record.get("callout_note") or record.get("note"),
                     "uploaded_at": datetime.utcnow().isoformat() + "Z"
                 }
                 self.client.table("slides").upsert(payload).execute()

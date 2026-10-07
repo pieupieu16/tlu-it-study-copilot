@@ -117,7 +117,10 @@ INGESTED_SLIDES: List[Dict[str, Any]] = [
         "silver_status": "Sanitized UTF-8, PII Clear",
         "gold_chunks": 14,
         "vectors_indexed": 14,
-        "uploaded_at": "2026-10-06 14:30:00"
+        "uploaded_at": "2026-10-06 14:30:00",
+        "content_desc": "Vùng nhớ Heap là không gian nhớ dùng cho cấp phát động tại thời điểm thực thi (runtime). Khác với vùng nhớ Stack được quản lý tự động theo phạm vi hàm, lập trình viên phải chủ động giải phóng bộ nhớ heap đã xin cấp phát.",
+        "code_snippet": "// Ví dụ chuẩn trong Slide IT101 Tuần 3:\nint *ptr = new int(100); // Cấp phát 1 ô nhớ int trên Heap\nstd::cout << \"Gia tri: \" << *ptr << std::endl;\ndelete ptr; // Bắt buộc giải phóng sau khi dùng\nptr = nullptr; // Tránh con trỏ lơ lửng (Dangling pointer)",
+        "callout_note": "Cảnh Báo Lỗi Thường Gặp Của Sinh Viên: Quên giải phóng con trỏ dẫn đến rò rỉ bộ nhớ (Memory Leak), hoặc truy cập vào ô nhớ sau khi delete sẽ gây lỗi Segmentation fault (SIGSEGV)."
     },
     {
         "slide_id": "slide_it201_w05",
@@ -133,7 +136,10 @@ INGESTED_SLIDES: List[Dict[str, Any]] = [
         "silver_status": "Sanitized UTF-8, PII Clear",
         "gold_chunks": 22,
         "vectors_indexed": 22,
-        "uploaded_at": "2026-10-06 15:10:00"
+        "uploaded_at": "2026-10-06 15:10:00",
+        "content_desc": "Cây AVL tự động duy trì cân bằng sau mỗi thao tác chèn hoặc xóa thông qua các phép quay (Rotate Left, Rotate Right). Hệ số cân bằng Balance Factor luôn nằm trong khoảng [-1, 0, 1], đảm bảo độ phức tạp tìm kiếm tối ưu O(log n).",
+        "code_snippet": "// Cấu trúc Node cây AVL môn IT201:\npublic class AVLNode {\n    int key, height;\n    AVLNode left, right;\n    AVLNode(int d) { key = d; height = 1; }\n}\n// Độ phức tạp thời gian: O(log n) cho Search, Insert, Delete",
+        "callout_note": "Lưu Ý Giải Thuật: Cần tính toán lại chiều cao (height) của các node cha sau mỗi phép quay để duy trì điều kiện cân bằng cây AVL."
     },
     {
         "slide_id": "slide_it205_w06",
@@ -149,7 +155,10 @@ INGESTED_SLIDES: List[Dict[str, Any]] = [
         "silver_status": "Sanitized UTF-8, PII Clear",
         "gold_chunks": 18,
         "vectors_indexed": 18,
-        "uploaded_at": "2026-10-06 16:45:00"
+        "uploaded_at": "2026-10-06 16:45:00",
+        "content_desc": "Chuẩn hóa dữ liệu là quá trình tổ chức các bảng trong cơ sở dữ liệu quan hệ nhằm loại bỏ dư thừa dữ liệu (Data Redundancy) và tránh các bất thường khi chèn, sửa hoặc xóa (Anomalies). Dạng chuẩn 3NF yêu cầu mọi thuộc tính không khóa phụ thuộc hàm trực tiếp vào khóa chính.",
+        "code_snippet": "-- Minh họa truy vấn chuẩn hóa JOIN môn IT205:\nSELECT sv.ma_sv, sv.ho_ten, mh.ten_mon, d.diem_thi\nFROM SinhVien sv\nINNER JOIN BangDiem d ON sv.ma_sv = d.ma_sv\nINNER JOIN MonHoc mh ON d.ma_mon = mh.ma_mon\nWHERE mh.ma_mon = 'IT205';",
+        "callout_note": "Khuyến Nghị Tối Ưu: Luôn đánh chỉ mục B-Tree (Index) trên các trường khóa ngoại tham chiếu để giảm thiểu chi phí quét toàn bộ bảng (Table Scan)."
     }
 ]
 
@@ -403,6 +412,14 @@ async def post_slide_upload(req: SlideUploadRequest) -> Dict[str, Any]:
     )
 
     chunks_count = 12 if req.file_type in ["pdf", "pptx"] else 8
+    content_desc = (
+        req.content_summary.strip()
+        if req.content_summary and req.content_summary.strip()
+        else f"Học liệu môn {norm_code} Tuần {req.week}: {req.topic} đã được phân tích và sẵn sàng tra cứu."
+    )
+    code_snippet = f"// Học liệu môn {norm_code} - Tuần {req.week}\n// Tệp: {req.filename}\n// Chủ đề: {req.topic}"
+    callout_note = f"Học liệu chính khóa Khoa CNTT TLU môn {norm_code}."
+
     new_record = {
         "slide_id": file_id,
         "filename": req.filename,
@@ -417,7 +434,10 @@ async def post_slide_upload(req: SlideUploadRequest) -> Dict[str, Any]:
         "silver_status": "Sanitized UTF-8, PII Redacted, MinHash Deduped",
         "gold_chunks": chunks_count,
         "vectors_indexed": chunks_count,
-        "uploaded_at": datetime.now().strftime("%Y-%m-%d %H:%M:%S")
+        "uploaded_at": datetime.now().strftime("%Y-%m-%d %H:%M:%S"),
+        "content_desc": content_desc,
+        "code_snippet": code_snippet,
+        "callout_note": callout_note
     }
     INGESTED_SLIDES.insert(0, new_record)
 

@@ -55,10 +55,14 @@
           this.renderFilteredLogs();
           this.renderDLQ(data.dead_letter_queue || []);
         } else {
-          this.renderMockLogs();
+          this.cachedLogs = { audit_logs: [], inference_traces: [], guardrails_safety_logs: [], dead_letter_queue: [] };
+          this.renderFilteredLogs();
+          this.renderDLQ([]);
         }
       } catch (err) {
-        this.renderMockLogs();
+        this.cachedLogs = { audit_logs: [], inference_traces: [], guardrails_safety_logs: [], dead_letter_queue: [] };
+        this.renderFilteredLogs();
+        this.renderDLQ([]);
       }
     }
 
@@ -68,11 +72,9 @@
         if (res.ok) {
           const data = await res.json();
           this.renderFinops(data);
-        } else {
-          this.renderMockFinops();
         }
       } catch (err) {
-        this.renderMockFinops();
+        console.warn('FinOps fetch failed:', err);
       }
     }
 
@@ -90,15 +92,6 @@
         const margin = data.subscription_economics ? data.subscription_economics.gross_margin_percent : 54.16;
         this.marginDisplay.textContent = `${margin.toFixed(2)}%`;
       }
-    }
-
-    renderMockFinops() {
-      this.renderFinops({
-        monthly_budget_vnd: 15000000,
-        consumed_vnd: 6842000,
-        prompt_cache_hit_rate: 0.684,
-        subscription_economics: { gross_margin_percent: 54.16 }
-      });
     }
 
     renderFilteredLogs() {
@@ -192,33 +185,6 @@
         `;
       });
       this.dlqTableBody.innerHTML = html;
-    }
-
-    renderMockLogs() {
-      const nowStr = new Date().toLocaleTimeString('vi-VN');
-      this.cachedLogs = {
-        audit_logs: [
-          { timestamp: nowStr, student_id: 'A41234', action: 'CHAT_SOCRATIC_QUERY', course: 'IT101', status: '200_OK' },
-          { timestamp: nowStr, student_id: 'A38901', action: 'CODE_STUDIO_EXECUTE', course: 'IT201', status: '200_OK' },
-          { timestamp: nowStr, student_id: 'A41234', action: 'SLIDE_INGESTION_UPLOAD', course: 'IT101', status: '200_OK' }
-        ],
-        inference_traces: [
-          { provider: 'Groq Cloud', model: 'qwen/qwen3.8-27b', prompt_tokens: 185, completion_tokens: 92, latency_ms: 210.4, cache_hit: true },
-          { provider: 'Google Gemini', model: 'gemini-3.5-flash-lite', prompt_tokens: 320, completion_tokens: 140, latency_ms: 680.2, cache_hit: false },
-          { provider: 'Groq Cloud', model: 'openai/gpt-oss-120b', prompt_tokens: 410, completion_tokens: 185, latency_ms: 340.8, cache_hit: true }
-        ],
-        guardrails_safety_logs: [
-          { timestamp: nowStr, preserved_id: 'A41234', cccd_redacted: 0, article_25_flag: false, verdict: 'APPROVED' },
-          { timestamp: nowStr, preserved_id: 'A38901', cccd_redacted: 1, article_25_flag: false, verdict: 'MASKED_APPROVED' },
-          { timestamp: nowStr, preserved_id: 'A41234', cccd_redacted: 0, article_25_flag: true, verdict: 'SOCRATIC_CAUTION_APPLIED' }
-        ],
-        dead_letter_queue: [
-          { dlq_id: 'dlq_001', timestamp: '2026-10-06 13:15:00', error_code: 'ENCODING_CP1258_CORRUPTION', source_file: 'old_assignment_k33.cpp', resolved: true },
-          { dlq_id: 'dlq_002', timestamp: '2026-10-06 14:02:10', error_code: 'AST_SYNTAX_PARSE_ERROR', source_file: 'incomplete_lab_snippet.java', resolved: true }
-        ]
-      };
-      this.renderFilteredLogs();
-      this.renderDLQ(this.cachedLogs.dead_letter_queue);
     }
   }
 

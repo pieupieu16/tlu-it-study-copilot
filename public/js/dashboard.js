@@ -142,10 +142,12 @@
           this.goldenItems = data.golden_dataset_sample || [];
           this.renderGoldenTable(this.goldenItems);
         } else {
-          this.renderLocalGoldenTable();
+          this.goldenItems = [];
+          this.renderGoldenTable([]);
         }
       } catch (err) {
-        this.renderLocalGoldenTable();
+        this.goldenItems = [];
+        this.renderGoldenTable([]);
       }
     }
 
@@ -164,7 +166,7 @@
       if (!this.goldenTableBody) return;
       this.goldenTableBody.innerHTML = '';
 
-      if (items.length === 0) {
+      if (!items || items.length === 0) {
         this.goldenTableBody.innerHTML = '<tr><td colspan="4" class="p-4 text-center text-xs text-[#94A3B8] italic">Không có câu hỏi đối chuẩn phù hợp với bộ lọc.</td></tr>';
         return;
       }
@@ -182,19 +184,6 @@
 
         this.goldenTableBody.appendChild(tr);
       });
-    }
-
-    renderLocalGoldenTable() {
-      const mockItems = [
-        { question_id: 'GD-IT101-01', course_code: 'IT101', user_query: 'Phân biệt con trỏ NULL và con trỏ chưa khởi tạo trong C', judge_score: '5.0/5.0' },
-        { question_id: 'GD-IT101-02', course_code: 'IT101', user_query: 'Tại sao cần giải phóng bộ nhớ heap sau khi dùng malloc?', judge_score: '4.8/5.0' },
-        { question_id: 'GD-IT201-01', course_code: 'IT201', user_query: 'Cài đặt thêm phần tử vào đầu danh sách liên kết đơn trong Java', judge_score: '5.0/5.0' },
-        { question_id: 'GD-IT205-01', course_code: 'IT205', user_query: 'Giải thích nguyên tắc chuẩn hóa dạng 3NF và khóa ngoại', judge_score: '4.9/5.0' },
-        { question_id: 'GD-IT301-01', course_code: 'IT301', user_query: 'Độ phức tạp thuật toán tìm đường đi ngắn nhất Dijkstra', judge_score: '5.0/5.0' },
-        { question_id: 'GD-IT315-01', course_code: 'IT315', user_query: 'Nguyên lý chuyển đổi địa chỉ ảo sang địa chỉ vật lý trong phân trang', judge_score: '4.9/5.0' }
-      ];
-      this.goldenItems = mockItems;
-      this.renderGoldenTable(mockItems);
     }
 
     escapeHtml(str) {
