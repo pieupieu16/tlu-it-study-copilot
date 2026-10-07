@@ -1,12 +1,14 @@
 """
 TLU IT Study Copilot - Supabase Database Client & ORM Layer
-Architecture: Asynchronous and synchronous Supabase PostgreSQL integration.
+Architecture: High-performance dual-engine integration supporting direct PostgreSQL Pooler
+              via psycopg2/asyncpg and Supabase REST/SDK.
 Domain: 100% TLU IT Department (Courses IT101, IT201, IT205, IT301, IT315).
 Compliance: Zero Icon policy, Light Mode assets, Zero prohibited terms.
 """
 
 import os
 import sys
+import json
 from datetime import datetime
 from pathlib import Path
 from typing import Any, Dict, List, Optional
@@ -28,6 +30,14 @@ if ENV_PATH.exists():
                         os.environ[key] = val
     except Exception as e:
         print(f"[Supabase Client] Failed to read .env: {e}")
+
+# PostgreSQL Driver import (psycopg2)
+try:
+    import psycopg2
+    import psycopg2.extras
+    PSYCOPG2_AVAILABLE = True
+except ImportError:
+    PSYCOPG2_AVAILABLE = False
 
 # Supabase SDK import with graceful fallback
 try:
@@ -54,159 +64,236 @@ class TLUSupabaseManager:
             os.getenv("SUPABASE_SERVICE_ROLE_KEY", "").strip()
             or os.getenv("SUPABASE_KEY", "").strip()
         )
+        self.db_url: str = os.getenv("SUPABASE_DB_URL", "").strip()
         self.client: Optional[Client] = None
         self.is_connected: bool = False
-        self._initialize_client()
+        self.active_engine: str = "in-memory"
+        self._initialize_connection()
 
-    def _initialize_client(self):
-        """Attempts to initialize the Supabase client SDK if credentials exist."""
-        if not self.supabase_url or not self.supabase_key:
-            self.is_connected = False
-            return
+    def _get_pg_connection(self):
+        """Creates a short-lived PostgreSQL connection via Pooler."""
+        if not self.db_url or not PSYCOPG2_AVAILABLE:
+            return None
+        return psycopg2.connect(self.db_url, connect_timeout=5)
 
-        # Basic format check (must be a valid URL)
-        if not self.supabase_url.startswith("http"):
-            self.is_connected = False
-            return
-
-        if SUPABASE_SDK_AVAILABLE:
+    def _initialize_connection(self):
+        """Attempts to verify connection via PostgreSQL Pooler or SDK."""
+        # 1. Prioritize Direct PostgreSQL Pooler Connection
+        if self.db_url and PSYCOPG2_AVAILABLE:
             try:
-                self.client = create_client(self.supabase_url, self.supabase_key)
-                self.is_connected = True
-                print(f"[Supabase] Connected to project: {self.supabase_url}")
-            except Exception as exc:
-                print(f"[Supabase] Initialization error: {exc}")
-                self.is_connected = False
-        else:
-            # Fall back to direct REST mode via HTTPX
-            self.is_connected = True
-            print(f"[Supabase] Direct REST mode enabled for: {self.supabase_url}")
+                conn = self._get_pg_connection()
+                if conn:
+                    cur = conn.cursor()
+                    cur.execute("SELECT 1;")
+                    cur.close()
+                    conn.close()
+                    self.is_connected = True
+                    self.active_engine = "postgresql-pooler"
+                    print(f"[Supabase Database] Connected via PostgreSQL Pooler (aws-0-ap-southeast-1).")
+                    return
+            except Exception as pg_err:
+                print(f"[Supabase Database] PostgreSQL Pooler connection warning: {pg_err}")
+
+        # 2. Secondary: Supabase Client SDK
+        if self.supabase_url and self.supabase_key and self.supabase_url.startswith("http"):
+            if SUPABASE_SDK_AVAILABLE:
+                try:
+                    self.client = create_client(self.supabase_url, self.supabase_key)
+                    self.is_connected = True
+                    self.active_engine = "supabase-sdk"
+                    print(f"[Supabase Database] Connected via Supabase SDK: {self.supabase_url}")
+                    return
+                except Exception as sdk_err:
+                    print(f"[Supabase Database] SDK connection warning: {sdk_err}")
+
+        # Default fallback
+        self.is_connected = False
+        self.active_engine = "in-memory"
 
     def get_status(self) -> Dict[str, Any]:
         """Returns the operational status of the Supabase connection."""
         return {
-            "configured": bool(self.supabase_url and self.supabase_key),
+            "configured": bool(self.db_url or (self.supabase_url and self.supabase_key)),
             "connected": self.is_connected,
-            "url": self.supabase_url if self.supabase_url else "Not configured",
-            "sdk_available": SUPABASE_SDK_AVAILABLE,
-            "rest_available": HTTPX_AVAILABLE
+            "engine": self.active_engine,
+            "url": self.supabase_url if self.supabase_url else "Direct Postgres Pooler",
+            "db_host": "aws-0-ap-southeast-1.pooler.supabase.com" if self.db_url else "local",
+            "psycopg2_available": PSYCOPG2_AVAILABLE,
+            "sdk_available": SUPABASE_SDK_AVAILABLE
         }
 
     async def test_connection(self) -> Dict[str, Any]:
         """Tests live query against Supabase slides table."""
-        if not self.supabase_url or not self.supabase_key:
-            return {
-                "status": "not_configured",
-                "message": "SUPABASE_URL and SUPABASE_KEY are not configured in .env"
-            }
+        # Test Direct PostgreSQL
+        if self.db_url and PSYCOPG2_AVAILABLE:
+            try:
+                conn = self._get_pg_connection()
+                if conn:
+                    cur = conn.cursor(cursor_factory=psycopg2.extras.RealDictCursor)
+                    cur.execute("SELECT count(*) as total_slides FROM public.slides;")
+                    res = cur.fetchone()
+                    count = res["total_slides"] if res else 0
+                    cur.close()
+                    conn.close()
+                    return {
+                        "status": "connected",
+                        "engine": "postgresql-pooler",
+                        "total_slides": count,
+                        "message": f"Successfully connected to Supabase PostgreSQL ({count} slides in database)."
+                    }
+            except Exception as e:
+                return {
+                    "status": "error",
+                    "engine": "postgresql-pooler",
+                    "message": f"PostgreSQL connection test failed: {str(e)}"
+                }
 
-        try:
-            if self.client:
+        # Test SDK
+        if self.client:
+            try:
                 response = self.client.table("slides").select("slide_id").limit(1).execute()
                 return {
                     "status": "connected",
-                    "message": "Successfully connected to Supabase PostgreSQL database.",
+                    "engine": "supabase-sdk",
+                    "message": "Successfully connected via Supabase SDK.",
                     "data": response.data
                 }
-            elif HTTPX_AVAILABLE:
-                endpoint = f"{self.supabase_url.rstrip('/')}/rest/v1/slides?select=slide_id&limit=1"
-                headers = {
-                    "apikey": self.supabase_key,
-                    "Authorization": f"Bearer {self.supabase_key}"
+            except Exception as e:
+                return {
+                    "status": "error",
+                    "engine": "supabase-sdk",
+                    "message": f"SDK test failed: {str(e)}"
                 }
-                async with httpx.AsyncClient(timeout=5.0) as http_client:
-                    res = await http_client.get(endpoint, headers=headers)
-                    if res.status_code in [200, 206]:
-                        return {
-                            "status": "connected",
-                            "message": "Connected to Supabase via PostgREST endpoint.",
-                            "data": res.json()
-                        }
-                    else:
-                        return {
-                            "status": "error",
-                            "code": res.status_code,
-                            "message": f"Supabase responded with code {res.status_code}: {res.text[:200]}"
-                        }
-        except Exception as e:
-            return {
-                "status": "error",
-                "message": f"Connection test failed: {str(e)}"
-            }
 
-        return {"status": "offline", "message": "Supabase client not operational"}
+        return {
+            "status": "not_configured",
+            "message": "Supabase credentials not configured or offline"
+        }
 
     async def fetch_slides(self, course_code: Optional[str] = None) -> Optional[List[Dict[str, Any]]]:
-        """Fetches slide lecture records from Supabase."""
+        """Fetches slide lecture records from Supabase PostgreSQL."""
         if not self.is_connected:
             return None
 
-        try:
-            if self.client:
+        # PostgreSQL Engine
+        if self.db_url and PSYCOPG2_AVAILABLE:
+            try:
+                conn = self._get_pg_connection()
+                if conn:
+                    cur = conn.cursor(cursor_factory=psycopg2.extras.RealDictCursor)
+                    if course_code:
+                        cur.execute(
+                            "SELECT * FROM public.slides WHERE UPPER(course_code) = %s ORDER BY uploaded_at DESC;",
+                            (course_code.upper(),)
+                        )
+                    else:
+                        cur.execute("SELECT * FROM public.slides ORDER BY uploaded_at DESC;")
+                    rows = cur.fetchall()
+                    cur.close()
+                    conn.close()
+
+                    # Convert datetime objects to string format for JSON serialization
+                    formatted_rows = []
+                    for r in rows:
+                        d = dict(r)
+                        if "uploaded_at" in d and isinstance(d["uploaded_at"], datetime):
+                            d["uploaded_at"] = d["uploaded_at"].strftime("%Y-%m-%d %H:%M:%S")
+                        if "created_at" in d and isinstance(d["created_at"], datetime):
+                            d["created_at"] = d["created_at"].strftime("%Y-%m-%d %H:%M:%S")
+                        formatted_rows.append(d)
+
+                    if formatted_rows:
+                        return formatted_rows
+            except Exception as e:
+                print(f"[Supabase PG] fetch_slides query error: {e}")
+
+        # Supabase SDK Engine
+        if self.client:
+            try:
                 query = self.client.table("slides").select("*").order("uploaded_at", desc=True)
                 if course_code:
                     query = query.eq("course_code", course_code.upper())
                 res = query.execute()
-                if res.data is not None and len(res.data) > 0:
+                if res.data:
                     return res.data
-            elif HTTPX_AVAILABLE:
-                url = f"{self.supabase_url.rstrip('/')}/rest/v1/slides?select=*&order=uploaded_at.desc"
-                if course_code:
-                    url += f"&course_code=eq.{course_code.upper()}"
-                headers = {
-                    "apikey": self.supabase_key,
-                    "Authorization": f"Bearer {self.supabase_key}"
-                }
-                async with httpx.AsyncClient(timeout=5.0) as http_client:
-                    res = await http_client.get(url, headers=headers)
-                    if res.status_code == 200:
-                        data = res.json()
-                        if data and len(data) > 0:
-                            return data
-        except Exception as e:
-            print(f"[Supabase] fetch_slides query failed: {e}")
+            except Exception as e:
+                print(f"[Supabase SDK] fetch_slides query error: {e}")
 
         return None
 
     async def insert_slide(self, record: Dict[str, Any]) -> bool:
-        """Inserts a new lecture slide record into Supabase."""
+        """Inserts or updates a lecture slide record into Supabase PostgreSQL."""
         if not self.is_connected:
             return False
 
-        try:
-            payload = {
-                "slide_id": record.get("slide_id"),
-                "filename": record.get("filename"),
-                "course_code": record.get("course_code"),
-                "course_name": record.get("course_name"),
-                "week": record.get("week", 1),
-                "topic": record.get("topic", "Chủ đề bài giảng"),
-                "file_type": record.get("file_type", "pdf"),
-                "sha256": record.get("sha256", ""),
-                "status": record.get("status", "PROCESSED"),
-                "bronze_status": record.get("bronze_status", "Archived RAW (Immutable)"),
-                "silver_status": record.get("silver_status", "Sanitized UTF-8, PII Redacted"),
-                "gold_chunks": record.get("gold_chunks", 12),
-                "vectors_indexed": record.get("vectors_indexed", 12),
-                "uploaded_at": datetime.utcnow().isoformat() + "Z"
-            }
+        # PostgreSQL Engine
+        if self.db_url and PSYCOPG2_AVAILABLE:
+            try:
+                conn = self._get_pg_connection()
+                if conn:
+                    conn.autocommit = True
+                    cur = conn.cursor()
+                    insert_sql = """
+                    INSERT INTO public.slides (
+                        slide_id, filename, course_code, course_name, week, topic,
+                        file_type, sha256, status, bronze_status, silver_status,
+                        gold_chunks, vectors_indexed, uploaded_at
+                    ) VALUES (
+                        %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, NOW()
+                    )
+                    ON CONFLICT (slide_id) DO UPDATE SET
+                        filename = EXCLUDED.filename,
+                        course_name = EXCLUDED.course_name,
+                        topic = EXCLUDED.topic,
+                        status = EXCLUDED.status,
+                        gold_chunks = EXCLUDED.gold_chunks,
+                        vectors_indexed = EXCLUDED.vectors_indexed;
+                    """
+                    cur.execute(insert_sql, (
+                        record.get("slide_id"),
+                        record.get("filename"),
+                        record.get("course_code"),
+                        record.get("course_name"),
+                        record.get("week", 1),
+                        record.get("topic", "Chủ đề bài giảng"),
+                        record.get("file_type", "pdf"),
+                        record.get("sha256", ""),
+                        record.get("status", "PROCESSED"),
+                        record.get("bronze_status", "Archived RAW (Immutable)"),
+                        record.get("silver_status", "Sanitized UTF-8, PII Redacted"),
+                        record.get("gold_chunks", 12),
+                        record.get("vectors_indexed", 12)
+                    ))
+                    cur.close()
+                    conn.close()
+                    print(f"[Supabase PG] Successfully persisted slide: {record.get('slide_id')}")
+                    return True
+            except Exception as e:
+                print(f"[Supabase PG] insert_slide error: {e}")
 
-            if self.client:
+        # Supabase SDK Engine
+        if self.client:
+            try:
+                payload = {
+                    "slide_id": record.get("slide_id"),
+                    "filename": record.get("filename"),
+                    "course_code": record.get("course_code"),
+                    "course_name": record.get("course_name"),
+                    "week": record.get("week", 1),
+                    "topic": record.get("topic", "Chủ đề bài giảng"),
+                    "file_type": record.get("file_type", "pdf"),
+                    "sha256": record.get("sha256", ""),
+                    "status": record.get("status", "PROCESSED"),
+                    "bronze_status": record.get("bronze_status", "Archived RAW (Immutable)"),
+                    "silver_status": record.get("silver_status", "Sanitized UTF-8, PII Redacted"),
+                    "gold_chunks": record.get("gold_chunks", 12),
+                    "vectors_indexed": record.get("vectors_indexed", 12),
+                    "uploaded_at": datetime.utcnow().isoformat() + "Z"
+                }
                 self.client.table("slides").upsert(payload).execute()
                 return True
-            elif HTTPX_AVAILABLE:
-                url = f"{self.supabase_url.rstrip('/')}/rest/v1/slides"
-                headers = {
-                    "apikey": self.supabase_key,
-                    "Authorization": f"Bearer {self.supabase_key}",
-                    "Content-Type": "application/json",
-                    "Prefer": "resolution=merge-duplicates"
-                }
-                async with httpx.AsyncClient(timeout=5.0) as http_client:
-                    res = await http_client.post(url, headers=headers, json=payload)
-                    return res.status_code in [200, 201]
-        except Exception as e:
-            print(f"[Supabase] insert_slide failed: {e}")
+            except Exception as e:
+                print(f"[Supabase SDK] insert_slide error: {e}")
 
         return False
 
@@ -223,33 +310,31 @@ class TLUSupabaseManager:
         if not self.is_connected:
             return False
 
-        try:
-            payload = {
-                "student_id": student_id,
-                "course_code": course_code,
-                "user_message": user_message,
-                "code_context": code_context or "",
-                "ai_reply": ai_reply,
-                "socratic_approved": True,
-                "model_provider": model_provider,
-                "created_at": datetime.utcnow().isoformat() + "Z"
-            }
-
-            if self.client:
-                self.client.table("socratic_chats").insert(payload).execute()
-                return True
-            elif HTTPX_AVAILABLE:
-                url = f"{self.supabase_url.rstrip('/')}/rest/v1/socratic_chats"
-                headers = {
-                    "apikey": self.supabase_key,
-                    "Authorization": f"Bearer {self.supabase_key}",
-                    "Content-Type": "application/json"
-                }
-                async with httpx.AsyncClient(timeout=5.0) as http_client:
-                    res = await http_client.post(url, headers=headers, json=payload)
-                    return res.status_code in [200, 201]
-        except Exception as e:
-            print(f"[Supabase] save_chat_message failed: {e}")
+        if self.db_url and PSYCOPG2_AVAILABLE:
+            try:
+                conn = self._get_pg_connection()
+                if conn:
+                    conn.autocommit = True
+                    cur = conn.cursor()
+                    insert_sql = """
+                    INSERT INTO public.socratic_chats (
+                        student_id, course_code, user_message, code_context,
+                        ai_reply, socratic_approved, model_provider
+                    ) VALUES (%s, %s, %s, %s, %s, TRUE, %s);
+                    """
+                    cur.execute(insert_sql, (
+                        student_id,
+                        course_code,
+                        user_message,
+                        code_context or "",
+                        ai_reply,
+                        model_provider
+                    ))
+                    cur.close()
+                    conn.close()
+                    return True
+            except Exception as e:
+                print(f"[Supabase PG] save_chat_message error: {e}")
 
         return False
 

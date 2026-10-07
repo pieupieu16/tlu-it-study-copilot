@@ -62,10 +62,20 @@ async def run_setup():
     print("=" * 70)
     print("TLU IT Study Copilot - Supabase PostgreSQL Database Setup")
     print("Institution: Truong Dai hoc Thang Long - Khoa Cong nghe Thong tin")
-    print("=" * 70)
+    if ENV_FILE.exists():
+        with open(ENV_FILE, "r", encoding="utf-8") as f:
+            for line in f:
+                line = line.strip()
+                if line and not line.startswith("#") and "=" in line:
+                    k, v = line.split("=", 1)
+                    k_clean = k.strip()
+                    if k_clean and k_clean not in os.environ:
+                        os.environ[k_clean] = v.strip().strip('"').strip("'")
 
     target_url = args.url or os.getenv("SUPABASE_URL", "")
     target_key = args.key or os.getenv("SUPABASE_KEY", "")
+    target_db_url = os.getenv("SUPABASE_DB_URL", "")
+
 
     if args.url and args.key:
         update_env_file(args.url, args.key)
@@ -74,8 +84,9 @@ async def run_setup():
         target_url = args.url
         target_key = args.key
 
-    if not target_url or not target_key:
+    if not (target_db_url or (target_url and target_key)):
         print("\n[!] Supabase credentials not found in environment or arguments.")
+
         print("\nCac buoc thuc hien de hoan tat:")
         print("1. Tren tab trinh duyet Supabase (pieupieu16's Project):")
         print("   - Nhap Database Password va chon Region (Singapore)")
@@ -96,7 +107,9 @@ async def run_setup():
     manager = TLUSupabaseManager()
     manager.supabase_url = target_url
     manager.supabase_key = target_key
-    manager._initialize_client()
+    manager.db_url = target_db_url
+    manager._initialize_connection()
+
 
     result = await manager.test_connection()
     print(f"Connection Status: {result.get('status')}")
