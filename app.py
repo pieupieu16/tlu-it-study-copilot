@@ -104,6 +104,25 @@ class SlideUploadRequest(BaseModel):
 # Medallion Lakehouse Document Catalog
 INGESTED_SLIDES: List[Dict[str, Any]] = [
     {
+        "slide_id": "slide_datascience_w03_1791353451",
+        "filename": "Data Science_Machine Learning course.pdf",
+        "course_code": "DATASCIENCE",
+        "course_name": "Khoa học Dữ liệu và Học máy",
+        "week": 3,
+        "topic": "Khoa học Dữ liệu & Học máy (Data Science & Machine Learning)",
+        "file_type": "pdf",
+        "sha256": "2f2f92a71ef77cd9afe952ed065faba79a98a882ebc783870c7faffcd4bda903",
+        "status": "PROCESSED",
+        "bronze_status": "Archived RAW (Immutable)",
+        "silver_status": "Sanitized UTF-8, PII Redacted, MinHash Deduped",
+        "gold_chunks": 12,
+        "vectors_indexed": 12,
+        "uploaded_at": "2026-10-07 06:10:52",
+        "content_desc": "Giáo trình và bài giảng Chuyên sâu Khoa học Dữ liệu (Data Science) & Học máy (Machine Learning). Bao gồm các kỹ thuật tiền xử lý dữ liệu, trích xuất đặc trưng, huấn luyện mô hình phân loại và hồi quy.",
+        "code_snippet": "# Pipeline huấn luyện mô hình Machine Learning:\nimport pandas as pd\nfrom sklearn.model_selection import train_test_split\nfrom sklearn.ensemble import RandomForestClassifier\n\n# Nạp và huấn luyện dữ liệu bài giảng TLU\nX_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2)\nmodel = RandomForestClassifier(n_estimators=100)\nmodel.fit(X_train, y_train)",
+        "callout_note": "Học liệu Khoa học Dữ liệu tải lên trực tiếp vào hệ thống cơ sở dữ liệu Supabase phục vụ sinh viên."
+    },
+    {
         "slide_id": "slide_it101_w03",
         "filename": "IT101_Tuan03_ConTro_BoNho.pdf",
         "course_code": "IT101",

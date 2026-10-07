@@ -2,90 +2,38 @@
  * TLU IT Study Copilot - Slide Viewer & Universal IT Course Ingestion Controller
  * Module: public/js/slides.js
  * Domain: Fits 100% of Information Technology (CNTT) courses at Thang Long University.
- * Invariant Rule: 100% Light Mode, Zero Icons (no SVG, font icons, emojis), Zero Placeholders.
+ * Invariant Rule: 100% Light Mode, Zero Icons (no SVG, font icons, emojis), Zero Boilerplate.
  */
 
 (function () {
   'use strict';
 
-  // Comprehensive Curated Slide Decks for IT Curriculum
-  const IT_SLIDES_DECK = [
-    {
-      course_code: 'IT101',
-      course_name: 'Nhập môn lập trình (C/C++)',
-      week: 3,
-      page: 'Slide 18 / 42',
-      topic: 'Chủ đề: Cấp Phát Bộ Nhớ Động Trên Vùng Nhớ Heap (C/C++)',
-      desc: 'Vùng nhớ Heap là không gian nhớ dùng cho cấp phát động tại thời điểm thực thi (runtime). Khác với vùng nhớ Stack được quản lý tự động theo phạm vi hàm, lập trình viên phải chủ động giải phóng bộ nhớ heap đã xin cấp phát.',
-      code: `// Ví dụ chuẩn trong Slide IT101 Tuần 3:
-int *ptr = new int(100); // Cấp phát 1 ô nhớ int trên Heap
-std::cout << "Gia tri: " << *ptr << std::endl;
-delete ptr; // Bắt buộc giải phóng sau khi dùng
-ptr = nullptr; // Tránh con trỏ lơ lửng (Dangling pointer)`,
-      note: 'Cảnh Báo Lỗi Thường Gặp Của Sinh Viên: Quên giải phóng con trỏ dẫn đến rò rỉ bộ nhớ (Memory Leak), hoặc truy cập vào ô nhớ sau khi delete sẽ gây lỗi Segmentation fault (SIGSEGV).'
-    },
-    {
-      course_code: 'IT201',
-      course_name: 'Cấu trúc dữ liệu & Giải thuật (Java)',
-      week: 5,
-      page: 'Slide 22 / 50',
-      topic: 'Chủ đề: Cây Nhị Phân Tìm Kiếm Cân Bằng AVL & Đồ Thị Dijkstra',
-      desc: 'Cây AVL tự động duy trì cân bằng sau mỗi thao tác chèn hoặc xóa thông qua các phép quay (Rotate Left, Rotate Right). Hệ số cân bằng Balance Factor luôn nằm trong khoảng [-1, 0, 1], đảm bảo độ phức tạp tìm kiếm tối ưu O(log n).',
-      code: `// Cấu trúc Node cây AVL môn IT201:
-public class AVLNode {
-    int key, height;
-    AVLNode left, right;
-    AVLNode(int d) { key = d; height = 1; }
-}
-// Độ phức tạp thời gian: O(log n) cho Search, Insert, Delete`,
-      note: 'Lưu Ý Giải Thuật: Cần tính toán lại chiều cao (height) của các node cha sau mỗi phép quay để duy trì điều kiện cân bằng cây AVL.'
-    },
-    {
-      course_code: 'IT205',
-      course_name: 'Cơ sở dữ liệu (SQL)',
-      week: 6,
-      page: 'Slide 14 / 36',
-      topic: 'Chủ đề: Chuẩn Hóa Lược Đồ Quan Hệ 1NF, 2NF, 3NF & BCNF',
-      desc: 'Chuẩn hóa dữ liệu là quá trình tổ chức các bảng trong cơ sở dữ liệu quan hệ nhằm loại bỏ dư thừa dữ liệu (Data Redundancy) và tránh các bất thường khi chèn, sửa hoặc xóa (Anomalies). Dạng chuẩn 3NF yêu cầu mọi thuộc tính không khóa phụ thuộc hàm trực tiếp vào khóa chính.',
-      code: `-- Minh họa truy vấn chuẩn hóa JOIN môn IT205:
-SELECT sv.ma_sv, sv.ho_ten, mh.ten_mon, d.diem_thi
-FROM SinhVien sv
-INNER JOIN BangDiem d ON sv.ma_sv = d.ma_sv
-INNER JOIN MonHoc mh ON d.ma_mon = mh.ma_mon
-WHERE mh.ma_mon = 'IT205';`,
-      note: 'Khuyến Nghị Tối Ưu: Luôn đánh chỉ mục B-Tree (Index) trên các trường khóa ngoại tham chiếu để giảm thiểu chi phí quét toàn bộ bảng (Table Scan).'
-    },
-    {
-      course_code: 'IT301',
-      course_name: 'Mạng máy tính & Truyền thông (Python)',
-      week: 4,
-      page: 'Slide 12 / 38',
-      topic: 'Chủ đề: Lập Trình Socket TCP / UDP & Mô Hình Phân Lớp OSI',
-      desc: 'Giao thức TCP cung cấp kết nối tin cậy hướng luồng thông qua cơ chế bắt tay 3 bước (Three-way handshake) và kiểm soát luồng cửa sổ trượt. UDP cung cấp truyền tải phi kết nối tốc độ cao phù hợp cho truyền phát trực tuyến.',
-      code: `# Lập trình Socket TCP Server chuẩn IT301:
-import socket
-server = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-server.bind(('0.0.0.0', 8080))
-server.listen(5)
-print("TLU Socket Server dang lang nghe tren port 8080...")`,
-      note: 'Lưu Ý An Toàn Mạng: Đảm bảo giải phóng tài nguyên socket và xử lý ngoại lệ Timeout để tránh chiếm dụng tài nguyên cổng mạng.'
-    },
-    {
-      course_code: 'IT315',
-      course_name: 'Kiến trúc máy tính & Hệ điều hành',
-      week: 7,
-      page: 'Slide 26 / 45',
-      topic: 'Chủ đề: Quản Lý Bộ Nhớ Ảo, Phân Trang Paging & Bảng Trang (Page Table)',
-      desc: 'Hệ điều hành sử dụng bộ nhớ ảo để tạo ra không gian địa chỉ riêng biệt cho từng tiến trình. Đơn vị quản lý bộ nhớ MMU dịch địa chỉ ảo (Virtual Address) sang địa chỉ vật lý (Physical Address) dựa trên bảng trang đa cấp.',
-      code: `// Minh họa cấu trúc địa chỉ ảo phân trang:
-// [ Virtual Page Number (VPN) | Page Offset ]
-// MMU tra cứu TLB Cache -> Page Table Walk -> Physical Frame Number (PFN)`,
-      note: 'Cảnh Báo Lỗi HĐH: Khi một trang chưa được nạp vào RAM, ngắt phần cứng Page Fault sẽ phát sinh để chuyển trang từ ổ đĩa hoán đổi (Swap) vào bộ nhớ.'
-    }
-  ];
+  // Default Initial Slide (User's real uploaded Data Science slide)
+  const DEFAULT_SLIDE = {
+    slide_id: 'slide_datascience_w03_1791353451',
+    course_code: 'DATASCIENCE',
+    course_name: 'Khoa học Dữ liệu và Học máy',
+    week: 3,
+    page: 'Slide 01 / 12',
+    topic: 'Chủ đề: Khoa học Dữ liệu & Học máy (Data Science & Machine Learning)',
+    desc: 'Giáo trình và bài giảng Chuyên sâu Khoa học Dữ liệu (Data Science) & Học máy (Machine Learning). Bao gồm các kỹ thuật tiền xử lý dữ liệu, trích xuất đặc trưng, huấn luyện mô hình phân loại và hồi quy.',
+    code: `# Pipeline huấn luyện mô hình Machine Learning:\nimport pandas as pd\nfrom sklearn.model_selection import train_test_split\nfrom sklearn.ensemble import RandomForestClassifier\n\n# Nạp và huấn luyện dữ liệu bài giảng TLU\nX_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2)\nmodel = RandomForestClassifier(n_estimators=100)\nmodel.fit(X_train, y_train)`,
+    note: 'Học liệu Khoa học Dữ liệu tải lên trực tiếp vào hệ thống cơ sở dữ liệu Supabase phục vụ sinh viên Khoa CNTT TLU.'
+  };
 
   // In-Class Quick Question Quiz Dataset (Inspired by K3-Hackathon student-question-panel)
   const SLIDE_QUESTIONS = {
+    'DATASCIENCE': {
+      prompt: 'Trong bài toán huấn luyện mô hình Machine Learning, kỹ thuật Cross-Validation (K-Fold) có tác dụng chính là gì?',
+      options: [
+        'A. Đánh giá tổng quát hóa mô hình và hạn chế tình trạng Overfitting',
+        'B. Tăng kích thước tập dữ liệu gấp K lần mà không cần thu thập thêm',
+        'C. Tự động chuyển đổi toàn bộ đặc trưng phi số thành số nguyên',
+        'D. Giảm thời gian huấn luyện mô hình về mức O(1)'
+      ],
+      correctIndex: 0,
+      explanation: 'K-Fold Cross-Validation chia dữ liệu thành K phần để huấn luyện và kiểm thử chéo, giúp đánh giá độ ổn định và giảm thiểu nguy cơ Overfitting.'
+    },
     'IT101': {
       prompt: 'Trong C++, khi cấp phát vùng nhớ Heap bằng toán tử new, nếu không gọi delete thì điều gì sẽ xảy ra?',
       options: [
@@ -238,7 +186,7 @@ print("TLU Socket Server dang lang nghe tren port 8080...")`,
       this.splitHumanTicketsList = document.getElementById('split-human-tickets-list');
 
       // Active Presentation State
-      this.slidesDeck = [...IT_SLIDES_DECK];
+      this.slidesDeck = [{ ...DEFAULT_SLIDE }];
       this.currentSlideIndex = 0;
 
       this.init();
@@ -1072,7 +1020,8 @@ print("TLU Socket Server dang lang nghe tren port 8080...")`,
       if (!Array.isArray(dbSlides) || dbSlides.length === 0) return;
 
       const mapped = dbSlides.map(s => {
-        const pageNum = s.course_code === 'IT101' ? 'Slide 18 / 42' :
+        const pageNum = s.course_code === 'DATASCIENCE' ? `Slide 01 / ${s.gold_chunks || 12}` :
+                        s.course_code === 'IT101' ? 'Slide 18 / 42' :
                         s.course_code === 'IT201' ? 'Slide 22 / 50' :
                         s.course_code === 'IT205' ? 'Slide 14 / 36' :
                         s.course_code === 'IT301' ? 'Slide 12 / 38' :
@@ -1081,7 +1030,7 @@ print("TLU Socket Server dang lang nghe tren port 8080...")`,
 
         return {
           slide_id: s.slide_id,
-          course_code: s.course_code || 'IT101',
+          course_code: s.course_code || 'DATASCIENCE',
           course_name: s.course_name || `Môn học CNTT (${s.course_code})`,
           week: s.week || 1,
           page: pageNum,
@@ -1092,17 +1041,14 @@ print("TLU Socket Server dang lang nghe tren port 8080...")`,
         };
       });
 
-      const it101Slide = mapped.find(s => s.course_code === 'IT101');
-      const it201Slide = mapped.find(s => s.course_code === 'IT201');
-      const others = mapped.filter(s => s.course_code !== 'IT101' && s.course_code !== 'IT201');
-
-      const orderedDeck = [];
-      if (it101Slide) orderedDeck.push(it101Slide);
-      if (it201Slide) orderedDeck.push(it201Slide);
-      orderedDeck.push(...others);
-
-      if (orderedDeck.length > 0) {
-        this.slidesDeck = orderedDeck;
+      if (mapped.length > 0) {
+        // Prioritize user's real uploaded Data Science slide at index 0
+        const dsIndex = mapped.findIndex(s => s.slide_id === 'slide_datascience_w03_1791353451' || s.course_code === 'DATASCIENCE');
+        if (dsIndex > 0) {
+          const dsSlide = mapped.splice(dsIndex, 1)[0];
+          mapped.unshift(dsSlide);
+        }
+        this.slidesDeck = mapped;
         if (this.currentSlideIndex >= this.slidesDeck.length) {
           this.currentSlideIndex = 0;
         }

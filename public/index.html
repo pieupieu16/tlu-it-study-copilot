@@ -524,7 +524,7 @@ int main() {
         <!-- Classroom Top Header Bar (Inspired by K3-Hackathon student-classroom__header) -->
         <div class="flex flex-col md:flex-row md:items-center justify-between gap-3 border-b-2 border-[#F1F5F9] pb-4">
           <div class="flex flex-wrap items-center gap-2.5">
-            <span id="current-slide-badge" class="px-3 py-1 bg-[#EEF4FF] border border-[#C7D9FE] text-[#0D62FE] text-xs font-black rounded-xl">IT101 • Tuần 03</span>
+            <span id="current-slide-badge" class="px-3 py-1 bg-[#EEF4FF] border border-[#C7D9FE] text-[#0D62FE] text-xs font-black rounded-xl">DATASCIENCE • Tuần 03</span>
             <span id="slide-sync-badge" class="text-[11px] font-extrabold text-[#10B981] bg-[#ECFDF5] px-2.5 py-1 rounded-xl border border-[#A7F3D0]">Đang Theo Dõi Bài Giảng</span>
             <span id="current-slide-format-badge" class="text-[10px] font-bold text-[#0D62FE] bg-[#EEF4FF] px-2 py-0.5 rounded-lg border border-[#C7D9FE]">Học Liệu Chính Khóa</span>
           </div>
@@ -532,9 +532,9 @@ int main() {
           <!-- Classroom Reading Progress Bar -->
           <div class="flex items-center space-x-3 w-full md:w-80">
             <div class="h-3 flex-1 overflow-hidden rounded-full bg-[#F1F5F9] border border-[#CBD5E1]">
-              <div id="slide-progress-bar" class="h-full rounded-full bg-[#0D62FE] transition-all duration-300" style="width: 42.8%;"></div>
+              <div id="slide-progress-bar" class="h-full rounded-full bg-[#0D62FE] transition-all duration-300" style="width: 16.6%;"></div>
             </div>
-            <span id="current-slide-page" class="text-xs sm:text-sm font-extrabold tabular-nums text-[#0F172A] bg-[#F8FAFC] px-3 py-1 rounded-xl border border-[#CBD5E1] shrink-0">Slide 18 / 42</span>
+            <span id="current-slide-page" class="text-xs sm:text-sm font-extrabold tabular-nums text-[#0F172A] bg-[#F8FAFC] px-3 py-1 rounded-xl border border-[#CBD5E1] shrink-0">Slide 01 / 12</span>
           </div>
 
           <!-- Quick Navigation Header Buttons -->
@@ -586,27 +586,28 @@ int main() {
 
                 <!-- Title & Signature Accent Underline Bar (from SlideCanvas.tsx) -->
                 <div>
-                  <h3 id="current-slide-topic" class="text-base sm:text-2xl font-black text-[#0F172A] leading-snug">Chủ đề: Cấp Phát Bộ Nhớ Động Trên Vùng Nhớ Heap (C/C++)</h3>
+                  <h3 id="current-slide-topic" class="text-base sm:text-2xl font-black text-[#0F172A] leading-snug">Chủ đề: Khoa học Dữ liệu &amp; Học máy (Data Science &amp; Machine Learning)</h3>
                   <div class="h-2 w-28 bg-[#0D62FE] rounded-full my-2.5"></div>
                 </div>
 
                 <p id="current-slide-desc" class="text-xs sm:text-sm text-[#334155] leading-relaxed">
-                  Vùng nhớ Heap là không gian nhớ dùng cho cấp phát động tại thời điểm thực thi (runtime). Khác với vùng nhớ Stack được quản lý tự động theo phạm vi hàm, lập trình viên phải chủ động giải phóng bộ nhớ heap đã xin cấp phát.
+                  Giáo trình và bài giảng Chuyên sâu Khoa học Dữ liệu (Data Science) &amp; Học máy (Machine Learning). Bao gồm các kỹ thuật tiền xử lý dữ liệu, trích xuất đặc trưng, huấn luyện mô hình phân loại và hồi quy.
                 </p>
 
                 <!-- Code box with K3-Hackathon block styling -->
                 <div id="current-slide-code-box" class="blk-card border border-[#CBD5E1] bg-[#F8FAFC] rounded-xl p-4 sm:p-5 font-mono text-xs sm:text-sm text-[#0F172A] space-y-1.5 shadow-2xs">
-                  <div class="text-[#64748B]">// Ví dụ chuẩn trong Slide IT101 Tuần 3:</div>
-                  <div><span class="text-[#0D62FE] font-bold">int</span> *ptr = <span class="text-[#0D62FE] font-bold">new</span> <span class="text-[#0D62FE] font-bold">int</span>(100); <span class="text-[#64748B]">// Cấp phát 1 ô nhớ int trên Heap</span></div>
-                  <div>std::cout &lt;&lt; <span class="text-[#B91C1C]">"Gia tri: "</span> &lt;&lt; *ptr &lt;&lt; std::endl;</div>
-                  <div><span class="text-[#0D62FE] font-bold">delete</span> ptr; <span class="text-[#64748B]">// Bắt buộc giải phóng sau khi dùng</span></div>
-                  <div>ptr = <span class="text-[#0D62FE] font-bold">nullptr</span>; <span class="text-[#64748B]">// Tránh con trỏ lơ lửng (Dangling pointer)</span></div>
+                  <div class="text-[#64748B]"># Pipeline huấn luyện mô hình Machine Learning:</div>
+                  <div><span class="text-[#0D62FE] font-bold">import</span> pandas <span class="text-[#0D62FE] font-bold">as</span> pd</div>
+                  <div><span class="text-[#0D62FE] font-bold">from</span> sklearn.model_selection <span class="text-[#0D62FE] font-bold">import</span> train_test_split</div>
+                  <div><span class="text-[#0D62FE] font-bold">from</span> sklearn.ensemble <span class="text-[#0D62FE] font-bold">import</span> RandomForestClassifier</div>
+                  <div>model = RandomForestClassifier(n_estimators=100)</div>
+                  <div>model.fit(X_train, y_train)</div>
                 </div>
 
                 <!-- Callout Note -->
-                <div id="current-slide-note-box" class="bg-[#FEF2F2] border-l-4 border-[#FF3B30] p-4 rounded-r-xl text-xs sm:text-sm text-[#7F1D1D] space-y-1">
-                  <div class="font-bold text-[#B91C1C]">Cảnh Báo Lỗi Thường Gặp Của Sinh Viên:</div>
-                  <div>Quên giải phóng con trỏ dẫn đến rò rỉ bộ nhớ (Memory Leak), hoặc truy cập vào ô nhớ sau khi delete sẽ gây lỗi <code class="font-mono font-bold bg-white/70 px-1 rounded">Segmentation fault (SIGSEGV)</code>.</div>
+                <div id="current-slide-note-box" class="bg-[#F0FDF4] border-l-4 border-[#10B981] p-4 rounded-r-xl text-xs sm:text-sm text-[#14532D] space-y-1">
+                  <div class="font-bold text-[#15803D]">Lưu Ý Thực Hành Khoa Học Dữ Liệu:</div>
+                  <div>Học liệu Khoa học Dữ liệu tải lên trực tiếp vào hệ thống cơ sở dữ liệu Supabase phục vụ sinh viên Khoa CNTT TLU.</div>
                 </div>
 
                 <!-- Slide Footer Label -->
