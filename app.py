@@ -37,6 +37,13 @@ try:
 except ImportError:
     ai_engine = None
 
+# Import Supabase Database Client Layer
+try:
+    from supabase_client import supabase_db
+except ImportError:
+    supabase_db = None
+
+
 
 # ============================================================================
 # Pydantic Schemas
@@ -206,7 +213,18 @@ async def get_health() -> Dict[str, Any]:
     }
     if ai_engine:
         health_payload["ai_engine"] = ai_engine.get_providers_status()
+    if supabase_db:
+        health_payload["database"] = supabase_db.get_status()
     return health_payload
+
+
+@app.get("/api/database/status", tags=["System"])
+async def get_database_status() -> Dict[str, Any]:
+    """Retrieve Supabase PostgreSQL connection status and configuration."""
+    if supabase_db:
+        return supabase_db.get_status()
+    return {"configured": False, "connected": False, "engine": "in-memory"}
+
 
 
 @app.get("/api/ai/providers", tags=["AI Engine"])
@@ -226,9 +244,10 @@ async def get_courses() -> List[Dict[str, Any]]:
 @app.post("/api/chat/socratic", tags=["Socratic Tutoring"])
 async def post_socratic_chat(req: SocraticChatRequest) -> Dict[str, Any]:
     """Execute Socratic tutoring conversation loop under Article 25 constraints with AI Engine."""
+    response_data = None
     if ai_engine:
         try:
-            return await ai_engine.generate_socratic_response(
+            response_data = await ai_engine.generate_socratic_response(
                 course_code=req.course_code,
                 student_id=req.student_id,
                 message=req.message,
@@ -237,12 +256,30 @@ async def post_socratic_chat(req: SocraticChatRequest) -> Dict[str, Any]:
         except Exception as e:
             print(f"[API Chat] AI Engine exception: {e}. Falling back to Oracle.")
 
-    return TLUWebReferenceOracle.simulate_socratic_chat(
-        course_code=req.course_code,
-        student_id=req.student_id,
-        message=req.message,
-        code_context=req.code_context
-    )
+    if not response_data:
+        response_data = TLUWebReferenceOracle.simulate_socratic_chat(
+            course_code=req.course_code,
+            student_id=req.student_id,
+            message=req.message,
+            code_context=req.code_context
+        )
+
+    # Persist interaction to Supabase if connected
+    if supabase_db and supabase_db.is_connected:
+        try:
+            await supabase_db.save_chat_message(
+                student_id=req.student_id,
+                course_code=req.course_code,
+                user_message=req.message,
+                ai_reply=response_data.get("reply", ""),
+                code_context=req.code_context,
+                model_provider=response_data.get("model_provider", "TLU AI Engine")
+            )
+        except Exception as err:
+            print(f"[Supabase Chat Log Warning] {err}")
+
+    return response_data
+
 
 
 @app.post("/api/code/run", tags=["Code Studio"])
@@ -384,6 +421,13 @@ async def post_slide_upload(req: SlideUploadRequest) -> Dict[str, Any]:
     }
     INGESTED_SLIDES.insert(0, new_record)
 
+    # Persist record to Supabase PostgreSQL database if connected
+    if supabase_db and supabase_db.is_connected:
+        try:
+            await supabase_db.insert_slide(new_record)
+        except Exception as err:
+            print(f"[Supabase Slide Insert Warning] {err}")
+
     return {
         "status": "success",
         "message": f"Tài liệu '{req.filename}' đã được nạp thành công vào Medallion Lakehouse TLU.",
@@ -394,10 +438,19 @@ async def post_slide_upload(req: SlideUploadRequest) -> Dict[str, Any]:
 @app.get("/api/slides/list", tags=["Lakehouse RAG"])
 async def get_slides_list(course_code: Optional[str] = None) -> List[Dict[str, Any]]:
     """Retrieve catalog of ingested course lecture slides and lab guides."""
+    if supabase_db and supabase_db.is_connected:
+        try:
+            db_slides = await supabase_db.fetch_slides(course_code)
+            if db_slides and len(db_slides) > 0:
+                return db_slides
+        except Exception as err:
+            print(f"[Supabase Slides Query Warning] {err}")
+
     if course_code:
         norm = course_code.upper()
         return [s for s in INGESTED_SLIDES if s["course_code"] == norm]
     return INGESTED_SLIDES
+
 
 
 @app.get("/api/admin/logs", tags=["Operations & SRE"])
