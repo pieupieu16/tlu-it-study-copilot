@@ -558,6 +558,18 @@ int main() {
           </button>
         </div>
 
+        <!-- Hand Raised Notice Banner (from K3-Hackathon raise_hand) -->
+        <div id="slide-hand-notice" class="hidden p-3.5 bg-[#FEF3C7] border-2 border-b-4 border-[#F59E0B] rounded-xl flex items-center justify-between gap-3 text-xs">
+          <div class="flex items-center space-x-2 text-[#92400E] font-bold">
+            <span class="w-2.5 h-2.5 rounded-full bg-[#F59E0B] inline-block animate-ping"></span>
+            <span>Bạn đã giơ tay phát biểu! Giảng viên và Trợ giảng Khoa CNTT đã nhận được tín hiệu trên lớp.</span>
+          </div>
+          <button id="btn-slide-lower-hand" class="blk-btn px-3 py-1 bg-white hover:bg-[#FEF3C7] text-[#B45309] text-xs font-extrabold cursor-pointer">
+            Hạ Tay
+          </button>
+        </div>
+
+
         <!-- Main Classroom Stage Row: 16:9 Slide Canvas + Optional Split AI Panel -->
         <div class="flex flex-col lg:flex-row items-start gap-5">
 
@@ -606,13 +618,75 @@ int main() {
               </div>
             </div>
 
+            <!-- In-Class Quick Question / Quiz Panel (Directly from K3-Hackathon student-question-panel) -->
+            <div id="slide-inclass-quiz-panel" class="hidden blk-card p-5 space-y-4 bg-white border-2 border-b-4 border-[#6366F1] rounded-2xl shadow-sm">
+              <div class="flex items-center justify-between border-b border-[#E0E7FF] pb-3">
+                <div>
+                  <span class="text-[11px] font-black uppercase text-[#4F46E5] tracking-wider" id="quiz-slide-eyebrow">CÂU HỎI NHANH TRÊN LỚP • SLIDE 18 / 42</span>
+                  <h4 id="quiz-question-prompt" class="text-base sm:text-lg font-black text-[#0F172A] mt-1">Trong C++, khi cấp phát vùng nhớ Heap bằng toán tử new, nếu không gọi delete thì điều gì sẽ xảy ra?</h4>
+                </div>
+                <button id="btn-close-inclass-quiz" class="blk-btn px-2.5 py-1 bg-[#F1F5F9] hover:bg-[#E2E8F0] text-[#64748B] text-xs font-black cursor-pointer" title="Đóng câu hỏi nhanh">
+                  [X]
+                </button>
+              </div>
+
+              <!-- Options Container -->
+              <div id="quiz-options-container" class="space-y-2">
+                <!-- Rendered dynamically by slides.js -->
+              </div>
+
+              <!-- Confidence Scoring & Action Bar (Before Submitting) -->
+              <div id="quiz-confidence-section" class="space-y-2 pt-2 border-t border-[#F1F5F9]">
+                <p class="text-center text-xs font-extrabold uppercase tracking-wider text-[#64748B]">BẠN CHẮC CHẮN TỚI ĐÂU VỚI CÂU TRẢ LỜI CỦA MÌNH?</p>
+                <div class="grid grid-cols-3 gap-2">
+                  <button id="btn-quiz-conf-1" class="blk-btn py-2.5 bg-[#FEF2F2] hover:bg-[#FEE2E2] text-[#DC2626] border border-[#FCA5A5] text-xs font-extrabold cursor-pointer" title="Mức độ tự tin: Chưa chắc">
+                    Chưa Chắc
+                  </button>
+                  <button id="btn-quiz-conf-2" class="blk-btn py-2.5 bg-[#FEF9C3] hover:bg-[#FEF08A] text-[#CA8A04] border border-[#FDE047] text-xs font-extrabold cursor-pointer" title="Mức độ tự tin: Tạm ổn">
+                    Tạm Ổn
+                  </button>
+                  <button id="btn-quiz-conf-3" class="blk-btn py-2.5 bg-[#ECFDF5] hover:bg-[#D1FAE5] text-[#059669] border border-[#6EE7B7] text-xs font-extrabold cursor-pointer" title="Mức độ tự tin: Chắc chắn">
+                    Chắc Chắn
+                  </button>
+                </div>
+                <div class="flex justify-center pt-1">
+                  <button id="btn-quiz-skip" class="text-xs font-extrabold uppercase tracking-wider text-[#64748B] hover:text-[#0F172A] cursor-pointer">
+                    [ Bỏ qua câu hỏi này ]
+                  </button>
+                </div>
+              </div>
+
+              <!-- Result / Pedagogical Feedback Card (After Submitting) -->
+              <div id="quiz-result-card" class="hidden p-4 rounded-xl border-2 space-y-2">
+                <div class="flex items-center justify-between">
+                  <span id="quiz-result-status" class="text-xs font-black uppercase tracking-wider">CHÍNH XÁC!</span>
+                  <span id="quiz-result-confidence-badge" class="text-3xs font-black px-2 py-0.5 rounded-full bg-white border">Độ tự tin: Chắc chắn</span>
+                </div>
+                <p id="quiz-result-explanation" class="text-xs sm:text-sm leading-relaxed text-[#0F172A]">
+                  Toán tử new cấp phát bộ nhớ động trên vùng nhớ Heap. Hệ thống không tự động thu hồi khi hàm kết thúc, bắt buộc phải dùng delete để tránh rò rỉ bộ nhớ (Memory Leak).
+                </p>
+                <div id="quiz-correct-answer-box" class="hidden text-xs font-bold text-[#059669] bg-[#ECFDF5] p-2 rounded-lg border border-[#A7F3D0]">
+                  Đáp án đúng: A. Rò rỉ bộ nhớ (Memory Leak)
+                </div>
+                <div class="flex items-center justify-between pt-1">
+                  <button id="btn-quiz-retry" class="blk-btn px-3 py-1 bg-white hover:bg-[#F8FAFC] text-[#475569] text-xs font-bold cursor-pointer">
+                    Làm Lại
+                  </button>
+                  <span class="text-3xs text-[#64748B]">Điểm số &amp; tương tác đã được ghi nhận vào hồ sơ sinh viên</span>
+                </div>
+              </div>
+            </div>
+
             <!-- Classroom Controls & Zoom Dock (Inspired by K3-Hackathon student-classroom__controls) -->
             <div class="relative z-10 blk-card p-3 sm:p-4 flex flex-wrap items-center justify-between gap-3 shadow-xs bg-white">
               
-              <!-- Follow toggle -->
+              <!-- Follow toggle & Raise hand -->
               <div class="flex items-center gap-2">
                 <button id="btn-slide-toggle-follow" class="blk-btn px-3.5 py-2 bg-[#ECFDF5] hover:bg-[#D1FAE5] text-[#047857] text-xs font-extrabold transition-all cursor-pointer">
                   Đang Theo Dõi Giảng Viên
+                </button>
+                <button id="btn-slide-raise-hand" class="blk-btn px-3 py-2 bg-white hover:bg-[#FEF3C7] text-[#B45309] border border-[#FCD34D] text-xs font-extrabold transition-all cursor-pointer" title="Giơ tay phát biểu trên lớp">
+                  Giơ Tay
                 </button>
               </div>
 
@@ -633,8 +707,11 @@ int main() {
                 </button>
               </div>
 
-              <!-- Split AI Toggle Button -->
-              <div>
+              <!-- In-Class Quiz & Split AI Toggle Buttons -->
+              <div class="flex items-center gap-2">
+                <button id="btn-toggle-inclass-quiz" class="blk-btn px-3 py-2 bg-[#EEF2FF] hover:bg-[#E0E7FF] text-[#4F46E5] text-xs font-extrabold transition-all cursor-pointer">
+                  Câu Hỏi Nhanh (Quiz)
+                </button>
                 <button id="btn-toggle-split-ai" class="blk-btn px-3.5 py-2 bg-[#F3E8FF] hover:bg-[#E9D5FF] text-[#7E22CE] text-xs font-extrabold transition-all cursor-pointer">
                   Hỏi AI Về Slide
                 </button>
@@ -666,57 +743,109 @@ int main() {
             <div class="flex items-center justify-between border-b border-[#CBD5E1] pb-3">
               <div>
                 <span class="text-[11px] font-black uppercase text-[#7E22CE] tracking-wider">HỖ TRỢ THEO SLIDE HIỆN TẠI</span>
-                <h4 class="text-base font-extrabold text-[#0F172A]">Gia Sư Socratic AI</h4>
+                <h4 class="text-base font-extrabold text-[#0F172A]">Gia Sư &amp; Hỗ Trợ Lớp Học</h4>
               </div>
               <button id="btn-close-split-ai" class="blk-btn px-2.5 py-1 bg-[#F1F5F9] hover:bg-[#E2E8F0] text-[#64748B] text-xs font-black cursor-pointer" title="Đóng panel hỗ trợ">
                 [X]
               </button>
             </div>
 
-            <!-- Scope notice -->
-            <div class="p-3 bg-[#EEF4FF] border border-[#BFDBFE] rounded-xl text-xs text-[#0D62FE] font-medium leading-relaxed">
-              AI trả lời bám sát slide đang trình chiếu và gợi mở tư duy theo chuẩn phương pháp Socratic TLU.
+            <!-- K3-Hackathon ai-help-panel 2-Tab Switcher -->
+            <div class="flex items-center border-2 border-[#CBD5E1] rounded-xl overflow-hidden bg-[#F8FAFC]">
+              <button id="btn-split-tab-ai" class="flex-1 py-2 text-center text-xs font-black transition-all cursor-pointer bg-white text-[#7E22CE] border-r border-[#CBD5E1] shadow-2xs">
+                Hỏi AI
+              </button>
+              <button id="btn-split-tab-human" class="flex-1 py-2 text-center text-xs font-black transition-all cursor-pointer bg-[#F8FAFC] text-[#64748B] hover:text-[#0F172A]">
+                Nhờ Hỗ Trợ
+              </button>
             </div>
 
-            <!-- Slide Summary -->
-            <div class="p-3.5 bg-[#F8FAFC] border border-[#CBD5E1] rounded-xl space-y-1.5">
-              <span class="text-3xs font-black uppercase tracking-wider text-[#7E22CE]">TÓM TẮT TRỌNG TÂM SLIDE</span>
-              <p id="split-ai-slide-summary" class="text-xs text-[#334155] leading-relaxed">
-                Cấp phát bộ nhớ động trên Heap bằng toán tử new và bắt buộc thu hồi bằng delete để tránh lỗi rò rỉ bộ nhớ trong C++.
-              </p>
-            </div>
+            <!-- Tab 1: AI Assistant View (Matching K3-Hackathon aiTab === 'ai') -->
+            <div id="split-panel-ai-view" class="space-y-4">
+              <!-- Scope notice & Confusion Score -->
+              <div class="p-3 bg-[#EEF4FF] border border-[#BFDBFE] rounded-xl text-xs text-[#0D62FE] font-medium leading-relaxed space-y-2">
+                <div class="flex items-center justify-between">
+                  <span>Trợ giảng Socratic TLU</span>
+                  <span id="split-ai-confusion-badge" class="px-2 py-0.5 rounded-full bg-[#ECFDF5] text-[#059669] border border-[#A7F3D0] text-3xs font-black">
+                    Mức bối rối: 12% · Sẵn sàng
+                  </span>
+                </div>
+                <div>AI trả lời bám sát slide đang trình chiếu và gợi mở tư duy theo chuẩn phương pháp Socratic TLU.</div>
+              </div>
 
-            <!-- Quick Socratic suggestions -->
-            <div class="space-y-2">
-              <span class="text-3xs font-black uppercase tracking-wider text-[#64748B]">GỢI Ý CÂU HỎI NHANH:</span>
-              <div id="split-ai-suggestions" class="space-y-1.5">
-                <button class="split-ai-chip w-full text-left p-2.5 bg-white hover:bg-[#F3E8FF] border border-[#CBD5E1] hover:border-[#A855F7] rounded-xl text-xs font-semibold text-[#0F172A] transition-all cursor-pointer">
-                  So sánh phân vùng Heap vs Stack trong slide này
-                </button>
-                <button class="split-ai-chip w-full text-left p-2.5 bg-white hover:bg-[#F3E8FF] border border-[#CBD5E1] hover:border-[#A855F7] rounded-xl text-xs font-semibold text-[#0F172A] transition-all cursor-pointer">
-                  Tại sao bắt buộc dùng delete sau khi new?
-                </button>
-                <button class="split-ai-chip w-full text-left p-2.5 bg-white hover:bg-[#F3E8FF] border border-[#CBD5E1] hover:border-[#A855F7] rounded-xl text-xs font-semibold text-[#0F172A] transition-all cursor-pointer">
-                  Con trỏ lơ lửng (Dangling pointer) là gì?
-                </button>
+              <!-- Slide Summary -->
+              <div class="p-3.5 bg-[#F8FAFC] border border-[#CBD5E1] rounded-xl space-y-1.5">
+                <span class="text-3xs font-black uppercase tracking-wider text-[#7E22CE]">TÓM TẮT TRỌNG TÂM SLIDE</span>
+                <p id="split-ai-slide-summary" class="text-xs text-[#334155] leading-relaxed">
+                  Cấp phát bộ nhớ động trên Heap bằng toán tử new và bắt buộc thu hồi bằng delete để tránh lỗi rò rỉ bộ nhớ trong C++.
+                </p>
+              </div>
+
+              <!-- Quick Socratic suggestions -->
+              <div class="space-y-2">
+                <span class="text-3xs font-black uppercase tracking-wider text-[#64748B]">GỢI Ý CÂU HỎI NHANH:</span>
+                <div id="split-ai-suggestions" class="space-y-1.5">
+                  <button class="split-ai-chip w-full text-left p-2.5 bg-white hover:bg-[#F3E8FF] border border-[#CBD5E1] hover:border-[#A855F7] rounded-xl text-xs font-semibold text-[#0F172A] transition-all cursor-pointer">
+                    So sánh phân vùng Heap vs Stack trong slide này
+                  </button>
+                  <button class="split-ai-chip w-full text-left p-2.5 bg-white hover:bg-[#F3E8FF] border border-[#CBD5E1] hover:border-[#A855F7] rounded-xl text-xs font-semibold text-[#0F172A] transition-all cursor-pointer">
+                    Tại sao bắt buộc dùng delete sau khi new?
+                  </button>
+                  <button class="split-ai-chip w-full text-left p-2.5 bg-white hover:bg-[#F3E8FF] border border-[#CBD5E1] hover:border-[#A855F7] rounded-xl text-xs font-semibold text-[#0F172A] transition-all cursor-pointer">
+                    Con trỏ lơ lửng (Dangling pointer) là gì?
+                  </button>
+                </div>
+              </div>
+
+              <!-- Message stream -->
+              <div id="split-ai-messages" class="h-44 overflow-y-auto p-3 bg-[#F8FAFC] border border-[#CBD5E1] rounded-xl space-y-2 text-xs">
+                <div class="p-2.5 bg-white border border-[#E2E8F0] rounded-xl text-[#334155]">
+                  Xin chào! Tôi là Trợ giảng Socratic đồng hành cùng slide này. Bạn có câu hỏi nào về phần cấp phát bộ nhớ động không?
+                </div>
+              </div>
+
+              <!-- Composer input box -->
+              <div class="space-y-2 pt-1 border-t border-[#CBD5E1]">
+                <label for="split-ai-input" class="text-3xs font-black uppercase tracking-wider text-[#64748B] block">ĐẶT CÂU HỎI VỀ SLIDE:</label>
+                <div class="flex items-center gap-2">
+                  <input id="split-ai-input" type="text" aria-label="Nhập câu hỏi về slide này" class="flex-1 px-3 py-2 bg-white border border-[#CBD5E1] focus:border-[#0D62FE] rounded-xl text-xs text-[#0F172A] outline-none" />
+                  <button id="btn-send-split-ai" class="blk-btn px-3.5 py-2 bg-[#0D62FE] hover:bg-[#0047E0] text-white text-xs font-extrabold cursor-pointer">
+                    Gửi
+                  </button>
+                </div>
               </div>
             </div>
 
-            <!-- Message stream -->
-            <div id="split-ai-messages" class="h-44 overflow-y-auto p-3 bg-[#F8FAFC] border border-[#CBD5E1] rounded-xl space-y-2 text-xs">
-              <div class="p-2.5 bg-white border border-[#E2E8F0] rounded-xl text-[#334155]">
-                Xin chào! Tôi là Trợ giảng Socratic đồng hành cùng slide này. Bạn có câu hỏi nào về phần cấp phát bộ nhớ động không?
+            <!-- Tab 2: Human TA & Lecturer Support View (Matching K3-Hackathon aiTab === 'human') -->
+            <div id="split-panel-human-view" class="hidden space-y-4">
+              <div class="p-3 bg-[#EEF2FF] border border-[#C7D2FE] rounded-xl text-xs text-[#3730A3] font-medium leading-relaxed">
+                Gửi trực tiếp cho Giảng viên và Trợ giảng Khoa CNTT khi bạn cần người thật giải đáp thắc mắc.
               </div>
-            </div>
 
-            <!-- Composer input box -->
-            <div class="space-y-2 pt-1 border-t border-[#CBD5E1]">
-              <label for="split-ai-input" class="text-3xs font-black uppercase tracking-wider text-[#64748B] block">ĐẶT CÂU HỎI VỀ SLIDE:</label>
-              <div class="flex items-center gap-2">
-                <input id="split-ai-input" type="text" aria-label="Nhập câu hỏi về slide này" class="flex-1 px-3 py-2 bg-white border border-[#CBD5E1] focus:border-[#0D62FE] rounded-xl text-xs text-[#0F172A] outline-none" />
-                <button id="btn-send-split-ai" class="blk-btn px-3.5 py-2 bg-[#0D62FE] hover:bg-[#0047E0] text-white text-xs font-extrabold cursor-pointer">
-                  Gửi
+              <!-- Ticket Submission Form -->
+              <div class="space-y-2">
+                <label for="split-human-ticket-input" class="text-3xs font-black uppercase tracking-wider text-[#64748B] block">BẠN ĐANG VƯỚNG PHẦN NÀO?</label>
+                <textarea id="split-human-ticket-input" rows="3" aria-label="Mô tả chi tiết phần bạn chưa hiểu trên slide này" class="w-full px-3 py-2 bg-white border border-[#CBD5E1] focus:border-[#0D62FE] rounded-xl text-xs text-[#0F172A] outline-none resize-none"></textarea>
+                <button id="btn-split-submit-ticket" class="blk-btn w-full py-2.5 bg-[#4F46E5] hover:bg-[#4338CA] text-white text-xs font-extrabold cursor-pointer">
+                  Gửi Yêu Cầu Hỗ Trợ Tới Trợ Giảng
                 </button>
+              </div>
+
+              <!-- Recent Tickets List -->
+              <div class="space-y-2 pt-2 border-t border-[#CBD5E1]">
+                <span class="text-3xs font-black uppercase tracking-wider text-[#64748B] block">PHIẾU HỎI ĐÁP CỦA BẠN:</span>
+                <div id="split-human-tickets-list" class="space-y-2 max-h-56 overflow-y-auto">
+                  <div class="p-3 bg-[#F8FAFC] border border-[#CBD5E1] rounded-xl space-y-1.5 text-xs">
+                    <p class="font-bold text-[#0F172A]">Em chưa hiểu cơ chế thu hồi heap khi hàm main kết thúc?</p>
+                    <div class="flex items-center justify-between text-3xs">
+                      <span class="font-extrabold text-[#059669] bg-[#ECFDF5] px-2 py-0.5 rounded-md border border-[#A7F3D0]">Đã trả lời bởi Trợ giảng</span>
+                      <span class="text-[#64748B]">10:30 Hôm nay</span>
+                    </div>
+                    <div class="text-[#334155] bg-white p-2 rounded-lg border border-[#E2E8F0] font-medium">
+                      HĐH sẽ tự thu hồi toàn bộ tiến trình khi kết thúc, nhưng trong chương trình chạy lâu dài, việc không delete sẽ gây rò rỉ bộ nhớ nghiêm trọng.
+                    </div>
+                  </div>
+                </div>
               </div>
             </div>
 

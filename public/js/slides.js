@@ -84,6 +84,65 @@ print("TLU Socket Server dang lang nghe tren port 8080...")`,
     }
   ];
 
+  // In-Class Quick Question Quiz Dataset (Inspired by K3-Hackathon student-question-panel)
+  const SLIDE_QUESTIONS = {
+    'IT101': {
+      prompt: 'Trong C++, khi cấp phát vùng nhớ Heap bằng toán tử new, nếu không gọi delete thì điều gì sẽ xảy ra?',
+      options: [
+        'A. Rò rỉ bộ nhớ (Memory Leak)',
+        'B. Bộ nhớ tự động giải phóng khi hàm kết thúc',
+        'C. Tràn ngăn xếp bộ nhớ (Stack Overflow)',
+        'D. Bộ nhớ được nạp tự động vào bảng phân trang'
+      ],
+      correctIndex: 0,
+      explanation: 'Toán tử new cấp phát trên Heap. Trình biên dịch và runtime không tự động thu hồi khi thoát khỏi phạm vi hàm, gây rò rỉ bộ nhớ (Memory Leak).'
+    },
+    'IT201': {
+      prompt: 'Trong cây nhị phân tìm kiếm cân bằng AVL, hệ số cân bằng (Balance Factor) của mỗi node hợp lệ phải nằm trong khoảng nào?',
+      options: [
+        'A. [-1, 0, 1]',
+        'B. [-2, 0, 2]',
+        'C. [0, 1]',
+        'D. Bất kỳ giá trị nào nhỏ hơn chiều cao cây'
+      ],
+      correctIndex: 0,
+      explanation: 'Định nghĩa cây AVL yêu cầu độ chênh lệch chiều cao giữa cây con trái và cây con phải (Balance Factor = height_left - height_right) luôn thuộc {-1, 0, 1}.'
+    },
+    'IT205': {
+      prompt: 'Theo chuẩn hóa cơ sở dữ liệu quan hệ, dạng chuẩn 3NF yêu cầu điều kiện nào sau đây?',
+      options: [
+        'A. Thuộc tính không khóa không phụ thuộc bắc cầu vào bất kỳ khóa nào',
+        'B. Mọi thuộc tính phải chứa các giá trị nguyên tố (Atomic)',
+        'C. Bắt buộc mọi trường đều phải là khóa ngoại tham chiếu',
+        'D. Chỉ cần bảng đạt dạng chuẩn 1NF là đủ'
+      ],
+      correctIndex: 0,
+      explanation: 'Dạng chuẩn 3NF yêu cầu bảng đã đạt 2NF và không có thuộc tính không khóa nào phụ thuộc bắc cầu vào khóa chính (Transitive Dependency).'
+    },
+    'IT301': {
+      prompt: 'Trong giao thức TCP, cơ chế nào được sử dụng để thiết lập kết nối tin cậy giữa client và server?',
+      options: [
+        'A. Bắt tay ba bước (Three-way Handshake: SYN, SYN-ACK, ACK)',
+        'B. Gửi trực tiếp UDP Datagram không cần phản hồi',
+        'C. Quảng bá gói tin Broadcast ARP trên toàn mạng LAN',
+        'D. Phân mảnh gói tin IP Fragment tại router biên'
+      ],
+      correctIndex: 0,
+      explanation: 'Giao thức TCP sử dụng cơ chế bắt tay ba bước (SYN -> SYN-ACK -> ACK) để đồng bộ sequence numbers trước khi truyền dữ liệu.'
+    },
+    'IT315': {
+      prompt: 'Khi CPU yêu cầu truy cập một trang bộ nhớ ảo không có trong RAM, sự kiện phần cứng nào được kích hoạt?',
+      options: [
+        'A. Ngắt thiếu trang (Page Fault Exception)',
+        'B. Lỗi vi phạm phân đoạn bộ nhớ (Segmentation Fault)',
+        'C. Lệnh xóa bộ nhớ đệm TLB Flush tức thì',
+        'D. Khởi động lại hệ điều hành'
+      ],
+      correctIndex: 0,
+      explanation: 'Khi bit valid trong bảng trang bằng 0 (trang chưa nạp vào khung trang vật lý), phần cứng MMU kích hoạt ngắt Page Fault để HĐH nạp trang từ swap vào RAM.'
+    }
+  };
+
   class SlideUploadController {
     constructor() {
       // Form and Inputs
@@ -138,7 +197,31 @@ print("TLU Socket Server dang lang nghe tren port 8080...")`,
       this.btnSlideResync = document.getElementById('btn-slide-resync');
       this.followingLecturer = true;
 
-      // Split-View Classroom AI Study Panel
+      // K3-Hackathon In-Class Raise Hand Controls
+      this.btnSlideRaiseHand = document.getElementById('btn-slide-raise-hand');
+      this.btnSlideLowerHand = document.getElementById('btn-slide-lower-hand');
+      this.slideHandNotice = document.getElementById('slide-hand-notice');
+      this.handRaisedTimeout = null;
+      this.handRaised = false;
+
+      // K3-Hackathon In-Class Quick Question (Quiz)
+      this.btnToggleInclassQuiz = document.getElementById('btn-toggle-inclass-quiz');
+      this.btnCloseInclassQuiz = document.getElementById('btn-close-inclass-quiz');
+      this.slideInclassQuizPanel = document.getElementById('slide-inclass-quiz-panel');
+      this.quizSlideEyebrow = document.getElementById('quiz-slide-eyebrow');
+      this.quizQuestionPrompt = document.getElementById('quiz-question-prompt');
+      this.quizOptionsContainer = document.getElementById('quiz-options-container');
+      this.quizConfidenceSection = document.getElementById('quiz-confidence-section');
+      this.quizResultCard = document.getElementById('quiz-result-card');
+      this.quizResultStatus = document.getElementById('quiz-result-status');
+      this.quizResultConfidenceBadge = document.getElementById('quiz-result-confidence-badge');
+      this.quizResultExplanation = document.getElementById('quiz-result-explanation');
+      this.quizCorrectAnswerBox = document.getElementById('quiz-correct-answer-box');
+      this.btnQuizRetry = document.getElementById('btn-quiz-retry');
+      this.btnQuizSkip = document.getElementById('btn-quiz-skip');
+      this.selectedQuizOptionIndex = null;
+
+      // Split-View Classroom AI Study Panel & 2-Tab Switching
       this.btnToggleSplitAi = document.getElementById('btn-toggle-split-ai');
       this.btnCloseSplitAi = document.getElementById('btn-close-split-ai');
       this.slideAiSplitPanel = document.getElementById('slide-ai-split-panel');
@@ -146,6 +229,13 @@ print("TLU Socket Server dang lang nghe tren port 8080...")`,
       this.splitAiInput = document.getElementById('split-ai-input');
       this.btnSendSplitAi = document.getElementById('btn-send-split-ai');
       this.splitAiMessages = document.getElementById('split-ai-messages');
+      this.btnSplitTabAi = document.getElementById('btn-split-tab-ai');
+      this.btnSplitTabHuman = document.getElementById('btn-split-tab-human');
+      this.splitPanelAiView = document.getElementById('split-panel-ai-view');
+      this.splitPanelHumanView = document.getElementById('split-panel-human-view');
+      this.splitHumanTicketInput = document.getElementById('split-human-ticket-input');
+      this.btnSplitSubmitTicket = document.getElementById('btn-split-submit-ticket');
+      this.splitHumanTicketsList = document.getElementById('split-human-tickets-list');
 
       // Active Presentation State
       this.slidesDeck = [...IT_SLIDES_DECK];
@@ -161,6 +251,9 @@ print("TLU Socket Server dang lang nghe tren port 8080...")`,
       this.bindSlideNavigation();
       this.bindClassroomControls();
       this.bindSplitAiPanel();
+      this.bindRaiseHand();
+      this.bindInclassQuiz();
+      this.bindSplitTabs();
       this.loadSlidesList();
       this.renderCurrentSlide();
     }
@@ -331,6 +424,9 @@ print("TLU Socket Server dang lang nghe tren port 8080...")`,
       if (this.splitAiSlideSummary) {
         this.splitAiSlideSummary.textContent = `${(current.desc || '').slice(0, 160)}... Bám sát chuẩn đào tạo Khoa CNTT TLU môn ${current.course_code}.`;
       }
+
+      // Update In-Class Quick Question (from K3-Hackathon student-question-panel)
+      this.renderSlideQuiz(current);
 
       // Visual feedback flash on slide container
       const container = document.getElementById('current-slide-container');
@@ -560,6 +656,230 @@ print("TLU Socket Server dang lang nghe tren port 8080...")`,
         this.splitAiMessages.appendChild(fallbackMsg);
       }
       this.splitAiMessages.scrollTop = this.splitAiMessages.scrollHeight;
+    }
+
+    renderSlideQuiz(current) {
+      if (!this.quizOptionsContainer || !this.quizQuestionPrompt) return;
+      const q = SLIDE_QUESTIONS[current.course_code] || SLIDE_QUESTIONS['IT101'];
+      if (!q) return;
+
+      if (this.quizSlideEyebrow) {
+        this.quizSlideEyebrow.textContent = `CÂU HỎI NHANH TRÊN LỚP • ${current.page || current.course_code}`;
+      }
+      this.quizQuestionPrompt.textContent = q.prompt;
+
+      this.selectedQuizOptionIndex = null;
+      if (this.quizResultCard) this.quizResultCard.classList.add('hidden');
+      if (this.quizConfidenceSection) this.quizConfidenceSection.classList.remove('hidden');
+
+      this.quizOptionsContainer.innerHTML = '';
+      q.options.forEach((optText, optIdx) => {
+        const btn = document.createElement('button');
+        btn.type = 'button';
+        btn.className = 'quiz-option-btn w-full text-left p-3 rounded-xl border-2 border-b-4 border-[#CBD5E1] bg-[#F8FAFC] hover:bg-[#EEF4FF] hover:border-[#0D62FE] text-xs sm:text-sm font-bold text-[#0F172A] transition-all cursor-pointer';
+        btn.textContent = optText;
+        btn.addEventListener('click', () => {
+          this.selectedQuizOptionIndex = optIdx;
+          const allOptionBtns = this.quizOptionsContainer.querySelectorAll('.quiz-option-btn');
+          allOptionBtns.forEach((b, idx) => {
+            if (idx === optIdx) {
+              b.className = 'quiz-option-btn w-full text-left p-3 rounded-xl border-2 border-b-4 border-[#0D62FE] bg-[#EEF4FF] text-xs sm:text-sm font-black text-[#0D62FE] shadow-2xs cursor-pointer';
+            } else {
+              b.className = 'quiz-option-btn w-full text-left p-3 rounded-xl border-2 border-b-4 border-[#CBD5E1] bg-[#F8FAFC] hover:bg-[#EEF4FF] hover:border-[#0D62FE] text-xs sm:text-sm font-bold text-[#0F172A] transition-all cursor-pointer';
+            }
+          });
+        });
+        this.quizOptionsContainer.appendChild(btn);
+      });
+    }
+
+    bindRaiseHand() {
+      if (this.btnSlideRaiseHand) {
+        this.btnSlideRaiseHand.addEventListener('click', () => {
+          this.handRaised = !this.handRaised;
+          if (this.handRaised) {
+            this.btnSlideRaiseHand.textContent = 'Đang Giơ Tay';
+            this.btnSlideRaiseHand.className = 'blk-btn px-3.5 py-2 bg-[#FEF3C7] text-[#92400E] border-2 border-[#F59E0B] text-xs font-black transition-all cursor-pointer';
+            if (this.slideHandNotice) this.slideHandNotice.classList.remove('hidden');
+            if (window.TLUMascot) {
+              window.TLUMascot.setCheering('Bạn đã giơ tay phát biểu trên lớp!');
+            }
+            if (this.handRaisedTimeout) clearTimeout(this.handRaisedTimeout);
+            this.handRaisedTimeout = setTimeout(() => {
+              this.lowerHand();
+            }, 8000);
+          } else {
+            this.lowerHand();
+          }
+        });
+      }
+
+      if (this.btnSlideLowerHand) {
+        this.btnSlideLowerHand.addEventListener('click', () => {
+          this.lowerHand();
+        });
+      }
+    }
+
+    lowerHand() {
+      this.handRaised = false;
+      if (this.handRaisedTimeout) {
+        clearTimeout(this.handRaisedTimeout);
+        this.handRaisedTimeout = null;
+      }
+      if (this.btnSlideRaiseHand) {
+        this.btnSlideRaiseHand.textContent = 'Giơ Tay';
+        this.btnSlideRaiseHand.className = 'blk-btn px-3.5 py-2 bg-white hover:bg-[#FEF3C7] text-[#B45309] border border-[#FCD34D] text-xs font-extrabold transition-all cursor-pointer';
+      }
+      if (this.slideHandNotice) {
+        this.slideHandNotice.classList.add('hidden');
+      }
+    }
+
+    bindInclassQuiz() {
+      if (this.btnToggleInclassQuiz) {
+        this.btnToggleInclassQuiz.addEventListener('click', () => {
+          if (this.slideInclassQuizPanel) {
+            this.slideInclassQuizPanel.classList.toggle('hidden');
+          }
+        });
+      }
+
+      if (this.btnCloseInclassQuiz) {
+        this.btnCloseInclassQuiz.addEventListener('click', () => {
+          if (this.slideInclassQuizPanel) {
+            this.slideInclassQuizPanel.classList.add('hidden');
+          }
+        });
+      }
+
+      const confButtons = [
+        { id: 'btn-quiz-conf-1', label: 'Chưa chắc' },
+        { id: 'btn-quiz-conf-2', label: 'Tạm ổn' },
+        { id: 'btn-quiz-conf-3', label: 'Chắc chắn' }
+      ];
+
+      confButtons.forEach(({ id, label }) => {
+        const btn = document.getElementById(id);
+        if (btn) {
+          btn.addEventListener('click', () => {
+            if (this.selectedQuizOptionIndex === null) {
+              if (this.quizOptionsContainer) {
+                this.quizOptionsContainer.classList.add('ring-2', 'ring-[#F59E0B]');
+                setTimeout(() => this.quizOptionsContainer.classList.remove('ring-2', 'ring-[#F59E0B]'), 600);
+              }
+              return;
+            }
+            this.submitQuizAnswer(label);
+          });
+        }
+      });
+
+      if (this.btnQuizSkip) {
+        this.btnQuizSkip.addEventListener('click', () => {
+          if (this.slideInclassQuizPanel) {
+            this.slideInclassQuizPanel.classList.add('hidden');
+          }
+        });
+      }
+
+      if (this.btnQuizRetry) {
+        this.btnQuizRetry.addEventListener('click', () => {
+          const cur = this.slidesDeck[this.currentSlideIndex] || this.slidesDeck[0];
+          this.renderSlideQuiz(cur);
+        });
+      }
+    }
+
+    submitQuizAnswer(confLabel) {
+      const cur = this.slidesDeck[this.currentSlideIndex] || this.slidesDeck[0];
+      const q = SLIDE_QUESTIONS[cur.course_code] || SLIDE_QUESTIONS['IT101'];
+      if (!q) return;
+
+      const isCorrect = this.selectedQuizOptionIndex === q.correctIndex;
+      if (this.quizConfidenceSection) this.quizConfidenceSection.classList.add('hidden');
+      if (this.quizResultCard) {
+        this.quizResultCard.classList.remove('hidden');
+        if (isCorrect) {
+          this.quizResultCard.className = 'p-4 rounded-xl border-2 border-[#10B981] bg-[#ECFDF5] space-y-2';
+          if (this.quizResultStatus) {
+            this.quizResultStatus.textContent = 'CHÍNH XÁC!';
+            this.quizResultStatus.className = 'text-xs font-black uppercase tracking-wider text-[#059669]';
+          }
+          if (this.quizCorrectAnswerBox) this.quizCorrectAnswerBox.classList.add('hidden');
+        } else {
+          this.quizResultCard.className = 'p-4 rounded-xl border-2 border-[#EF4444] bg-[#FEF2F2] space-y-2';
+          if (this.quizResultStatus) {
+            this.quizResultStatus.textContent = 'CHƯA ĐÚNG — CÙNG XEM LẠI GIẢI THÍCH NHÉ';
+            this.quizResultStatus.className = 'text-xs font-black uppercase tracking-wider text-[#DC2626]';
+          }
+          if (this.quizCorrectAnswerBox) {
+            this.quizCorrectAnswerBox.classList.remove('hidden');
+            this.quizCorrectAnswerBox.textContent = `Đáp án đúng: ${q.options[q.correctIndex]}`;
+          }
+        }
+      }
+
+      if (this.quizResultConfidenceBadge) {
+        this.quizResultConfidenceBadge.textContent = `Độ tự tin: ${confLabel}`;
+      }
+
+      if (this.quizResultExplanation) {
+        this.quizResultExplanation.textContent = q.explanation;
+      }
+
+      if (window.TLUMascot) {
+        if (isCorrect) {
+          window.TLUMascot.setCheering(`Tuyệt vời! Bạn đã trả lời đúng câu hỏi môn ${cur.course_code}!`);
+        } else {
+          window.TLUMascot.setCheering(`Đừng nản! Đọc kỹ giải thích để làm chủ kiến thức môn ${cur.course_code} nhé!`);
+        }
+      }
+    }
+
+    bindSplitTabs() {
+      if (this.btnSplitTabAi && this.btnSplitTabHuman) {
+        this.btnSplitTabAi.addEventListener('click', () => {
+          this.btnSplitTabAi.className = 'flex-1 py-2 text-center text-xs font-black transition-all cursor-pointer bg-white text-[#7E22CE] border-r border-[#CBD5E1] shadow-2xs';
+          this.btnSplitTabHuman.className = 'flex-1 py-2 text-center text-xs font-black transition-all cursor-pointer bg-[#F8FAFC] text-[#64748B] hover:text-[#0F172A]';
+          if (this.splitPanelAiView) this.splitPanelAiView.classList.remove('hidden');
+          if (this.splitPanelHumanView) this.splitPanelHumanView.classList.add('hidden');
+        });
+
+        this.btnSplitTabHuman.addEventListener('click', () => {
+          this.btnSplitTabHuman.className = 'flex-1 py-2 text-center text-xs font-black transition-all cursor-pointer bg-white text-[#4F46E5] shadow-2xs';
+          this.btnSplitTabAi.className = 'flex-1 py-2 text-center text-xs font-black transition-all cursor-pointer bg-[#F8FAFC] text-[#64748B] hover:text-[#0F172A] border-r border-[#CBD5E1]';
+          if (this.splitPanelHumanView) this.splitPanelHumanView.classList.remove('hidden');
+          if (this.splitPanelAiView) this.splitPanelAiView.classList.add('hidden');
+        });
+      }
+
+      if (this.btnSplitSubmitTicket && this.splitHumanTicketInput && this.splitHumanTicketsList) {
+        this.btnSplitSubmitTicket.addEventListener('click', () => {
+          const text = this.splitHumanTicketInput.value.trim();
+          if (!text) return;
+
+          const cur = this.slidesDeck[this.currentSlideIndex] || this.slidesDeck[0];
+          const ticketCard = document.createElement('div');
+          ticketCard.className = 'p-3 bg-[#F8FAFC] border border-[#CBD5E1] rounded-xl space-y-1.5 text-xs';
+          ticketCard.innerHTML = `
+            <p class="font-bold text-[#0F172A]">${this.escapeHtml(text)}</p>
+            <div class="flex items-center justify-between text-3xs">
+              <span class="font-extrabold text-[#D97706] bg-[#FEF3C7] px-2 py-0.5 rounded-md border border-[#FDE68A]">Đang chờ đội ngũ giảng dạy</span>
+              <span class="text-[#64748B]">Vừa xong • ${this.escapeHtml(cur.course_code)}</span>
+            </div>
+            <div class="text-[#475569] bg-white p-2 rounded-lg border border-[#E2E8F0] italic">
+              Yêu cầu đã được gửi đến Trợ giảng môn ${this.escapeHtml(cur.course_code)}. Câu trả lời sẽ xuất hiện tại đây ngay khi được giải đáp.
+            </div>
+          `;
+          this.splitHumanTicketsList.prepend(ticketCard);
+          this.splitHumanTicketInput.value = '';
+
+          if (window.TLUMascot) {
+            window.TLUMascot.setCheering('Yêu cầu hỗ trợ đã được gửi tới Giảng viên & Trợ giảng!');
+          }
+        });
+      }
     }
 
     escapeHtml(text) {

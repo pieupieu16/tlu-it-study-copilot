@@ -67,7 +67,7 @@ def test_k3_slide_viewer():
         assert not page.locator("#slide-sync-notice").is_visible()
         print("Resync verified: notice hidden and back to following lecturer")
         
-        # 6. Test Split-View AI Study Panel
+        # 6. Test Split-View AI Study Panel & 2-Tab Switcher
         page.click("#btn-toggle-split-ai")
         page.wait_for_timeout(300)
         assert page.locator("#slide-ai-split-panel").is_visible()
@@ -80,9 +80,74 @@ def test_k3_slide_viewer():
         # Capture screenshot with Split AI Study Panel opened
         page.screenshot(path=f"{proof_dir}/proof_k3_split_ai_panel.png")
         print("Captured proof_k3_split_ai_panel.png")
+
+        # Test Tab 2: Human TA Support
+        page.click("#btn-split-tab-human")
+        page.wait_for_timeout(300)
+        assert page.locator("#split-panel-human-view").is_visible()
+        assert not page.locator("#split-panel-ai-view").is_visible()
+        print("Human TA support tab verified")
+
+        page.fill("#split-human-ticket-input", "Em chưa hiểu rõ cơ chế giải phóng vùng nhớ Heap trong C++ khi hàm kết thúc?")
+        page.click("#btn-split-submit-ticket")
+        page.wait_for_timeout(300)
+        assert "Em chưa hiểu rõ cơ chế giải phóng" in page.inner_text("#split-human-tickets-list")
+        page.screenshot(path=f"{proof_dir}/proof_k3_split_human_ta.png")
+        print("Captured proof_k3_split_human_ta.png")
+
+        # Switch back to Tab 1: AI
+        page.click("#btn-split-tab-ai")
+        page.wait_for_timeout(300)
+        assert page.locator("#split-panel-ai-view").is_visible()
+        page.click("#btn-close-split-ai")
+        page.wait_for_timeout(200)
+
+        # 7. Test Raise Hand Feature (from K3-Hackathon raiseHand)
+        page.click("#btn-slide-raise-hand")
+        page.wait_for_timeout(300)
+        assert page.locator("#slide-hand-notice").is_visible()
+        assert "Đang Giơ Tay" in page.inner_text("#btn-slide-raise-hand")
+        page.screenshot(path=f"{proof_dir}/proof_k3_hand_raise.png")
+        print("Captured proof_k3_hand_raise.png")
+
+        page.click("#btn-slide-lower-hand")
+        page.wait_for_timeout(300)
+        assert not page.locator("#slide-hand-notice").is_visible()
+        assert "Giơ Tay" in page.inner_text("#btn-slide-raise-hand")
+        print("Lower hand verified")
+
+        # 8. Test In-Class Quick Question Panel (from K3-Hackathon student-question-panel)
+        page.click("#btn-toggle-inclass-quiz")
+        page.wait_for_timeout(300)
+        assert page.locator("#slide-inclass-quiz-panel").is_visible()
+        print("In-class quiz panel is visible")
+
+        # Select first option
+        page.locator(".quiz-option-btn").first.click()
+        page.wait_for_timeout(200)
+
+        # Submit with Confidence level 3 ("Chắc chắn")
+        page.click("#btn-quiz-conf-3")
+        page.wait_for_timeout(300)
+        assert page.locator("#quiz-result-card").is_visible()
+        assert "CHÍNH XÁC" in page.inner_text("#quiz-result-status")
+        page.screenshot(path=f"{proof_dir}/proof_k3_inclass_quiz.png")
+        print("Captured proof_k3_inclass_quiz.png")
+
+        # Test Quiz Retry
+        page.click("#btn-quiz-retry")
+        page.wait_for_timeout(200)
+        assert page.locator("#quiz-confidence-section").is_visible()
+        assert not page.locator("#quiz-result-card").is_visible()
+        print("Quiz retry verified")
+
+        page.click("#btn-close-inclass-quiz")
+        page.wait_for_timeout(200)
+        assert not page.locator("#slide-inclass-quiz-panel").is_visible()
+        print("In-class quiz close verified")
         
         browser.close()
-        print("All K3-Hackathon slide viewer feature tests PASSED successfully!")
+        print("All K3-Hackathon student classroom feature tests PASSED successfully!")
 
 if __name__ == "__main__":
     test_k3_slide_viewer()
