@@ -132,59 +132,27 @@ CREATE POLICY "Allow public read to audit logs"
     USING (true);
 
 -- ------------------------------------------------------------------------------
--- 6. Initial Seed Data (Core IT Course Slides & Sample Accounts)
+-- 6. Initial Seed Data (User Real Data Science Slide & Sample Accounts)
 -- ------------------------------------------------------------------------------
 INSERT INTO public.slides (
     slide_id, filename, course_code, course_name, week, topic, file_type, sha256,
     status, bronze_status, silver_status, gold_chunks, vectors_indexed, uploaded_at
 ) VALUES
 (
-    'slide_it101_w03',
-    'IT101_Tuan03_ConTro_BoNho.pdf',
-    'IT101',
-    'Nhập môn lập trình',
+    'slide_datascience_w03_1791353451',
+    'Data Science_Machine Learning course.pdf',
+    'DATASCIENCE',
+    'Khoa học Dữ liệu và Học máy',
     3,
-    'Con trỏ và Quản lý bộ nhớ động',
+    'Khoa học Dữ liệu & Học máy (Data Science & Machine Learning)',
     'pdf',
-    'e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855',
+    '2f2f92a71ef77cd9afe952ed065faba79a98a882ebc783870c7faffcd4bda903',
     'PROCESSED',
     'Archived RAW (Immutable)',
     'Sanitized UTF-8, PII Redacted',
-    14,
-    14,
-    '2026-10-06 14:30:00+00'
-),
-(
-    'slide_it201_w05',
-    'IT201_Tuan05_Cay_AVL_Dijkstra.pptx',
-    'IT201',
-    'Cấu trúc dữ liệu và Giải thuật',
-    5,
-    'Cây nhị phân tìm kiếm cân bằng AVL & Đồ thị',
-    'pptx',
-    'a591a6d40bf420404a011733cfb7b190d62c65bf0bcda32b57b277d9ad9f146e',
-    'PROCESSED',
-    'Archived RAW (Immutable)',
-    'Sanitized UTF-8, PII Redacted',
-    22,
-    22,
-    '2026-10-06 15:10:00+00'
-),
-(
-    'slide_it205_w06',
-    'IT205_Tuan06_ChuanHoa_3NF_BCNF.pdf',
-    'IT205',
-    'Cơ sở dữ liệu',
-    6,
-    'Chuẩn hóa quan hệ 1NF, 2NF, 3NF & BCNF',
-    'pdf',
-    'c8b417c822ff264f339d48b7f23a6f1943801f9b3112c3f84890c29cf4d55b0a',
-    'PROCESSED',
-    'Archived RAW (Immutable)',
-    'Sanitized UTF-8, PII Redacted',
-    18,
-    18,
-    '2026-10-06 16:45:00+00'
+    12,
+    12,
+    '2026-10-07 06:10:52+00'
 )
 ON CONFLICT (slide_id) DO NOTHING;
 

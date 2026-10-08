@@ -33,61 +33,6 @@
       ],
       correctIndex: 0,
       explanation: 'K-Fold Cross-Validation chia dữ liệu thành K phần để huấn luyện và kiểm thử chéo, giúp đánh giá độ ổn định và giảm thiểu nguy cơ Overfitting.'
-    },
-    'IT101': {
-      prompt: 'Trong C++, khi cấp phát vùng nhớ Heap bằng toán tử new, nếu không gọi delete thì điều gì sẽ xảy ra?',
-      options: [
-        'A. Rò rỉ bộ nhớ (Memory Leak)',
-        'B. Bộ nhớ tự động giải phóng khi hàm kết thúc',
-        'C. Tràn ngăn xếp bộ nhớ (Stack Overflow)',
-        'D. Bộ nhớ được nạp tự động vào bảng phân trang'
-      ],
-      correctIndex: 0,
-      explanation: 'Toán tử new cấp phát trên Heap. Trình biên dịch và runtime không tự động thu hồi khi thoát khỏi phạm vi hàm, gây rò rỉ bộ nhớ (Memory Leak).'
-    },
-    'IT201': {
-      prompt: 'Trong cây nhị phân tìm kiếm cân bằng AVL, hệ số cân bằng (Balance Factor) của mỗi node hợp lệ phải nằm trong khoảng nào?',
-      options: [
-        'A. [-1, 0, 1]',
-        'B. [-2, 0, 2]',
-        'C. [0, 1]',
-        'D. Bất kỳ giá trị nào nhỏ hơn chiều cao cây'
-      ],
-      correctIndex: 0,
-      explanation: 'Định nghĩa cây AVL yêu cầu độ chênh lệch chiều cao giữa cây con trái và cây con phải (Balance Factor = height_left - height_right) luôn thuộc {-1, 0, 1}.'
-    },
-    'IT205': {
-      prompt: 'Theo chuẩn hóa cơ sở dữ liệu quan hệ, dạng chuẩn 3NF yêu cầu điều kiện nào sau đây?',
-      options: [
-        'A. Thuộc tính không khóa không phụ thuộc bắc cầu vào bất kỳ khóa nào',
-        'B. Mọi thuộc tính phải chứa các giá trị nguyên tố (Atomic)',
-        'C. Bắt buộc mọi trường đều phải là khóa ngoại tham chiếu',
-        'D. Chỉ cần bảng đạt dạng chuẩn 1NF là đủ'
-      ],
-      correctIndex: 0,
-      explanation: 'Dạng chuẩn 3NF yêu cầu bảng đã đạt 2NF và không có thuộc tính không khóa nào phụ thuộc bắc cầu vào khóa chính (Transitive Dependency).'
-    },
-    'IT301': {
-      prompt: 'Trong giao thức TCP, cơ chế nào được sử dụng để thiết lập kết nối tin cậy giữa client và server?',
-      options: [
-        'A. Bắt tay ba bước (Three-way Handshake: SYN, SYN-ACK, ACK)',
-        'B. Gửi trực tiếp UDP Datagram không cần phản hồi',
-        'C. Quảng bá gói tin Broadcast ARP trên toàn mạng LAN',
-        'D. Phân mảnh gói tin IP Fragment tại router biên'
-      ],
-      correctIndex: 0,
-      explanation: 'Giao thức TCP sử dụng cơ chế bắt tay ba bước (SYN -> SYN-ACK -> ACK) để đồng bộ sequence numbers trước khi truyền dữ liệu.'
-    },
-    'IT315': {
-      prompt: 'Khi CPU yêu cầu truy cập một trang bộ nhớ ảo không có trong RAM, sự kiện phần cứng nào được kích hoạt?',
-      options: [
-        'A. Ngắt thiếu trang (Page Fault Exception)',
-        'B. Lỗi vi phạm phân đoạn bộ nhớ (Segmentation Fault)',
-        'C. Lệnh xóa bộ nhớ đệm TLB Flush tức thì',
-        'D. Khởi động lại hệ điều hành'
-      ],
-      correctIndex: 0,
-      explanation: 'Khi bit valid trong bảng trang bằng 0 (trang chưa nạp vào khung trang vật lý), phần cứng MMU kích hoạt ngắt Page Fault để HĐH nạp trang từ swap vào RAM.'
     }
   };
 
@@ -599,7 +544,7 @@
         fallbackMsg.className = 'p-2.5 bg-white border border-[#E2E8F0] rounded-xl text-[#334155] space-y-1';
         fallbackMsg.innerHTML = `
           <div class="font-bold text-[#7E22CE]">[Gia Sư Socratic]:</div>
-          <div>Trong slide này, bạn hãy quan sát xem sau khi cấp phát bộ nhớ thì con trỏ trỏ tới vùng nhớ nào, và điều gì xảy ra nếu quên thu hồi bộ nhớ?</div>
+          <div>Trong slide này, bạn hãy quan sát cấu trúc pipeline huấn luyện và cách thức đánh giá độ chính xác của mô hình học máy.</div>
         `;
         this.splitAiMessages.appendChild(fallbackMsg);
       }
@@ -608,7 +553,7 @@
 
     renderSlideQuiz(current) {
       if (!this.quizOptionsContainer || !this.quizQuestionPrompt) return;
-      const q = SLIDE_QUESTIONS[current.course_code] || SLIDE_QUESTIONS['IT101'];
+      const q = SLIDE_QUESTIONS[current.course_code] || SLIDE_QUESTIONS['DATASCIENCE'];
       if (!q) return;
 
       if (this.quizSlideEyebrow) {
@@ -741,7 +686,7 @@
 
     submitQuizAnswer(confLabel) {
       const cur = this.slidesDeck[this.currentSlideIndex] || this.slidesDeck[0];
-      const q = SLIDE_QUESTIONS[cur.course_code] || SLIDE_QUESTIONS['IT101'];
+      const q = SLIDE_QUESTIONS[cur.course_code] || SLIDE_QUESTIONS['DATASCIENCE'];
       if (!q) return;
 
       const isCorrect = this.selectedQuizOptionIndex === q.correctIndex;

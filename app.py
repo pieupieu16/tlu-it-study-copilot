@@ -101,7 +101,7 @@ class SlideUploadRequest(BaseModel):
     content_summary: Optional[str] = Field(default="", description="Optional extracted notes or text")
 
 
-# Medallion Lakehouse Document Catalog
+# Medallion Lakehouse Document Catalog (Only User Real Data Science Slide)
 INGESTED_SLIDES: List[Dict[str, Any]] = [
     {
         "slide_id": "slide_datascience_w03_1791353451",
@@ -121,63 +121,6 @@ INGESTED_SLIDES: List[Dict[str, Any]] = [
         "content_desc": "Giáo trình và bài giảng Chuyên sâu Khoa học Dữ liệu (Data Science) & Học máy (Machine Learning). Bao gồm các kỹ thuật tiền xử lý dữ liệu, trích xuất đặc trưng, huấn luyện mô hình phân loại và hồi quy.",
         "code_snippet": "# Pipeline huấn luyện mô hình Machine Learning:\nimport pandas as pd\nfrom sklearn.model_selection import train_test_split\nfrom sklearn.ensemble import RandomForestClassifier\n\n# Nạp và huấn luyện dữ liệu bài giảng TLU\nX_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2)\nmodel = RandomForestClassifier(n_estimators=100)\nmodel.fit(X_train, y_train)",
         "callout_note": "Học liệu Khoa học Dữ liệu tải lên trực tiếp vào hệ thống cơ sở dữ liệu Supabase phục vụ sinh viên."
-    },
-    {
-        "slide_id": "slide_it101_w03",
-        "filename": "IT101_Tuan03_ConTro_BoNho.pdf",
-        "course_code": "IT101",
-        "course_name": "Nhập môn lập trình",
-        "week": 3,
-        "topic": "Con trỏ và Quản lý bộ nhớ động",
-        "file_type": "pdf",
-        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
-        "status": "PROCESSED",
-        "bronze_status": "Archived RAW",
-        "silver_status": "Sanitized UTF-8, PII Clear",
-        "gold_chunks": 14,
-        "vectors_indexed": 14,
-        "uploaded_at": "2026-10-06 14:30:00",
-        "content_desc": "Vùng nhớ Heap là không gian nhớ dùng cho cấp phát động tại thời điểm thực thi (runtime). Khác với vùng nhớ Stack được quản lý tự động theo phạm vi hàm, lập trình viên phải chủ động giải phóng bộ nhớ heap đã xin cấp phát.",
-        "code_snippet": "// Ví dụ chuẩn trong Slide IT101 Tuần 3:\nint *ptr = new int(100); // Cấp phát 1 ô nhớ int trên Heap\nstd::cout << \"Gia tri: \" << *ptr << std::endl;\ndelete ptr; // Bắt buộc giải phóng sau khi dùng\nptr = nullptr; // Tránh con trỏ lơ lửng (Dangling pointer)",
-        "callout_note": "Cảnh Báo Lỗi Thường Gặp Của Sinh Viên: Quên giải phóng con trỏ dẫn đến rò rỉ bộ nhớ (Memory Leak), hoặc truy cập vào ô nhớ sau khi delete sẽ gây lỗi Segmentation fault (SIGSEGV)."
-    },
-    {
-        "slide_id": "slide_it201_w05",
-        "filename": "IT201_Tuan05_Cay_AVL_Dijkstra.pptx",
-        "course_code": "IT201",
-        "course_name": "Cấu trúc dữ liệu và Giải thuật",
-        "week": 5,
-        "topic": "Cây nhị phân tìm kiếm cân bằng AVL & Đồ thị",
-        "file_type": "pptx",
-        "sha256": "a591a6d40bf420404a011733cfb7b190d62c65bf0bcda32b57b277d9ad9f146e",
-        "status": "PROCESSED",
-        "bronze_status": "Archived RAW",
-        "silver_status": "Sanitized UTF-8, PII Clear",
-        "gold_chunks": 22,
-        "vectors_indexed": 22,
-        "uploaded_at": "2026-10-06 15:10:00",
-        "content_desc": "Cây AVL tự động duy trì cân bằng sau mỗi thao tác chèn hoặc xóa thông qua các phép quay (Rotate Left, Rotate Right). Hệ số cân bằng Balance Factor luôn nằm trong khoảng [-1, 0, 1], đảm bảo độ phức tạp tìm kiếm tối ưu O(log n).",
-        "code_snippet": "// Cấu trúc Node cây AVL môn IT201:\npublic class AVLNode {\n    int key, height;\n    AVLNode left, right;\n    AVLNode(int d) { key = d; height = 1; }\n}\n// Độ phức tạp thời gian: O(log n) cho Search, Insert, Delete",
-        "callout_note": "Lưu Ý Giải Thuật: Cần tính toán lại chiều cao (height) của các node cha sau mỗi phép quay để duy trì điều kiện cân bằng cây AVL."
-    },
-    {
-        "slide_id": "slide_it205_w06",
-        "filename": "IT205_Tuan06_ChuanHoa_3NF_BCNF.pdf",
-        "course_code": "IT205",
-        "course_name": "Cơ sở dữ liệu",
-        "week": 6,
-        "topic": "Chuẩn hóa quan hệ 1NF, 2NF, 3NF & BCNF",
-        "file_type": "pdf",
-        "sha256": "c8b417c822ff264f339d48b7f23a6f1943801f9b3112c3f84890c29cf4d55b0a",
-        "status": "PROCESSED",
-        "bronze_status": "Archived RAW",
-        "silver_status": "Sanitized UTF-8, PII Clear",
-        "gold_chunks": 18,
-        "vectors_indexed": 18,
-        "uploaded_at": "2026-10-06 16:45:00",
-        "content_desc": "Chuẩn hóa dữ liệu là quá trình tổ chức các bảng trong cơ sở dữ liệu quan hệ nhằm loại bỏ dư thừa dữ liệu (Data Redundancy) và tránh các bất thường khi chèn, sửa hoặc xóa (Anomalies). Dạng chuẩn 3NF yêu cầu mọi thuộc tính không khóa phụ thuộc hàm trực tiếp vào khóa chính.",
-        "code_snippet": "-- Minh họa truy vấn chuẩn hóa JOIN môn IT205:\nSELECT sv.ma_sv, sv.ho_ten, mh.ten_mon, d.diem_thi\nFROM SinhVien sv\nINNER JOIN BangDiem d ON sv.ma_sv = d.ma_sv\nINNER JOIN MonHoc mh ON d.ma_mon = mh.ma_mon\nWHERE mh.ma_mon = 'IT205';",
-        "callout_note": "Khuyến Nghị Tối Ưu: Luôn đánh chỉ mục B-Tree (Index) trên các trường khóa ngoại tham chiếu để giảm thiểu chi phí quét toàn bộ bảng (Table Scan)."
     }
 ]
 

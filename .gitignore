@@ -30,3 +30,6 @@ htmlcov/
 # Operating System files
 .DS_Store
 Thumbs.db
+
+# Agent workspaces
+.agents/

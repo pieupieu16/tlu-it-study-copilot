@@ -18,7 +18,7 @@
       this.personaSelect = document.getElementById('persona-select');
       this.activeCourseLabel = document.getElementById('chat-active-course-label');
 
-      this.currentCourse = 'IT101';
+      this.currentCourse = (this.courseSelect && this.courseSelect.value) ? this.courseSelect.value : 'DATASCIENCE';
       this.currentPersona = {
         name: 'Nguyễn Văn An',
         id: 'A41234',

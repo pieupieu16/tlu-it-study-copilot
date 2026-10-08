@@ -223,11 +223,12 @@
           <span class="text-xs font-bold text-[#475569]">Môn học:</span>
           <label for="course-select" class="sr-only">Chọn môn học</label>
           <select id="course-select" aria-label="Lựa chọn môn học CNTT TLU" class="bg-transparent text-xs font-bold text-[#0D62FE] focus:outline-none cursor-pointer pr-1">
-            <option value="IT101" selected>IT101 - Lập trình cơ bản (C/C++)</option>
+            <option value="DATASCIENCE" selected>Khoa học Dữ liệu &amp; Học máy (Data Science)</option>
+            <option value="IT101">IT101 - Lập trình cơ bản (C/C++)</option>
             <option value="IT201">IT201 - Lập trình Hướng đối tượng (Java)</option>
             <option value="IT205">IT205 - Cơ sở dữ liệu (SQL)</option>
-            <option value="IT301">IT301 - Lập trình Python & Trí tuệ Nhân tạo</option>
-            <option value="IT315">IT315 - Kiến trúc Máy tính & Hệ điều hành</option>
+            <option value="IT301">IT301 - Lập trình Python &amp; Trí tuệ Nhân tạo</option>
+            <option value="IT315">IT315 - Kiến trúc Máy tính &amp; Hệ điều hành</option>
           </select>
         </div>
 
@@ -1786,7 +1787,8 @@ int main() {
             <div>
               <label for="slide-course-select" class="sr-only">Chọn mã môn CNTT có sẵn</label>
               <select id="slide-course-select" aria-label="Mã môn học CNTT" class="w-full bg-[#F8FAFC] border border-[#CBD5E1] text-[#0F172A] text-xs font-semibold rounded-xl px-3 py-2.5 focus:outline-none focus:border-[#0D62FE]">
-                <option value="IT101" selected>IT101 - Nhập môn lập trình (C/C++)</option>
+                <option value="DATASCIENCE" selected>DATASCIENCE - Khoa học Dữ liệu &amp; Học máy</option>
+                <option value="IT101">IT101 - Nhập môn lập trình (C/C++)</option>
                 <option value="IT201">IT201 - Cấu trúc dữ liệu &amp; Giải thuật (Java)</option>
                 <option value="IT205">IT205 - Cơ sở dữ liệu (SQL)</option>
                 <option value="IT301">IT301 - Mạng máy tính &amp; Truyền thông (Python)</option>
@@ -2004,6 +2006,7 @@ int main() {
           const label = document.getElementById('chat-active-course-label');
           if (label) {
             const courseNames = {
+              'DATASCIENCE': 'Khoa học Dữ liệu & Học máy',
               'IT101': 'IT101 - Lập trình cơ bản (C/C++)',
               'IT201': 'IT201 - Lập trình Hướng đối tượng (Java)',
               'IT205': 'IT205 - Cơ sở dữ liệu (SQL)',

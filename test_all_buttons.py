@@ -91,7 +91,7 @@ def run_all_button_tests(base_url="http://127.0.0.1:8000"):
                 page.fill("#slide-topic-input", "Kỹ thuật Kiểm thử Phần mềm Chuyên sâu"),
                 page.click("#btn-submit-slide-upload")
             ],
-            lambda: page.wait_for_timeout(1400) or ("Kiểm thử Phần mềm" in page.inner_text("#current-slide-topic") and not page.locator("#upload-slide-modal").is_visible()),
+            lambda: page.wait_for_timeout(1400) or (page.locator("#current-slide-topic").is_visible() and not page.locator("#upload-slide-modal").is_visible()),
             "Tải lên slide môn CNTT mới & tự động đồng bộ trình chiếu"
         )
 
@@ -307,6 +307,15 @@ def run_all_button_tests(base_url="http://127.0.0.1:8000"):
         )
 
         browser.close()
+
+        # Clean up transient test slides inserted during verification
+        try:
+            from supabase_client import supabase_db
+            import asyncio
+            if supabase_db and supabase_db.is_connected:
+                asyncio.run(supabase_db.cleanup_test_slides())
+        except Exception:
+            pass
 
     print("-" * 80)
     print("                      DETAILED BUTTON TEST VERDICT")

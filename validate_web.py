@@ -1484,6 +1484,15 @@ def main() -> int:
         print(f"{colors.BOLD}{colors.RED}VERIFICATION RESULT  : DEFECTS DETECTED (EXIT CODE 1){colors.RESET}\n")
         exit_code = 1
 
+    # Clean up transient test slides inserted during verification
+    try:
+        from supabase_client import supabase_db
+        import asyncio
+        if supabase_db and supabase_db.is_connected:
+            asyncio.run(supabase_db.cleanup_test_slides())
+    except Exception:
+        pass
+
     if args.json_report:
         report_data = {
             "timestamp": time.strftime("%Y-%m-%dT%H:%M:%SZ", time.gmtime()),

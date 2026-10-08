@@ -349,6 +349,30 @@ class TLUSupabaseManager:
 
         return False
 
+    async def execute_query(self, query: str, params: tuple = ()) -> bool:
+        """Executes a direct SQL query against Supabase PostgreSQL."""
+        if not self.is_connected:
+            return False
+        if self.db_url and PSYCOPG2_AVAILABLE:
+            try:
+                conn = self._get_pg_connection()
+                if conn:
+                    conn.autocommit = True
+                    cur = conn.cursor()
+                    cur.execute(query, params)
+                    cur.close()
+                    conn.close()
+                    return True
+            except Exception as e:
+                print(f"[Supabase PG] execute_query error: {e}")
+        return False
+
+    async def cleanup_test_slides(self) -> bool:
+        """Purges any transient test slides keeping only the real user Data Science slide."""
+        return await self.execute_query(
+            "DELETE FROM public.slides WHERE slide_id != 'slide_datascience_w03_1791353451';"
+        )
+
 
 # Singleton Instance
 supabase_db = TLUSupabaseManager()
