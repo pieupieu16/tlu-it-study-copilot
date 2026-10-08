@@ -8,17 +8,19 @@
 (function () {
   'use strict';
 
-  // Default Initial Slide (User's real uploaded Data Science slide)
+  // Default Initial Slide (User's real uploaded Data Science slide deck)
   const DEFAULT_SLIDE = {
-    slide_id: 'slide_datascience_w03_1791353451',
+    slide_id: 'slide_datascience_p001',
     course_code: 'DATASCIENCE',
     course_name: 'Khoa học Dữ liệu và Học máy',
     week: 3,
-    page: 'Slide 01 / 12',
-    topic: 'Chủ đề: Khoa học Dữ liệu & Học máy (Data Science & Machine Learning)',
-    desc: 'Giáo trình và bài giảng Chuyên sâu Khoa học Dữ liệu (Data Science) & Học máy (Machine Learning). Bao gồm các kỹ thuật tiền xử lý dữ liệu, trích xuất đặc trưng, huấn luyện mô hình phân loại và hồi quy.',
-    code: `# Pipeline huấn luyện mô hình Machine Learning:\nimport pandas as pd\nfrom sklearn.model_selection import train_test_split\nfrom sklearn.ensemble import RandomForestClassifier\n\n# Nạp và huấn luyện dữ liệu bài giảng TLU\nX_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2)\nmodel = RandomForestClassifier(n_estimators=100)\nmodel.fit(X_train, y_train)`,
-    note: 'Học liệu Khoa học Dữ liệu tải lên trực tiếp vào hệ thống cơ sở dữ liệu Supabase phục vụ sinh viên Khoa CNTT TLU.'
+    page: 'Slide 01 / 137',
+    page_num: 1,
+    total_pages: 137,
+    topic: 'Chủ đề: Data Science & Machine Learning Python course',
+    desc: 'Bài giảng mở đầu môn Khoa học Dữ liệu và Học máy (Data Science & Machine Learning). Giảng viên: Thang Nguyen, Viet Nguyen.',
+    code: `# Mở đầu khóa học Khoa học Dữ liệu (137 Trang Slide bài giảng):\nimport pandas as pd\nimport numpy as np\nimport sklearn\n\nprint("Chào mừng đến với khóa học Data Science & Machine Learning!")`,
+    note: 'Học liệu Khoa học Dữ liệu tải lên trực tiếp từ tệp PDF gốc gồm 137 trang slide.'
   };
 
   // In-Class Quick Question Quiz Dataset (Inspired by K3-Hackathon student-question-panel)
@@ -130,6 +132,11 @@
       this.btnSplitSubmitTicket = document.getElementById('btn-split-submit-ticket');
       this.splitHumanTicketsList = document.getElementById('split-human-tickets-list');
 
+      // Bottom Classroom Dock Navigation Buttons
+      this.btnPrevSlideBottom = document.getElementById('btn-prev-slide-bottom');
+      this.btnNextSlideBottom = document.getElementById('btn-next-slide-bottom');
+      this.currentSlidePageBottom = document.getElementById('current-slide-page-bottom');
+
       // Active Presentation State
       this.slidesDeck = [{ ...DEFAULT_SLIDE }];
       this.currentSlideIndex = 0;
@@ -234,37 +241,70 @@
     }
 
     bindSlideNavigation() {
+      const goToNext = () => {
+        if (this.currentSlideIndex < this.slidesDeck.length - 1) {
+          this.currentSlideIndex++;
+        } else {
+          this.currentSlideIndex = 0;
+        }
+        this.renderCurrentSlide();
+        if (window.TLUMascot) {
+          const cur = this.slidesDeck[this.currentSlideIndex];
+          window.TLUMascot.setCheering(`Đang xem trang ${this.currentSlideIndex + 1} / ${this.slidesDeck.length}!`);
+        }
+      };
+
+      const goToPrev = () => {
+        if (this.currentSlideIndex > 0) {
+          this.currentSlideIndex--;
+        } else {
+          this.currentSlideIndex = this.slidesDeck.length - 1;
+        }
+        this.renderCurrentSlide();
+        if (window.TLUMascot) {
+          const cur = this.slidesDeck[this.currentSlideIndex];
+          window.TLUMascot.setCheering(`Đang xem trang ${this.currentSlideIndex + 1} / ${this.slidesDeck.length}!`);
+        }
+      };
+
       if (this.btnPrevSlide) {
         this.btnPrevSlide.addEventListener('click', (e) => {
           if (e) e.preventDefault();
-          if (this.currentSlideIndex > 0) {
-            this.currentSlideIndex--;
-          } else {
-            this.currentSlideIndex = this.slidesDeck.length - 1;
-          }
-          this.renderCurrentSlide();
-          if (window.TLUMascot) {
-            const cur = this.slidesDeck[this.currentSlideIndex];
-            window.TLUMascot.setCheering(`Đã chuyển về slide trước: môn ${cur.course_code}!`);
-          }
+          goToPrev();
         });
       }
 
       if (this.btnNextSlide) {
         this.btnNextSlide.addEventListener('click', (e) => {
           if (e) e.preventDefault();
-          if (this.currentSlideIndex < this.slidesDeck.length - 1) {
-            this.currentSlideIndex++;
-          } else {
-            this.currentSlideIndex = 0;
-          }
-          this.renderCurrentSlide();
-          if (window.TLUMascot) {
-            const cur = this.slidesDeck[this.currentSlideIndex];
-            window.TLUMascot.setCheering(`Đã chuyển sang slide kế tiếp: môn ${cur.course_code}!`);
-          }
+          goToNext();
         });
       }
+
+      if (this.btnPrevSlideBottom) {
+        this.btnPrevSlideBottom.addEventListener('click', (e) => {
+          if (e) e.preventDefault();
+          goToPrev();
+        });
+      }
+
+      if (this.btnNextSlideBottom) {
+        this.btnNextSlideBottom.addEventListener('click', (e) => {
+          if (e) e.preventDefault();
+          goToNext();
+        });
+      }
+
+      // Keyboard navigation (ArrowLeft = Previous, ArrowRight = Next)
+      window.addEventListener('keydown', (e) => {
+        const activeTag = (document.activeElement && document.activeElement.tagName.toLowerCase()) || '';
+        if (['input', 'textarea'].includes(activeTag)) return;
+        if (e.key === 'ArrowRight' || e.key === 'PageDown') {
+          goToNext();
+        } else if (e.key === 'ArrowLeft' || e.key === 'PageUp') {
+          goToPrev();
+        }
+      });
     }
 
     renderCurrentSlide() {
@@ -277,6 +317,10 @@
 
       if (this.currentSlidePage) {
         this.currentSlidePage.textContent = current.page || `Slide ${this.currentSlideIndex + 1} / ${this.slidesDeck.length}`;
+      }
+
+      if (this.currentSlidePageBottom) {
+        this.currentSlidePageBottom.textContent = current.page || `Slide ${this.currentSlideIndex + 1} / ${this.slidesDeck.length}`;
       }
 
       if (this.currentSlideTopic) {
@@ -950,6 +994,23 @@
           const slides = await res.json();
           this.renderSlidesList(slides);
           if (shouldHydrateDeck) {
+            // Load full presentation slide pages (extracted from uploaded PDF)
+            try {
+              const pagesRes = await fetch('/api/slides/pages');
+              if (pagesRes.ok) {
+                const pages = await pagesRes.json();
+                if (Array.isArray(pages) && pages.length > 1) {
+                  this.slidesDeck = pages;
+                  if (this.currentSlideIndex >= this.slidesDeck.length) {
+                    this.currentSlideIndex = 0;
+                  }
+                  this.renderCurrentSlide();
+                  return;
+                }
+              }
+            } catch (errPages) {
+              console.warn('Could not load detailed slide pages:', errPages);
+            }
             this.hydrateSlidesDeckFromDatabase(slides);
           }
         } else {

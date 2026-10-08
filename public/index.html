@@ -533,9 +533,9 @@ int main() {
           <!-- Classroom Reading Progress Bar -->
           <div class="flex items-center space-x-3 w-full md:w-80">
             <div class="h-3 flex-1 overflow-hidden rounded-full bg-[#F1F5F9] border border-[#CBD5E1]">
-              <div id="slide-progress-bar" class="h-full rounded-full bg-[#0D62FE] transition-all duration-300" style="width: 16.6%;"></div>
+              <div id="slide-progress-bar" class="h-full rounded-full bg-[#0D62FE] transition-all duration-300" style="width: 0.73%;"></div>
             </div>
-            <span id="current-slide-page" class="text-xs sm:text-sm font-extrabold tabular-nums text-[#0F172A] bg-[#F8FAFC] px-3 py-1 rounded-xl border border-[#CBD5E1] shrink-0">Slide 01 / 12</span>
+            <span id="current-slide-page" class="text-xs sm:text-sm font-extrabold tabular-nums text-[#0F172A] bg-[#F8FAFC] px-3 py-1 rounded-xl border border-[#CBD5E1] shrink-0">Slide 01 / 137</span>
           </div>
 
           <!-- Quick Navigation Header Buttons -->
@@ -709,6 +709,19 @@ int main() {
                 </button>
               </div>
 
+              <!-- Page Navigation Buttons (Always visible at bottom dock) -->
+              <div class="flex items-center gap-1.5 bg-[#EEF4FF] border border-[#BFDBFE] rounded-xl px-2 py-1">
+                <button id="btn-prev-slide-bottom" class="blk-btn px-2.5 py-1 bg-white hover:bg-[#DBEAFE] text-[#0D62FE] text-xs font-black cursor-pointer" title="Lật về trang slide trước">
+                  Trang Trước
+                </button>
+                <span id="current-slide-page-bottom" class="px-2.5 py-1 text-xs font-black tabular-nums text-[#0D62FE] bg-white rounded-lg border border-[#BFDBFE]">
+                  Slide 01 / 137
+                </span>
+                <button id="btn-next-slide-bottom" class="blk-btn px-2.5 py-1 bg-[#0D62FE] hover:bg-[#0047E0] text-white text-xs font-black cursor-pointer" title="Lật sang trang slide kế tiếp">
+                  Trang Kế Tiếp
+                </button>
+              </div>
+
               <!-- In-Class Quiz & Split AI Toggle Buttons -->
               <div class="flex items-center gap-2">
                 <button id="btn-toggle-inclass-quiz" class="blk-btn px-3 py-2 bg-[#EEF2FF] hover:bg-[#E0E7FF] text-[#4F46E5] text-xs font-extrabold transition-all cursor-pointer">
@@ -723,6 +736,9 @@ int main() {
 
             <!-- Bottom Action Bar (Preserving All Original Button IDs) -->
             <div class="flex flex-wrap items-center justify-start gap-2.5 pt-1">
+              <a href="/slides/data_science_course.pdf" target="_blank" id="btn-view-original-pdf" class="blk-btn px-3.5 py-2.5 bg-white border border-[#CBD5E1] hover:border-[#0D62FE] text-[#475569] hover:text-[#0D62FE] text-xs font-bold shadow-2xs hover:shadow-xs transition-all flex items-center space-x-1.5 cursor-pointer">
+                <span>Xem File PDF Gốc (137 Trang)</span>
+              </a>
               <button id="btn-trigger-messenger-panel" class="blk-btn px-4 py-2.5 bg-[#0D62FE] hover:bg-[#0047E0] text-white text-xs font-bold shadow-xs hover:shadow transition-all flex items-center space-x-1.5 cursor-pointer">
                 <span>Hỏi Chatbot Rồng TLU Về Slide Này</span>
               </button>

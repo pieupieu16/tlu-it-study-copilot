@@ -8,6 +8,7 @@ Compliance: 100% Light Mode visual assets, Zero Icon policy (pure text labels, b
 import os
 import sys
 import hashlib
+import json
 from datetime import datetime
 from pathlib import Path
 from typing import Optional, List, Dict, Any
@@ -431,6 +432,19 @@ async def get_slides_list(course_code: Optional[str] = None) -> List[Dict[str, A
     if course_code:
         norm = course_code.upper()
         return [s for s in INGESTED_SLIDES if s["course_code"] == norm]
+    return INGESTED_SLIDES
+
+
+@app.get("/api/slides/pages", tags=["Lakehouse RAG"])
+async def get_slide_pages() -> List[Dict[str, Any]]:
+    """Retrieve full presentation slide pages (extracted 137 pages of the user course deck)."""
+    pages_file = PUBLIC_DIR / "slides" / "data_science_pages.json"
+    if pages_file.exists():
+        try:
+            with open(pages_file, "r", encoding="utf-8") as f:
+                return json.load(f)
+        except Exception as e:
+            print(f"[Error reading slide pages] {e}")
     return INGESTED_SLIDES
 
 
