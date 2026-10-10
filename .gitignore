@@ -33,3 +33,8 @@ Thumbs.db
 
 # Agent workspaces
 .agents/
+traces/
+classroom.db*
+benchmark_results.json
+stress_results.json
+proof_*.png

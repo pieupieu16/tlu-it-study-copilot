@@ -44,6 +44,43 @@ try:
 except ImportError:
     supabase_db = None
 
+# Import Classroom Subsystem & Concurrency Architecture
+import socketio
+from classroom.config import get_settings as get_classroom_settings
+from classroom.database import Base as ClassroomBase, engine as classroom_engine
+from classroom.realtime import sio, shutdown as realtime_shutdown
+from classroom.concurrency import get_event_loop_lag_monitor, advisor_executor
+from classroom import register_classroom_routes
+from classroom import services as modules
+from classroom import models, schemas, realtime, config
+from classroom import database as db
+
+# Expose classroom submodules for compatibility with test harnesses
+sys.modules["app.modules"] = modules
+sys.modules["app.models"] = models
+sys.modules["app.schemas"] = schemas
+sys.modules["app.realtime"] = realtime
+sys.modules["app.config"] = config
+sys.modules["app.db"] = db
+for _mod_name in [
+    "llm",
+    "slide_tracking",
+    "state_engine",
+    "advisor",
+    "auto_questions",
+    "session_understanding",
+    "analytics",
+    "assessment",
+    "question_support",
+    "student_coach",
+    "slide_import",
+    "agent_tools",
+]:
+    _mod_obj = getattr(modules, _mod_name, None)
+    if _mod_obj is not None:
+        sys.modules[f"app.modules.{_mod_name}"] = _mod_obj
+        setattr(modules, _mod_name, _mod_obj)
+
 
 
 # ============================================================================
@@ -135,8 +172,35 @@ async def lifespan(app: FastAPI):
     # Startup sequence: initialize references and verify assets
     if not (PUBLIC_DIR / "assets" / "tlu_dragon_mascot.png").exists():
         print("[Warning] tlu_dragon_mascot.png is not found in public/assets.")
+
+    # Startup: Initialize Classroom Database Tables
+    try:
+        ClassroomBase.metadata.create_all(classroom_engine)
+        print("[Classroom DB] Initialized SQLite tables successfully.")
+    except Exception as e:
+        print(f"[Classroom DB Warning] Table creation failed: {e}")
+
+    # Startup: Start event loop lag monitor
+    try:
+        get_event_loop_lag_monitor().start()
+    except Exception as e:
+        print(f"[Concurrency Warning] Lag monitor startup failed: {e}")
+
     yield
+
     # Shutdown sequence
+    try:
+        get_event_loop_lag_monitor().stop()
+    except Exception:
+        pass
+    try:
+        advisor_executor.shutdown(wait=False)
+    except Exception:
+        pass
+    try:
+        await realtime_shutdown()
+    except Exception as e:
+        print(f"[Classroom Shutdown Warning] Realtime shutdown error: {e}")
 
 
 # ============================================================================
@@ -188,6 +252,16 @@ async def get_health() -> Dict[str, Any]:
     if supabase_db:
         health_payload["database"] = supabase_db.get_status()
     return health_payload
+
+
+@app.get("/api/health/lag", tags=["System"])
+async def get_health_lag() -> Dict[str, Any]:
+    """Retrieve event loop lag metrics (concurrency latency monitoring)."""
+    try:
+        monitor = get_event_loop_lag_monitor()
+        return monitor.get_stats()
+    except Exception:
+        return {"status": "ok", "current_lag_ms": 0.0, "p99_lag_ms": 0.0}
 
 
 @app.get("/api/database/status", tags=["System"])
@@ -500,6 +574,12 @@ async def get_admin_finops() -> Dict[str, Any]:
 
 
 # ============================================================================
+# Classroom Subsystem REST Routers Mount
+# ============================================================================
+register_classroom_routes(app)
+
+
+# ============================================================================
 # Static Files & SPA Root Routing
 # ============================================================================
 
@@ -512,6 +592,11 @@ if (PUBLIC_DIR / "css").exists():
 
 if (PUBLIC_DIR / "js").exists():
     app.mount("/js", StaticFiles(directory=str(PUBLIC_DIR / "js")), name="js")
+
+# Mount Classroom slide-pages directory for rendered PDF slide pages
+_classroom_settings = get_classroom_settings()
+_classroom_settings.slide_page_dir.mkdir(parents=True, exist_ok=True)
+app.mount("/slide-pages", StaticFiles(directory=str(_classroom_settings.slide_page_dir)), name="slide-pages")
 
 # Primary SPA Route
 @app.api_route("/", methods=["GET", "HEAD"], include_in_schema=False)
@@ -533,6 +618,37 @@ async def serve_admin_portal(subpath: str = ""):
 # Mount remaining public folder
 if PUBLIC_DIR.exists():
     app.mount("/", StaticFiles(directory=str(PUBLIC_DIR), html=True), name="static")
+
+
+# ============================================================================
+# Socket.IO ASGIApp Root Mounting & CombinedASGIApp Pattern
+# ============================================================================
+
+socket_app = socketio.ASGIApp(
+    socketio_server=sio,
+    other_asgi_app=app,
+    socketio_path="socket.io",
+)
+
+
+class CombinedASGIApp:
+    """Transparent ASGI wrapper delegating ASGI calls to socket_app
+    and attribute lookups to the underlying FastAPI app instance.
+    """
+
+    def __init__(self, socket_asgi: socketio.ASGIApp, fastapi_instance: FastAPI):
+        self._socket_asgi = socket_asgi
+        self._fastapi_instance = fastapi_instance
+
+    async def __call__(self, scope, receive, send):
+        return await self._socket_asgi(scope, receive, send)
+
+    def __getattr__(self, name: str):
+        return getattr(self._fastapi_instance, name)
+
+
+fastapi_app = app
+app = CombinedASGIApp(socket_app, fastapi_app)
 
 
 # ============================================================================

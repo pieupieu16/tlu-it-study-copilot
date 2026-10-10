@@ -55,17 +55,11 @@ def test_k3_slide_viewer():
         assert page.inner_text("#slide-zoom-val") == "100%"
         print("Zoom reset to 100% verified")
         
-        # 5. Test Follow Toggle
-        page.click("#btn-slide-toggle-follow")
-        page.wait_for_timeout(300)
-        assert page.locator("#slide-sync-notice").is_visible()
-        print("Self-reading sync notice is visible")
-        
-        # Resync
-        page.click("#btn-slide-resync")
-        page.wait_for_timeout(300)
+        # 5. Verify Lecturer Tracking controls are removed
+        assert not page.locator("#btn-slide-toggle-follow").is_visible()
         assert not page.locator("#slide-sync-notice").is_visible()
-        print("Resync verified: notice hidden and back to following lecturer")
+        assert not page.locator("#slide-sync-badge").is_visible()
+        print("Lecturer tracking controls successfully removed as requested")
         
         # 6. Test Split-View AI Study Panel & 2-Tab Switcher
         page.click("#btn-toggle-split-ai")

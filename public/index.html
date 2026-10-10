@@ -340,38 +340,64 @@
       <!-- Two-Column Split Layout for Code Studio & Diff Viewer -->
       <div class="grid grid-cols-1 lg:grid-cols-12 gap-6 items-start">
         
-        <!-- Left Column: Code Editor & Terminal Simulator (Col 1 to 7) -->
-        <div class="lg:col-span-7 bg-white border border-[#E2E8F0] rounded-2xl shadow-sm overflow-hidden flex flex-col h-[680px]">
-          <!-- Editor Toolbar -->
-          <div class="px-4 py-3 border-b border-[#F1F5F9] bg-[#FFFFFF] flex items-center justify-between">
+        <!-- Left Column: Code Editor & Terminal Simulator (Col 1 to 7) - OnlineGDB Distilled -->
+        <div class="lg:col-span-7 bg-white border-2 border-b-4 border-[#CBD5E1] rounded-2xl shadow-sm overflow-hidden flex flex-col h-[720px]">
+          <!-- OnlineGDB Style Top Editor Bar -->
+          <div class="px-3.5 py-2.5 bg-[#F8FAFC] border-b border-[#CBD5E1] flex flex-wrap items-center justify-between gap-2">
+            <!-- Left: Active File Tab & Language Selector -->
             <div class="flex items-center space-x-2">
-              <label for="code-lang-selector" class="text-xs font-bold text-[#475569]">Ngôn ngữ:</label>
-              <select id="code-lang-selector" aria-label="Ngôn ngữ lập trình" class="bg-[#F8FAFC] border border-[#CBD5E1] text-[#0F172A] text-xs font-bold rounded-lg px-2.5 py-1 focus:ring-1 focus:ring-[#0D62FE]">
-                <option value="cpp" selected>C / C++ (IT101)</option>
-                <option value="java">Java (IT201)</option>
-                <option value="sql">SQL (IT205)</option>
-                <option value="python">Python (IT301)</option>
-              </select>
+              <div class="flex items-center space-x-1.5 bg-white border border-[#CBD5E1] px-2.5 py-1 rounded-lg text-xs font-black text-[#0F172A] shadow-2xs">
+                <span class="w-2 h-2 rounded-full bg-[#10B981]"></span>
+                <span id="editor-active-filename">main.cpp</span>
+              </div>
+              <div class="flex items-center space-x-1">
+                <label for="code-lang-selector" class="sr-only">Ngôn ngữ</label>
+                <select id="code-lang-selector" aria-label="Ngôn ngữ lập trình" class="bg-white border border-[#CBD5E1] text-[#0F172A] text-xs font-bold rounded-lg px-2.5 py-1 focus:ring-1 focus:ring-[#0D62FE] outline-none">
+                  <option value="cpp" selected>C++ (GCC / IT101)</option>
+                  <option value="java">Java (OpenJDK / IT201)</option>
+                  <option value="sql">SQL (PostgreSQL / IT205)</option>
+                  <option value="python">Python (IT301)</option>
+                </select>
+              </div>
             </div>
 
-            <!-- Action Buttons -->
+            <!-- Right: Action Buttons (Run F9, Diff, Format, Reset) -->
             <div class="flex items-center space-x-1.5">
-              <button id="btn-code-run" class="px-3 py-1.5 bg-[#10B981] hover:bg-[#059669] text-white text-xs font-bold rounded-lg shadow-2xs hover:shadow-sm transition-all flex items-center space-x-1">
-                <span>Chạy thử</span>
+              <button id="btn-code-run" class="blk-btn px-3.5 py-1.5 bg-[#10B981] hover:bg-[#059669] text-white text-xs font-black rounded-lg shadow-2xs hover:shadow-xs transition-all flex items-center space-x-1 cursor-pointer" title="Chạy mã nguồn (F9 hoặc Ctrl+Enter)">
+                <span>▶ Chạy (F9)</span>
               </button>
-              <button id="btn-code-diff" class="px-3 py-1.5 bg-[#0D62FE] hover:bg-[#0047E0] text-white text-xs font-bold rounded-lg shadow-2xs hover:shadow-sm transition-all flex items-center space-x-1">
-                <span>So sánh Diff</span>
+              <button id="btn-code-diff" class="blk-btn px-3 py-1.5 bg-[#0D62FE] hover:bg-[#0047E0] text-white text-xs font-black rounded-lg shadow-2xs hover:shadow-xs transition-all flex items-center space-x-1 cursor-pointer" title="So sánh lỗi logic theo Điều 25 TLU">
+                <span>⚡ So sánh Diff</span>
               </button>
-              <button id="btn-code-reset" class="px-2.5 py-1.5 bg-[#F1F5F9] hover:bg-[#E2E8F0] text-[#475569] text-xs font-semibold rounded-lg transition-colors" title="Đặt lại code mẫu">
+              <button id="btn-code-format" class="blk-btn px-2.5 py-1.5 bg-white hover:bg-[#F1F5F9] text-[#475569] text-xs font-bold rounded-lg border border-[#CBD5E1] transition-colors cursor-pointer" title="Tự động căn lề và định dạng code">
+                Định dạng
+              </button>
+              <button id="btn-code-reset" class="blk-btn px-2.5 py-1.5 bg-white hover:bg-[#F1F5F9] text-[#475569] text-xs font-bold rounded-lg border border-[#CBD5E1] transition-colors cursor-pointer" title="Đặt lại code mẫu">
                 Đặt lại
               </button>
             </div>
           </div>
 
-          <!-- Editor Input Box -->
-          <div id="code-editor-container" class="flex-1 relative bg-[#F8FAFC] p-3.5 overflow-hidden font-mono text-xs">
+          <!-- OnlineGDB Shortcuts & Position Indicator Bar -->
+          <div class="px-3.5 py-1 bg-[#F1F5F9] border-b border-[#E2E8F0] flex items-center justify-between text-[10px] text-[#64748B] font-mono">
+            <div class="flex items-center space-x-2.5">
+              <span><kbd class="bg-white px-1 py-0.5 rounded border border-[#CBD5E1] text-[9px] font-bold">F9</kbd> / <kbd class="bg-white px-1 py-0.5 rounded border border-[#CBD5E1] text-[9px] font-bold">Ctrl+Enter</kbd>: Chạy</span>
+              <span><kbd class="bg-white px-1 py-0.5 rounded border border-[#CBD5E1] text-[9px] font-bold">Tab</kbd>: 4 space</span>
+              <span><kbd class="bg-white px-1 py-0.5 rounded border border-[#CBD5E1] text-[9px] font-bold">Ctrl+/</kbd>: Ghi chú</span>
+            </div>
+            <div id="editor-cursor-pos" class="font-semibold text-[#0F172A] tabular-nums">Dòng 1, Cột 1</div>
+          </div>
+
+          <!-- Code Editor Body with Synchronized Line Numbers Gutter -->
+          <div id="code-editor-container" class="flex-1 relative bg-[#FFFFFF] flex overflow-hidden font-mono text-xs">
+            <!-- Line Numbers Gutter -->
+            <div id="editor-line-numbers" class="w-10 sm:w-12 bg-[#F8FAFC] border-r border-[#E2E8F0] text-[#94A3B8] text-right pr-2 pt-3 select-none font-mono text-xs leading-6 overflow-hidden shrink-0 space-y-0">
+              <div>1</div>
+            </div>
+
+            <!-- Code Textarea -->
             <label for="code-editor" class="sr-only">Trình soạn thảo mã nguồn</label>
-            <textarea id="code-editor" rows="22" spellcheck="false" aria-label="Khung soạn thảo mã nguồn" class="w-full h-full bg-transparent text-[#0F172A] font-mono text-xs leading-relaxed focus:outline-none resize-none">#include &lt;iostream&gt;
+            <textarea id="code-editor" rows="18" spellcheck="false" aria-label="Khung soạn thảo mã nguồn" class="flex-1 w-full h-full bg-transparent text-[#0F172A] font-mono text-xs leading-6 pt-3 pl-3 pr-3 pb-3 focus:outline-none resize-none overflow-y-auto whitespace-pre tab-size-4">#include &lt;iostream&gt;
 using namespace std;
 
 int main() {
@@ -386,14 +412,41 @@ int main() {
 }</textarea>
           </div>
 
-          <!-- Terminal Output Simulator -->
-          <div class="border-t border-[#E2E8F0] bg-[#F1F5F9] p-3.5 text-xs font-mono">
-            <div class="flex items-center justify-between text-[11px] font-bold text-[#64748B] mb-1">
-              <span>TERMINAL SIMULATOR</span>
-              <span id="terminal-status-badge" class="text-[#FF3B30]">Exit code: 139 (SIGSEGV)</span>
+          <!-- Console & Terminal Section (OnlineGDB Dual Tab: Output & STDIN) -->
+          <div class="border-t-2 border-[#CBD5E1] bg-[#0F172A] text-white flex flex-col">
+            <!-- Console Header Dock -->
+            <div class="px-3 py-1.5 bg-[#1E293B] border-b border-[#334155] flex items-center justify-between">
+              <div class="flex items-center space-x-1">
+                <button id="btn-tab-console-output" class="px-2.5 py-1 text-xs font-black rounded-lg bg-[#0F172A] text-white border border-[#475569] cursor-pointer">
+                  Console (Output)
+                </button>
+                <button id="btn-tab-console-stdin" class="px-2.5 py-1 text-xs font-bold rounded-lg bg-transparent text-[#94A3B8] hover:text-white hover:bg-[#334155] cursor-pointer">
+                  Standard Input (stdin)
+                </button>
+              </div>
+
+              <!-- Status Badge & Action -->
+              <div class="flex items-center space-x-2">
+                <span id="terminal-status-badge" class="text-[10px] font-mono font-bold px-2 py-0.5 rounded-full bg-[#334155] text-[#94A3B8]">
+                  Sẵn sàng
+                </span>
+                <button id="btn-clear-terminal" class="text-[10px] font-bold text-[#94A3B8] hover:text-white px-2 py-0.5 rounded hover:bg-[#334155] cursor-pointer" title="Xóa màn hình console">
+                  Xóa Output
+                </button>
+              </div>
             </div>
-            <div id="code-output" class="text-[#B91C1C] text-[11px] leading-relaxed max-h-24 overflow-y-auto">
-              Segmentation fault (core dumped): Invalid memory access at address 0x0
+
+            <!-- Tab 1: Terminal Output Simulator -->
+            <div id="console-output-view" class="p-3 font-mono text-xs max-h-36 min-h-24 overflow-y-auto bg-[#0F172A]">
+              <div id="code-output" class="text-[11px] leading-relaxed text-[#94A3B8]">
+                Bấm [▶ Chạy (F9)] để biên dịch và thực thi chương trình trong sandbox mô phỏng.
+              </div>
+            </div>
+
+            <!-- Tab 2: Standard Input (stdin) Box (Hidden by default) -->
+            <div id="console-stdin-view" class="hidden p-2.5 bg-[#0F172A]">
+              <label for="code-stdin" class="sr-only">Dữ liệu đầu vào stdin</label>
+              <textarea id="code-stdin" rows="3" placeholder="Nhập dữ liệu đầu vào stdin tại đây (mỗi dòng tương ứng một lần cin >> hoặc scanf)..." class="w-full bg-[#1E293B] border border-[#334155] rounded-lg p-2 text-xs font-mono text-white placeholder-[#64748B] focus:outline-none resize-none"></textarea>
             </div>
           </div>
         </div>
@@ -526,8 +579,8 @@ int main() {
         <div class="flex flex-col md:flex-row md:items-center justify-between gap-3 border-b-2 border-[#F1F5F9] pb-4">
           <div class="flex flex-wrap items-center gap-2.5">
             <span id="current-slide-badge" class="px-3 py-1 bg-[#EEF4FF] border border-[#C7D9FE] text-[#0D62FE] text-xs font-black rounded-xl">DATASCIENCE • Tuần 03</span>
-            <span id="slide-sync-badge" class="text-[11px] font-extrabold text-[#10B981] bg-[#ECFDF5] px-2.5 py-1 rounded-xl border border-[#A7F3D0]">Đang Theo Dõi Bài Giảng</span>
             <span id="current-slide-format-badge" class="text-[10px] font-bold text-[#0D62FE] bg-[#EEF4FF] px-2 py-0.5 rounded-lg border border-[#C7D9FE]">Học Liệu Chính Khóa</span>
+            <h3 id="current-slide-topic" class="text-xs font-extrabold text-[#0F172A] bg-[#F8FAFC] px-2.5 py-1 rounded-xl border border-[#CBD5E1]">Chủ đề: Data Science</h3>
           </div>
 
           <!-- Classroom Reading Progress Bar -->
@@ -548,16 +601,35 @@ int main() {
           </div>
         </div>
 
-        <!-- Sync Notice Banner (Toggled when in self-reading mode) -->
-        <div id="slide-sync-notice" class="hidden p-3.5 bg-[#FFFBEB] border-2 border-b-4 border-[#FCD34D] rounded-xl flex items-center justify-between gap-3 text-xs">
-          <div class="flex items-center space-x-2 text-[#92400E] font-bold">
-            <span class="w-2.5 h-2.5 rounded-full bg-[#F59E0B] inline-block"></span>
-            <span id="slide-sync-notice-text">Bạn đang ở chế độ tự đọc slide độc lập. Bấm [Đồng Bộ Bài Giảng] để bám sát nhịp độ lớp học.</span>
+        <!-- Teaching Advisor Smart Alert Panel (Realtime AI Guidance) -->
+        <div id="teaching-advisor-alert-panel" class="hidden p-4 bg-white border-2 border-b-4 border-[#0D62FE] rounded-2xl shadow-md space-y-2.5 transition-all duration-300">
+          <div class="flex items-center justify-between border-b border-[#F1F5F9] pb-2">
+            <div class="flex items-center space-x-2">
+              <span id="advisor-source-badge" class="px-2 py-0.5 bg-[#EEF4FF] border border-[#C7D9FE] text-[#0D62FE] text-2xs font-extrabold rounded-md uppercase">AI TEACHING ADVISOR</span>
+              <span id="advisor-confidence-badge" class="px-2 py-0.5 bg-[#F0FDF4] border border-[#BBF7D0] text-[#16A34A] text-2xs font-bold rounded-md">Độ tin cậy cao</span>
+            </div>
+            <div class="flex items-center space-x-2">
+              <span id="advisor-countdown" class="text-3xs font-mono font-bold text-[#94A3B8]">5s</span>
+              <button id="btn-close-advisor-alert" class="blk-btn px-2 py-0.5 bg-[#F8FAFC] hover:bg-[#F1F5F9] text-[#64748B] hover:text-[#0F172A] text-2xs font-bold rounded cursor-pointer" title="Đóng thông báo">Đóng</button>
+            </div>
           </div>
-          <button id="btn-slide-resync" class="blk-btn px-3 py-1 bg-white hover:bg-[#FEF3C7] text-[#B45309] text-xs font-extrabold cursor-pointer">
-            Đồng Bộ Bài Giảng
-          </button>
+          <div class="space-y-1 text-xs">
+            <div id="advisor-alert-headline" class="font-black text-[#0F172A] leading-snug">
+              Cảnh báo nhịp độ lớp học: 35% sinh viên dừng lại quá lâu ở slide này
+            </div>
+            <div id="advisor-alert-recommendation" class="text-[#475569] leading-relaxed">
+              Khuyến nghị hành động: Giảng viên nên đặt câu hỏi Checkpoint nhanh hoặc làm rõ ví dụ trước khi chuyển tiếp.
+            </div>
+          </div>
+          <div class="flex items-center justify-between pt-1 border-t border-[#F8FAFC] text-2xs">
+            <div class="flex items-center space-x-1.5">
+              <button id="btn-advisor-feedback-up" class="blk-btn px-2.5 py-1 bg-[#F0FDF4] hover:bg-[#DCFCE7] text-[#16A34A] font-extrabold rounded-lg cursor-pointer">Hữu ích (+1)</button>
+              <button id="btn-advisor-feedback-down" class="blk-btn px-2.5 py-1 bg-[#FEF2F2] hover:bg-[#FEE2E2] text-[#DC2626] font-extrabold rounded-lg cursor-pointer">Chưa phù hợp (-1)</button>
+            </div>
+            <span class="text-[#94A3B8] font-medium">Hệ thống hỗ trợ sư phạm thời gian thực</span>
+          </div>
         </div>
+
 
         <!-- Hand Raised Notice Banner (from K3-Hackathon raise_hand) -->
         <div id="slide-hand-notice" class="hidden p-3.5 bg-[#FEF3C7] border-2 border-b-4 border-[#F59E0B] rounded-xl flex items-center justify-between gap-3 text-xs">
@@ -578,43 +650,19 @@ int main() {
           <div class="flex-1 w-full space-y-4 min-w-0">
             
             <div id="slide-stage-wrapper" class="w-full overflow-hidden rounded-2xl relative">
-              <div id="current-slide-container" class="blk-card p-6 sm:p-8 space-y-4 transition-all duration-200">
+              <div id="current-slide-container" class="blk-card p-2 sm:p-3 transition-all duration-200 bg-white">
                 
-                <div class="flex flex-wrap items-center justify-between gap-2 border-b border-[#F1F5F9] pb-3">
-                  <span class="text-[11px] font-black uppercase tracking-wider text-[#0D62FE]">KHOA CÔNG NGHỆ THÔNG TIN • ĐẠI HỌC THĂNG LONG</span>
-                  <span id="current-slide-course-tag" class="text-[10px] font-bold text-[#0D62FE] bg-[#EEF4FF] px-2.5 py-0.5 rounded-full border border-[#C7D9FE]">Slide Trình Chiếu</span>
+                <!-- 16:9 Cinematic Canvas Stage (Exact K3-Hackathon SlideCanvas.tsx) -->
+                <div class="w-full relative rounded-xl overflow-hidden border-2 border-b-4 border-[#CBD5E1] bg-white shadow-xs" style="aspect-ratio: 16 / 9;">
+                  <canvas id="slide-canvas" width="1280" height="720" role="img" aria-label="TLU Classroom Slide" class="w-full h-full block object-contain" style="aspect-ratio: 16 / 9;"></canvas>
+                  <img id="slide-image" class="hidden w-full h-full object-contain" style="aspect-ratio: 16 / 9;" alt="Trang Slide Bài Giảng" />
                 </div>
 
-                <!-- Title & Signature Accent Underline Bar (from SlideCanvas.tsx) -->
-                <div>
-                  <h3 id="current-slide-topic" class="text-base sm:text-2xl font-black text-[#0F172A] leading-snug">Chủ đề: Khoa học Dữ liệu &amp; Học máy (Data Science &amp; Machine Learning)</h3>
-                  <div class="h-2 w-28 bg-[#0D62FE] rounded-full my-2.5"></div>
-                </div>
-
-                <p id="current-slide-desc" class="text-xs sm:text-sm text-[#334155] leading-relaxed">
-                  Giáo trình và bài giảng Chuyên sâu Khoa học Dữ liệu (Data Science) &amp; Học máy (Machine Learning). Bao gồm các kỹ thuật tiền xử lý dữ liệu, trích xuất đặc trưng, huấn luyện mô hình phân loại và hồi quy.
-                </p>
-
-                <!-- Code box with K3-Hackathon block styling -->
-                <div id="current-slide-code-box" class="blk-card border border-[#CBD5E1] bg-[#F8FAFC] rounded-xl p-4 sm:p-5 font-mono text-xs sm:text-sm text-[#0F172A] space-y-1.5 shadow-2xs">
-                  <div class="text-[#64748B]"># Pipeline huấn luyện mô hình Machine Learning:</div>
-                  <div><span class="text-[#0D62FE] font-bold">import</span> pandas <span class="text-[#0D62FE] font-bold">as</span> pd</div>
-                  <div><span class="text-[#0D62FE] font-bold">from</span> sklearn.model_selection <span class="text-[#0D62FE] font-bold">import</span> train_test_split</div>
-                  <div><span class="text-[#0D62FE] font-bold">from</span> sklearn.ensemble <span class="text-[#0D62FE] font-bold">import</span> RandomForestClassifier</div>
-                  <div>model = RandomForestClassifier(n_estimators=100)</div>
-                  <div>model.fit(X_train, y_train)</div>
-                </div>
-
-                <!-- Callout Note -->
-                <div id="current-slide-note-box" class="bg-[#F0FDF4] border-l-4 border-[#10B981] p-4 rounded-r-xl text-xs sm:text-sm text-[#14532D] space-y-1">
-                  <div class="font-bold text-[#15803D]">Lưu Ý Thực Hành Khoa Học Dữ Liệu:</div>
-                  <div>Học liệu Khoa học Dữ liệu tải lên trực tiếp vào hệ thống cơ sở dữ liệu Supabase phục vụ sinh viên Khoa CNTT TLU.</div>
-                </div>
-
-                <!-- Slide Footer Label -->
-                <div id="current-slide-canvas-footer" class="text-[11px] font-bold text-[#64748B] pt-3 border-t border-[#F1F5F9] flex items-center justify-between">
-                  <span>TLU IT Study Copilot • Slide Chuẩn Giảng Đường</span>
-                  <span class="font-mono">Tỉ Lệ Khung Hình 16:9</span>
+                <!-- Hidden compatibility hooks for state synchronization -->
+                <div class="hidden" aria-hidden="true">
+                  <p id="current-slide-desc"></p>
+                  <div id="current-slide-code-box"></div>
+                  <div id="current-slide-note-box"></div>
                 </div>
 
               </div>
@@ -682,12 +730,9 @@ int main() {
             <!-- Classroom Controls & Zoom Dock (Inspired by K3-Hackathon student-classroom__controls) -->
             <div class="relative z-10 blk-card p-3 sm:p-4 flex flex-wrap items-center justify-between gap-3 shadow-xs bg-white">
               
-              <!-- Follow toggle & Raise hand -->
+              <!-- Raise hand button -->
               <div class="flex items-center gap-2">
-                <button id="btn-slide-toggle-follow" class="blk-btn px-3.5 py-2 bg-[#ECFDF5] hover:bg-[#D1FAE5] text-[#047857] text-xs font-extrabold transition-all cursor-pointer">
-                  Đang Theo Dõi Giảng Viên
-                </button>
-                <button id="btn-slide-raise-hand" class="blk-btn px-3 py-2 bg-white hover:bg-[#FEF3C7] text-[#B45309] border border-[#FCD34D] text-xs font-extrabold transition-all cursor-pointer" title="Giơ tay phát biểu trên lớp">
+                <button id="btn-slide-raise-hand" class="blk-btn px-3.5 py-2 bg-white hover:bg-[#FEF3C7] text-[#B45309] border border-[#FCD34D] text-xs font-extrabold transition-all cursor-pointer" title="Giơ tay phát biểu trên lớp">
                   Giơ Tay
                 </button>
               </div>
@@ -1923,6 +1968,7 @@ int main() {
   <script src="js/lakehouse.js?v=2.2.0"></script>
   <script src="js/guardrails.js?v=2.2.0"></script>
   <script src="js/dashboard.js?v=2.2.0"></script>
+  <script src="js/socket.io.min.js"></script>
   <script src="js/slides.js?v=2.2.0"></script>
   <script src="js/admin_logs.js?v=2.2.0"></script>
   <script src="js/app.js?v=2.2.0"></script>

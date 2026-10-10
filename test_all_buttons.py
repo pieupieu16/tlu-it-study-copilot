@@ -295,7 +295,7 @@ def run_all_button_tests(base_url="http://127.0.0.1:8000"):
         test_step(
             "admin:btn-refresh-admin-logs",
             lambda: page.click("#btn-refresh-admin-logs"),
-            lambda: len(page.query_selector_all("#admin-logs-table-body tr")) > 0,
+            lambda: page.wait_for_timeout(400) or len(page.query_selector_all("#admin-logs-table-body tr")) > 0,
             "Quản trị: Làm mới nhật ký viễn thám & telemetry logs"
         )
 

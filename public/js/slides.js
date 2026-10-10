@@ -38,6 +38,263 @@
     }
   };
 
+  // 16:9 Cinematic Canvas Engine Constants (from K3-Hackathon SlideCanvas.tsx)
+  const CANVAS_W = 1280;
+  const CANVAS_H = 720;
+  const CANVAS_PAD = 84;
+
+  const SLIDE_LIGHT_PALETTE = {
+    bg: '#ffffff',
+    ink: '#0F172A',
+    muted: '#64748B',
+    accent: '#0D62FE', // TLU primary blue
+    codeBg: '#F8FAFC',
+    codeInk: '#1E293B',
+    noteBg: '#F0FDF4',
+    noteInk: '#14532D',
+    line: '#CBD5E1',
+  };
+
+  function wrapCanvasText(ctx, text, maxWidth) {
+    if (!text) return [];
+    const words = String(text).split(' ');
+    const lines = [];
+    let current = '';
+    for (const word of words) {
+      const candidate = current ? `${current} ${word}` : word;
+      if (ctx.measureText(candidate).width > maxWidth && current) {
+        lines.push(current);
+        current = word;
+      } else {
+        current = candidate;
+      }
+    }
+    if (current) lines.push(current);
+    return lines;
+  }
+
+  function drawSlideOnCanvas(canvas, slideData, pageLabel) {
+    if (!canvas) return;
+    const ctx = canvas.getContext('2d');
+    if (!ctx) return;
+
+    const dpr = Math.min(window.devicePixelRatio || 1, 2);
+    canvas.width = CANVAS_W * dpr;
+    canvas.height = CANVAS_H * dpr;
+    ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+    ctx.textBaseline = 'alphabetic';
+
+    const p = SLIDE_LIGHT_PALETTE;
+    const W = CANVAS_W;
+    const H = CANVAS_H;
+    const PAD = CANVAS_PAD;
+    const maxWidth = W - PAD * 2;
+
+    // Solid canvas background
+    ctx.fillStyle = p.bg;
+    ctx.fillRect(0, 0, W, H);
+
+    // Build or extract structured blocks
+    let blocks = [];
+    if (Array.isArray(slideData.blocks) && slideData.blocks.length > 0) {
+      blocks = slideData.blocks;
+    } else {
+      const courseCode = slideData.course_code || 'IT101';
+      const weekNum = slideData.week || 3;
+      const topicText = (slideData.topic || slideData.title || 'Bài giảng Khoa học Dữ liệu & Học máy').replace(/^Chủ đề:\s*/i, '');
+
+      blocks = [
+        { type: 'kicker', text: `TLU CNTT • ${courseCode} • TUẦN ${weekNum}` },
+        { type: 'title', text: topicText }
+      ];
+
+      if (slideData.desc) {
+        blocks.push({ type: 'lead', text: slideData.desc });
+      }
+
+      if (Array.isArray(slideData.bullets) && slideData.bullets.length > 0) {
+        blocks.push({ type: 'bullets', items: slideData.bullets });
+      }
+
+      if (slideData.code) {
+        const codeTrimmed = String(slideData.code).trim();
+        if (codeTrimmed && !codeTrimmed.startsWith('# Nội dung Slide')) {
+          blocks.push({
+            type: 'code',
+            lines: codeTrimmed.split('\n').filter(l => l.trim().length > 0)
+          });
+        }
+      }
+
+      if (Array.isArray(slideData.table) && slideData.table.length > 0) {
+        blocks.push({ type: 'table', rows: slideData.table });
+      }
+
+      if (slideData.note) {
+        const noteTrimmed = String(slideData.note).trim();
+        if (noteTrimmed && !noteTrimmed.startsWith('Học liệu chính khóa Khoa CNTT TLU - Slide')) {
+          blocks.push({ type: 'note', text: noteTrimmed });
+        }
+      }
+    }
+
+    let y = PAD;
+
+    for (const block of blocks) {
+      if (y > H - PAD - 40) break;
+      switch (block.type) {
+        case 'kicker': {
+          ctx.font = '700 24px Nunito, Segoe UI, system-ui, sans-serif';
+          ctx.fillStyle = p.accent;
+          ctx.fillText((block.text || '').toUpperCase(), PAD, y + 24);
+          y += 50;
+          break;
+        }
+        case 'title': {
+          ctx.font = '800 50px Nunito, Segoe UI, system-ui, sans-serif';
+          ctx.fillStyle = p.ink;
+          const titleLines = wrapCanvasText(ctx, block.text || '', maxWidth);
+          for (const line of titleLines) {
+            ctx.fillText(line, PAD, y + 46);
+            y += 60;
+          }
+          // Thick Solid Accent Underline Bar (from SlideCanvas.tsx)
+          ctx.fillStyle = p.accent;
+          ctx.fillRect(PAD, y + 2, 120, 10);
+          y += 38;
+          break;
+        }
+        case 'lead': {
+          ctx.font = '600 26px Nunito, Segoe UI, system-ui, sans-serif';
+          ctx.fillStyle = p.muted;
+          const leadLines = wrapCanvasText(ctx, block.text || '', maxWidth);
+          for (const line of leadLines.slice(0, 3)) {
+            ctx.fillText(line, PAD, y + 26);
+            y += 36;
+          }
+          y += 14;
+          break;
+        }
+        case 'bullets': {
+          ctx.font = '600 26px Nunito, Segoe UI, system-ui, sans-serif';
+          const items = Array.isArray(block.items) ? block.items : [];
+          for (const item of items) {
+            if (y > H - PAD - 50) break;
+            ctx.fillStyle = p.accent;
+            ctx.beginPath();
+            ctx.arc(PAD + 12, y + 16, 8, 0, Math.PI * 2);
+            ctx.fill();
+
+            ctx.fillStyle = p.ink;
+            const bLines = wrapCanvasText(ctx, item, maxWidth - 46);
+            for (const line of bLines) {
+              ctx.fillText(line, PAD + 34, y + 24);
+              y += 36;
+            }
+            y += 6;
+          }
+          y += 10;
+          break;
+        }
+        case 'code': {
+          const lines = Array.isArray(block.lines) ? block.lines : String(block.code || '').split('\n');
+          const lineH = 32;
+          const boxH = Math.min(lines.length * lineH + 34, H - y - PAD - 50);
+          const maxVisibleLines = Math.floor((boxH - 34) / lineH);
+
+          ctx.fillStyle = p.codeBg;
+          ctx.beginPath();
+          if (ctx.roundRect) ctx.roundRect(PAD, y, maxWidth, boxH, 16);
+          else ctx.rect(PAD, y, maxWidth, boxH);
+          ctx.fill();
+
+          ctx.strokeStyle = p.line;
+          ctx.lineWidth = 2;
+          ctx.stroke();
+
+          ctx.font = '500 21px ui-monospace, Consolas, monospace';
+          ctx.fillStyle = p.codeInk;
+          lines.slice(0, maxVisibleLines).forEach((line, i) => {
+            ctx.fillText(line, PAD + 24, y + 32 + i * lineH);
+          });
+          y += boxH + 20;
+          break;
+        }
+        case 'table': {
+          const rows = Array.isArray(block.rows) ? block.rows : [];
+          if (rows.length === 0) break;
+          const cols = Math.max(...rows.map(r => r.length));
+          const colW = maxWidth / cols;
+          const rowH = 44;
+          const boxH = Math.min(rows.length * rowH, H - y - PAD - 50);
+
+          ctx.fillStyle = p.codeBg;
+          ctx.beginPath();
+          if (ctx.roundRect) ctx.roundRect(PAD, y, maxWidth, boxH, 14);
+          else ctx.rect(PAD, y, maxWidth, boxH);
+          ctx.fill();
+
+          ctx.strokeStyle = p.line;
+          ctx.lineWidth = 2;
+          for (let r = 1; r < rows.length; r++) {
+            ctx.beginPath();
+            ctx.moveTo(PAD, y + r * rowH);
+            ctx.lineTo(PAD + maxWidth, y + r * rowH);
+            ctx.stroke();
+          }
+          for (let c = 1; c < cols; c++) {
+            ctx.beginPath();
+            ctx.moveTo(PAD + c * colW, y);
+            ctx.lineTo(PAD + c * colW, y + boxH);
+            ctx.stroke();
+          }
+
+          rows.forEach((row, r) => {
+            ctx.font = r === 0 ? '800 20px Nunito, Segoe UI, sans-serif' : '600 20px Nunito, Segoe UI, sans-serif';
+            ctx.fillStyle = r === 0 ? p.ink : p.codeInk;
+            row.slice(0, cols).forEach((cell, c) => {
+              let text = cell || '';
+              while (text && ctx.measureText(text).width > colW - 24) {
+                text = text.slice(0, -2);
+              }
+              if (text !== (cell || '')) text += '…';
+              ctx.fillText(text, PAD + c * colW + 12, y + r * rowH + 28);
+            });
+          });
+          y += boxH + 20;
+          break;
+        }
+        case 'note': {
+          ctx.font = '700 24px Nunito, Segoe UI, system-ui, sans-serif';
+          const lines = wrapCanvasText(ctx, block.text || '', maxWidth - 70);
+          const boxH = lines.length * 34 + 30;
+
+          ctx.fillStyle = p.noteBg;
+          ctx.beginPath();
+          if (ctx.roundRect) ctx.roundRect(PAD, y, maxWidth, boxH, 16);
+          else ctx.rect(PAD, y, maxWidth, boxH);
+          ctx.fill();
+
+          ctx.fillStyle = '#10B981';
+          ctx.beginPath();
+          if (ctx.roundRect) ctx.roundRect(PAD + 16, y + 12, 8, boxH - 24, 4);
+          else ctx.fillRect(PAD + 16, y + 12, 8, boxH - 24);
+          ctx.fill();
+
+          ctx.fillStyle = p.noteInk;
+          lines.forEach((line, i) => ctx.fillText(line, PAD + 40, y + 32 + i * 34));
+          y += boxH + 20;
+          break;
+        }
+      }
+    }
+
+    // Footer Page Label (Slide X / Y — Title)
+    ctx.font = '700 20px Nunito, Segoe UI, system-ui, sans-serif';
+    ctx.fillStyle = p.muted;
+    ctx.fillText(pageLabel || '', PAD, H - 32);
+  }
+
   class SlideUploadController {
     constructor() {
       // Form and Inputs
@@ -72,6 +329,8 @@
       this.currentSlideDesc = document.getElementById('current-slide-desc');
       this.currentSlideCodeBox = document.getElementById('current-slide-code-box');
       this.currentSlideNoteBox = document.getElementById('current-slide-note-box');
+      this.slideCanvas = document.getElementById('slide-canvas');
+      this.slideImage = document.getElementById('slide-image');
       this.btnPrevSlide = document.getElementById('btn-prev-slide');
       this.btnNextSlide = document.getElementById('btn-next-slide');
 
@@ -84,13 +343,8 @@
       this.btnSlideZoomReset = document.getElementById('btn-slide-zoom-reset');
       this.currentSlideContainer = document.getElementById('current-slide-container');
 
-      // Classroom Progress & Sync Indicators
+      // Classroom Progress Indicator
       this.slideProgressBar = document.getElementById('slide-progress-bar');
-      this.slideSyncBadge = document.getElementById('slide-sync-badge');
-      this.slideSyncNotice = document.getElementById('slide-sync-notice');
-      this.btnSlideToggleFollow = document.getElementById('btn-slide-toggle-follow');
-      this.btnSlideResync = document.getElementById('btn-slide-resync');
-      this.followingLecturer = true;
 
       // K3-Hackathon In-Class Raise Hand Controls
       this.btnSlideRaiseHand = document.getElementById('btn-slide-raise-hand');
@@ -137,6 +391,21 @@
       this.btnNextSlideBottom = document.getElementById('btn-next-slide-bottom');
       this.currentSlidePageBottom = document.getElementById('current-slide-page-bottom');
 
+      // Teaching Advisor Alert Panel
+      this.teachingAdvisorPanel = document.getElementById('teaching-advisor-alert-panel');
+      this.advisorSourceBadge = document.getElementById('advisor-source-badge');
+      this.advisorConfidenceBadge = document.getElementById('advisor-confidence-badge');
+      this.advisorCountdown = document.getElementById('advisor-countdown');
+      this.advisorHeadline = document.getElementById('advisor-alert-headline');
+      this.advisorRecommendation = document.getElementById('advisor-alert-recommendation');
+      this.btnCloseAdvisorAlert = document.getElementById('btn-close-advisor-alert');
+      this.btnAdvisorFeedbackUp = document.getElementById('btn-advisor-feedback-up');
+      this.btnAdvisorFeedbackDown = document.getElementById('btn-advisor-feedback-down');
+      this.advisorTimer = null;
+      this.advisorRemainingSeconds = 5;
+      this.currentAdviceId = null;
+      this.socket = null;
+
       // Active Presentation State
       this.slidesDeck = [{ ...DEFAULT_SLIDE }];
       this.currentSlideIndex = 0;
@@ -154,6 +423,8 @@
       this.bindRaiseHand();
       this.bindInclassQuiz();
       this.bindSplitTabs();
+      this.bindTeachingAdvisor();
+      this.initRealtimeSocket();
       this.loadSlidesList();
       this.renderCurrentSlide();
     }
@@ -348,6 +619,25 @@
         `;
       }
 
+      // Render 16:9 Canvas or PDF Page Image (from K3-Hackathon SlideCanvas.tsx)
+      const pageLabel = current.page || `Slide ${this.currentSlideIndex + 1} / ${this.slidesDeck.length}${current.topic ? ' — ' + current.topic.replace(/^Chủ đề:\s*/i, '') : ''}`;
+      const pageImage = current.page_image_url || current.page_image;
+      if (pageImage) {
+        if (this.slideCanvas) this.slideCanvas.classList.add('hidden');
+        if (this.slideImage) {
+          const src = (pageImage.startsWith('http') || pageImage.startsWith('/')) ? pageImage : `/slide-pages/${pageImage}`;
+          this.slideImage.src = src;
+          this.slideImage.alt = pageLabel;
+          this.slideImage.classList.remove('hidden');
+        }
+      } else {
+        if (this.slideImage) this.slideImage.classList.add('hidden');
+        if (this.slideCanvas) {
+          this.slideCanvas.classList.remove('hidden');
+          drawSlideOnCanvas(this.slideCanvas, current, pageLabel);
+        }
+      }
+
       // Sync active course label in Chat window
       const chatCourseLabel = document.getElementById('chat-active-course-label');
       if (chatCourseLabel) {
@@ -399,14 +689,6 @@
           }
         }, { passive: false });
       }
-
-      // Follow lecturer toggle
-      if (this.btnSlideToggleFollow) {
-        this.btnSlideToggleFollow.addEventListener('click', () => this.toggleFollow());
-      }
-      if (this.btnSlideResync) {
-        this.btnSlideResync.addEventListener('click', () => this.resyncWithClass());
-      }
     }
 
     zoomBy(delta) {
@@ -437,52 +719,6 @@
             wrapper.style.height = 'auto';
           }
         }
-      }
-    }
-
-    toggleFollow() {
-      this.followingLecturer = !this.followingLecturer;
-      if (this.followingLecturer) {
-        if (this.btnSlideToggleFollow) {
-          this.btnSlideToggleFollow.textContent = 'Đang Theo Dõi Giảng Viên';
-          this.btnSlideToggleFollow.className = 'blk-btn px-3.5 py-2 bg-[#ECFDF5] hover:bg-[#D1FAE5] text-[#047857] text-xs font-extrabold transition-all cursor-pointer';
-        }
-        if (this.slideSyncBadge) {
-          this.slideSyncBadge.textContent = 'Đang Theo Dõi Bài Giảng';
-          this.slideSyncBadge.className = 'text-[11px] font-extrabold text-[#10B981] bg-[#ECFDF5] px-2.5 py-1 rounded-xl border border-[#A7F3D0]';
-        }
-        if (this.slideSyncNotice) {
-          this.slideSyncNotice.classList.add('hidden');
-        }
-      } else {
-        if (this.btnSlideToggleFollow) {
-          this.btnSlideToggleFollow.textContent = 'Chế Độ Tự Đọc Slide';
-          this.btnSlideToggleFollow.className = 'blk-btn px-3.5 py-2 bg-[#FFFBEB] hover:bg-[#FEF3C7] text-[#B45309] text-xs font-extrabold transition-all cursor-pointer';
-        }
-        if (this.slideSyncBadge) {
-          this.slideSyncBadge.textContent = 'Tự Đọc Độc Lập';
-          this.slideSyncBadge.className = 'text-[11px] font-extrabold text-[#B45309] bg-[#FFFBEB] px-2.5 py-1 rounded-xl border border-[#FDE68A]';
-        }
-        if (this.slideSyncNotice) {
-          this.slideSyncNotice.classList.remove('hidden');
-        }
-      }
-    }
-
-    resyncWithClass() {
-      this.followingLecturer = true;
-      this.currentSlideIndex = 0;
-      this.renderCurrentSlide();
-      if (this.btnSlideToggleFollow) {
-        this.btnSlideToggleFollow.textContent = 'Đang Theo Dõi Giảng Viên';
-        this.btnSlideToggleFollow.className = 'blk-btn px-3.5 py-2 bg-[#ECFDF5] hover:bg-[#D1FAE5] text-[#047857] text-xs font-extrabold transition-all cursor-pointer';
-      }
-      if (this.slideSyncBadge) {
-        this.slideSyncBadge.textContent = 'Đang Theo Dõi Bài Giảng';
-        this.slideSyncBadge.className = 'text-[11px] font-extrabold text-[#10B981] bg-[#ECFDF5] px-2.5 py-1 rounded-xl border border-[#A7F3D0]';
-      }
-      if (this.slideSyncNotice) {
-        this.slideSyncNotice.classList.add('hidden');
       }
     }
 
@@ -819,6 +1055,133 @@
       }
     }
 
+    bindTeachingAdvisor() {
+      if (!this.teachingAdvisorPanel) return;
+      if (this.btnCloseAdvisorAlert) {
+        this.btnCloseAdvisorAlert.addEventListener('click', () => this.hideTeachingAdvisor());
+      }
+      if (this.btnAdvisorFeedbackUp) {
+        this.btnAdvisorFeedbackUp.addEventListener('click', () => this.sendAdvisorFeedback('up'));
+      }
+      if (this.btnAdvisorFeedbackDown) {
+        this.btnAdvisorFeedbackDown.addEventListener('click', () => this.sendAdvisorFeedback('down'));
+      }
+
+      this.teachingAdvisorPanel.addEventListener('mouseenter', () => {
+        if (this.advisorTimer) {
+          clearInterval(this.advisorTimer);
+          this.advisorTimer = null;
+        }
+      });
+      this.teachingAdvisorPanel.addEventListener('mouseleave', () => {
+        if (!this.advisorTimer && this.advisorRemainingSeconds > 0) {
+          this.startAdvisorCountdown();
+        }
+      });
+    }
+
+    showTeachingAdvisor(advice) {
+      if (!this.teachingAdvisorPanel || !advice) return;
+      this.currentAdviceId = advice.id || 1;
+      if (this.advisorHeadline && advice.headline) {
+        this.advisorHeadline.textContent = advice.headline;
+      }
+      if (this.advisorRecommendation && advice.recommendation) {
+        this.advisorRecommendation.textContent = advice.recommendation;
+      }
+      if (this.advisorSourceBadge && advice.source) {
+        this.advisorSourceBadge.textContent = advice.source === 'rule_fallback' ? 'QUY TẮC DỰ PHÒNG' : 'AI TEACHING ADVISOR';
+      }
+      if (this.advisorConfidenceBadge && advice.confidence) {
+        this.advisorConfidenceBadge.textContent = advice.confidence === 'high' ? 'Độ tin cậy cao' : 'Độ tin cậy trung bình';
+      }
+
+      this.teachingAdvisorPanel.classList.remove('hidden');
+      this.advisorRemainingSeconds = 5;
+      this.startAdvisorCountdown();
+    }
+
+    startAdvisorCountdown() {
+      if (this.advisorTimer) clearInterval(this.advisorTimer);
+      if (this.advisorCountdown) {
+        this.advisorCountdown.textContent = `${this.advisorRemainingSeconds}s`;
+      }
+      this.advisorTimer = setInterval(() => {
+        this.advisorRemainingSeconds -= 1;
+        if (this.advisorCountdown) {
+          this.advisorCountdown.textContent = `${this.advisorRemainingSeconds}s`;
+        }
+        if (this.advisorRemainingSeconds <= 0) {
+          clearInterval(this.advisorTimer);
+          this.advisorTimer = null;
+          this.hideTeachingAdvisor();
+        }
+      }, 1000);
+    }
+
+    hideTeachingAdvisor() {
+      if (this.advisorTimer) {
+        clearInterval(this.advisorTimer);
+        this.advisorTimer = null;
+      }
+      if (this.teachingAdvisorPanel) {
+        this.teachingAdvisorPanel.classList.add('hidden');
+      }
+    }
+
+    async sendAdvisorFeedback(rating) {
+      this.hideTeachingAdvisor();
+      try {
+        if (this.currentAdviceId) {
+          await fetch(`/api/teaching/sessions/1/advice/${this.currentAdviceId}/feedback`, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ rating: rating })
+          });
+        }
+      } catch (e) {
+        console.warn('Advice feedback error:', e);
+      }
+    }
+
+    initRealtimeSocket() {
+      if (typeof io === 'undefined') {
+        console.log('[Socket.IO] io client not found in window');
+        return;
+      }
+      try {
+        this.socket = io(window.location.origin, {
+          path: '/socket.io',
+          transports: ['polling', 'websocket'],
+          reconnection: true,
+          reconnectionAttempts: 5,
+        });
+
+        this.socket.on('connect', () => {
+          console.log('[Socket.IO] Connected to Classroom Realtime:', this.socket.id);
+          this.socket.emit('join_session', {
+            session_id: 1,
+            role: 'student',
+            token: 'student_token_web',
+            slide_index: this.currentSlideIndex || 0
+          });
+        });
+
+        this.socket.on('advice', (data) => {
+          if (data) this.showTeachingAdvisor(data);
+        });
+      } catch (err) {
+        console.warn('[Socket.IO Init Warning]', err);
+      }
+    }
+
+    goToSlideIndex(idx) {
+      if (idx >= 0 && idx < this.slidesDeck.length) {
+        this.currentSlideIndex = idx;
+        this.renderCurrentSlide();
+      }
+    }
+
     escapeHtml(text) {
       const div = document.createElement('div');
       div.textContent = text;
@@ -1043,7 +1406,10 @@
           topic: s.topic ? (s.topic.startsWith('Chủ đề:') ? s.topic : `Chủ đề: ${s.topic}`) : `Chủ đề: Bài giảng môn ${s.course_code}`,
           desc: s.content_desc || s.desc || `Học liệu môn ${s.course_code} - ${s.filename || 'Tài liệu môn học'} đã được nạp từ cơ sở dữ liệu Supabase.`,
           code: s.code_snippet || s.code || `// Học liệu môn ${s.course_code}\n// Tệp: ${s.filename || 'slide.pdf'}\n// Trích xuất từ Supabase Database`,
-          note: s.callout_note || s.note || `Học liệu chính khóa Khoa CNTT TLU môn ${s.course_code}.`
+          note: s.callout_note || s.note || `Học liệu chính khóa Khoa CNTT TLU môn ${s.course_code}.`,
+          blocks: s.blocks || null,
+          page_image: s.page_image || null,
+          page_image_url: s.page_image_url || s.page_image || null
         };
       });
 
