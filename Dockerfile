@@ -24,5 +24,5 @@ ENV PYTHONUNBUFFERED=1
 
 EXPOSE 8080
 
-# Chạy ứng dụng qua ASGI server Uvicorn
-CMD ["sh", "-c", "uvicorn app:app --host 0.0.0.0 --port ${PORT} --workers 1"]
+# Chạy ứng dụng qua Python
+CMD ["python3", "app.py"]
